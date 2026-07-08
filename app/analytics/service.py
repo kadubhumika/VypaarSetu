@@ -103,7 +103,6 @@ def get_merchant_dashboard(db: Session, merchant_id: int, store_id: int) -> dict
     )
     sales_by_category = [{"category_name": name, "revenue": float(total)} for name, total in category_rows]
 
-    # Best sellers
     best_seller_rows = (
         db.query(Product.name, func.sum(OrderItem.quantity), func.sum(OrderItem.subtotal))
         .join(OrderItem, OrderItem.product_id == Product.id)

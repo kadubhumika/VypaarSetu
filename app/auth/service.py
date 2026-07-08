@@ -8,6 +8,12 @@ from app.core.redis_client import redis_client
 from app.core.security import create_access_token, hash_password, verify_password
 from app.models import Merchant, Customer
 
+import smtplib
+import secrets
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from app.core.config import settings
+
 
 # ---------- Merchant (password-based) ----------
 
@@ -39,12 +45,49 @@ def _reset_key(email: str) -> str:
     return f"pwreset:{email}"
 
 
+
+
 def request_password_reset(email: str) -> str:
-    """Generates a reset token, stores it in Redis (15 min TTL), 'sends' it via email.
+    """Generates a reset token, stores it in Redis (15 min TTL), and sends it via email.
     Always call this even if the email doesn't exist — don't leak which emails are registered."""
     token = secrets.token_urlsafe(24)
     redis_client.setex(_reset_key(email), 900, token)
-    print(f"[DEV] Password reset token for {email}: {token}")  # TODO: real email send
+
+    # 1. Fallback if SMTP environment keys are not configured
+    if not (settings.smtp_host and settings.smtp_user and settings.smtp_password):
+        print(f"[DEV] SMTP unconfigured. Token for {email}: {token}")
+        return token
+
+    # 2. Build the email payload
+    reset_url = f"https://vypaarsetu.com{token}&email={email}"
+
+    msg = MIMEMultipart()
+    msg["From"] = settings.smtp_user
+    msg["To"] = email
+    msg["Subject"] = "Password Reset Request - VypaarSetu"
+
+    body = f"""
+    Hello,
+
+    You requested a password reset for your VypaarSetu account. 
+    Click the link below to reset your password. This link expires in 15 minutes:
+
+    {reset_url}
+
+    If you did not request this, please ignore this email.
+    """
+    msg.attach(MIMEText(body, "plain"))
+
+    # 3. Securely connect and send via TLS
+    try:
+        with smtplib.SMTP(settings.smtp_host, settings.smtp_port) as server:
+            server.starttls()  # Upgrade connection to secure encrypted TLS
+            server.login(settings.smtp_user, settings.smtp_password)
+            server.send_message(msg)
+    except Exception as e:
+        # Prevent delivery failures from breaking user request workflows
+        print(f"[ERROR] Failed to send password reset email to {email}: {e}")
+
     return token
 
 
@@ -130,7 +173,7 @@ def request_customer_otp(email: str) -> str:
     until a real SMTP/SMS provider is wired in)."""
     otp = f"{random.randint(0, 999999):06d}"
     redis_client.setex(_otp_key(email), settings.otp_ttl_seconds, otp)
-    # TODO: replace with real email send (smtplib) — for now, log it
+
     print(f"[DEV] OTP for {email}: {otp}")
     return otp
 
