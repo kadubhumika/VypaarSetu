@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - VyapaarSetu Merchant Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#f8f9fa] text-gray-800 antialiased min-h-screen flex">
+
+    <!-- 1. LEFT SIDEBAR DASHBOARD NAVIGATION -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col justify-between p-4 sticky top-0 h-screen flex-shrink-0">
+        <div class="space-y-8">
+            <!-- Brand Logo Header -->
+            <div class="px-2 py-1">
+                <span class="text-xl font-black text-[#009640] tracking-tight block">VyapaarSetu</span>
+                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mt-0.5">Merchant Hub</span>
+            </div>
+
+            <!-- Navigation Links Stack -->
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 text-gray-400"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                    <i data-lucide="boxes" class="w-4 h-4 text-gray-400"></i>
+                    <span>Inventory</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                    <i data-lucide="shopping-bag" class="w-4 h-4 text-gray-400"></i>
+                    <span>Products</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                    <i data-lucide="scroll-text" class="w-4 h-4 text-gray-400"></i>
+                    <span>Orders</span>
+                </a>
+
+                <div class="h-[1px] bg-gray-100 my-4"></div>
+
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold bg-[#009640] text-white shadow-xs transition">
+                    <i data-lucide="settings" class="w-4 h-4"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Sidebar Base Actions Container -->
+        <div class="space-y-4 pt-4 border-t border-gray-100">
+            <!-- Add Product Fast Link Action Button -->
+            <button class="w-full bg-[#007a33] hover:bg-[#006328] text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition shadow-xs">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>Add Product</span>
+            </button>
+
+            <!-- Bottom Mini Active User Identifier View -->
+            <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-100/70 border border-slate-200/40">
+                <div class="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100"
+                         alt="Aman Gupta Avatar" class="w-full h-full object-cover">
+                </div>
+                <div class="min-w-0">
+                    <h4 class="text-xs font-bold text-gray-800 truncate leading-none">Aman Gupta</h4>
+                    <span class="text-[10px] text-gray-400 font-semibold block mt-1">Elite Merchant</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 2. MAIN HUB DATA CONTROL WORKSPACE -->
+    <div class="flex-1 min-w-0 flex flex-col">
+
+        <!-- HEADER PANEL HEADER -->
+        <header class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
+            <div>
+                <h1 class="text-lg font-bold text-gray-900 tracking-tight">Profile Settings</h1>
+                <p class="text-xs text-gray-400 font-medium mt-0.5">Update your store information and business details.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Notifications Bell -->
+                <button class="p-2 text-gray-400 hover:text-gray-600 transition bg-white border border-gray-200 rounded-xl relative">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                </button>
+                <!-- Global Top Save Changes Switch Trigger -->
+                <button class="bg-[#009640] hover:bg-[#007a33] text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xs transition">
+                    Save Changes
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTAINER GRID FOR THE SECTION BLOCKS -->
+        <main class="p-8 max-w-5xl w-full mx-auto space-y-6">
+
+            <!-- FIRST SECTION ROW: IDENTITY & DETAILS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+
+                <!-- COLUMN LEFT ACCENT CARD WRAPPERS stack -->
+                <div class="md:col-span-1 space-y-6">
+                    <!-- Store Identity Brand Picture View block -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-5 text-center space-y-4 shadow-xs">
+                        <h3 class="text-xs font-bold text-gray-900 text-left tracking-tight">Store Identity</h3>
+
+                        <div class="mx-auto w-28 h-28 border border-dashed border-gray-300 rounded-2xl bg-[#fafafa] flex flex-col items-center justify-center p-3 cursor-pointer hover:bg-gray-50 transition relative group">
+                            <div class="w-10 h-10 text-[#009640] mb-1 flex items-center justify-center bg-emerald-50 rounded-lg">
+                                <i data-lucide="store" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-[#009640]">VyapaarSetu</span>
+                            <span class="text-[8px] text-gray-400 font-semibold uppercase tracking-wider scale-90">Retail Boutique</span>
+                        </div>
+
+                        <p class="text-[9px] text-gray-400 font-medium leading-relaxed px-4">
+                            Recommended: 512x512px SVG, PNG or JPG. Max 2MB.
+                        </p>
+                    </div>
+
+                    <!-- Verification Tracking Badge Widget -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-xs space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-gray-900 tracking-tight">Verified Merchant</h4>
+                            <span class="text-[8px] font-black tracking-wide text-emerald-700 bg-emerald-50 border border-emerald-100/60 px-1.5 py-0.5 rounded uppercase">Active</span>
+                        </div>
+                        <!-- Progress gauge line -->
+                        <div class="space-y-1.5">
+                            <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-[#009640] h-full rounded-full" style="width: 85%;"></div>
+                            </div>
+                            <span class="text-[10px] font-semibold text-gray-400 block">Profile completion: 85%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRIMARY FORM INPUT BLOCK -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 md:col-span-2 shadow-xs">
+                    <h3 class="text-xs font-bold text-gray-900 mb-5 tracking-tight">Primary Details</h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Store Name Input -->
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-400">Store Name</label>
+                            <input type="text" value="The Urban Collective"
+                                   class="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 bg-[#fafafa] focus:outline-none focus:bg-white focus:border-[#009640] transition">
+                        </div>
+
+                        <!-- Owner Name Input -->
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-400">Owner Name</label>
+                            <input type="text" value="Aman Gupta"
+                                   class="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 bg-[#fafafa] focus:outline-none focus:bg-white focus:border-[#009640] transition">
+                        </div>
+
+                        <!-- Email Address Input -->
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-400">Email Address</label>
+                            <input type="email" value="aman@urbancollective.com"
+                                   class="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 bg-[#fafafa] focus:outline-none focus:bg-white focus:border-[#009640] transition">
+                        </div>
+
+                        <!-- Phone Number Composite Input Field -->
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-400">Phone Number</label>
+                            <input type="tel" value="+91 98765 43210"
+                                   class="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 bg-[#fafafa] focus:outline-none focus:bg-white focus:border-[#009640] transition">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECOND SECTION ROW: ADDRESS & TIMINGS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+
+                <!-- BUSINESS ADDRESS SELECTION ROW PANEL -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-5 md:col-span-2 shadow-xs space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-gray-900 tracking-tight">Business Address</h3>
+                        <button class="text-[10px] font-bold text-[#009640] flex items-center gap-1 hover:underline">
+                            <i data-lucide="locate-fixed" class="w-3.5 h-3.5"></i> Use GPS
+                        </button>
+                    </div>
+
+                    <!-- Text Area Preview Output -->
+                    <div class="border border-gray-200 rounded-xl p-3 bg-white text-xs font-medium text-gray-700 leading-relaxed min-h-[64px]">
+                        Suite 402, Skyline Towers, Sector 18, Gurgaon, Haryana, 122002
+                    </div>
+
+                    <!-- Static Visual Content Map Representation Framework -->
+                    <div class="w-full h-44 rounded-xl border border-gray-200 overflow-hidden relative bg-slate-100">
+                        <img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/77.0266,28.4595,12,0/600x300?access_token=mock"
+                             alt="Map placeholder view of Gurgaon" class="w-full h-full object-cover opacity-80 filter contrast-125">
+                        <!-- Simulated interactive PIN bubble view overlay layout -->
+                        <div class="absolute bottom-3 left-3 bg-white border border-gray-200 px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-sm">
+                            <i data-lucide="map-pin" class="w-3 h-3 text-red-500 fill-red-100"></i>
+                            <span class="text-[9px] font-bold text-gray-700">Store Pin Verified</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OPERATION HOURS SCHEDULING MANAGEMENT CARD -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs space-y-4">
+                    <h3 class="text-xs font-bold text-gray-900 tracking-tight">Operation Hours</h3>
+
+                    <div class="space-y-3.5 text-xs">
+                        <!-- Mon - Fri Row -->
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium text-gray-600">Mon - Fri</span>
+                            <div class="flex items-center gap-1.5 font-bold text-gray-800 text-[11px]">
+                                <span class="bg-gray-50 border border-gray-100 rounded px-1.5 py-0.5">09:00 AM</span>
+                                <span class="text-gray-300 font-normal">-</span>
+                                <span class="bg-gray-50 border border-gray-100 rounded px-1.5 py-0.5">08:00 PM</span>
+                            </div>
+                        </div>
+
+                        <!-- Saturday Row -->
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium text-gray-600">Saturday</span>
+                            <div class="flex items-center gap-1.5 font-bold text-gray-800 text-[11px]">
+                                <span class="bg-gray-50 border border-gray-100 rounded px-1.5 py-0.5">10:00 AM</span>
+                                <span class="text-gray-300 font-normal">-</span>
+                                <span class="bg-gray-50 border border-gray-100 rounded px-1.5 py-0.5">06:00 PM</span>
+                            </div>
+                        </div>
+
+                        <!-- Sunday Row (Closed Alert Accent Row Container) -->
+                        <div class="flex justify-between items-center bg-red-50/50 border border-red-100/40 p-2 rounded-xl -mx-2">
+                            <span class="font-bold text-red-700 pl-1">Sunday</span>
+                            <div class="flex items-center gap-3 pr-1">
+                                <span class="text-[10px] font-bold text-red-600">Closed</span>
+                                <button class="text-[9px] font-black uppercase text-gray-400 hover:text-gray-600 tracking-wider">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="h-[1px] bg-gray-100 pt-1"></div>
+
+                    <!-- Timezone contextual alignment information block link text -->
+                    <div class="flex justify-between items-center text-xs pt-1">
+                        <span class="font-medium text-gray-400">Timezone</span>
+                        <span class="font-bold text-gray-700 text-[11px]">IST (UTC+5:30)</span>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

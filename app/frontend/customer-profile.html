@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - VyapaarSetu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#f8f9fa] text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- 1. HEADER / NAVIGATION BAR -->
+    <header class="bg-white border-b border-gray-200 px-4 lg:px-16 h-16 flex items-center justify-between gap-4 sticky top-0 z-50">
+        <!-- Logo -->
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <span class="text-xl font-black text-[#009640] tracking-tight">VyapaarSetu</span>
+        </div>
+
+        <!-- Middle Quick Navigation Links -->
+        <div class="hidden md:flex items-center gap-6 text-xs font-semibold text-gray-600">
+            <a href="#" class="hover:text-gray-900 transition">Categories</a>
+            <a href="#" class="hover:text-gray-900 transition">Deals</a>
+            <a href="#" class="hover:text-gray-900 transition">New Arrivals</a>
+        </div>
+
+        <!-- Search Bar & Utility Shortcuts -->
+        <div class="flex items-center gap-4 flex-1 md:flex-none justify-end">
+            <!-- Search field -->
+            <div class="max-w-xs w-full relative hidden sm:block">
+                <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2"></i>
+                <input type="text" placeholder="Search..."
+                       class="w-full pl-11 pr-4 py-2 bg-[#f1f4f9] rounded-xl text-xs font-medium placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#009640] transition">
+            </div>
+
+            <!-- Notification Trigger -->
+            <button class="text-gray-600 hover:text-gray-900 transition relative p-1">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Cart Shortcut -->
+            <button class="text-gray-600 hover:text-gray-900 transition relative p-1">
+                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Small Profile Indicator -->
+            <div class="w-8 h-8 rounded-full border border-gray-200 overflow-hidden cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
+                     alt="User Mini" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB CONTEXT TRACK -->
+    <div class="max-w-6xl mx-auto w-full px-4 lg:px-8 pt-6">
+        <nav class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+            <a href="#" class="hover:text-gray-600">Home</a>
+            <i data-lucide="chevron-right" class="w-3 h-3 text-gray-300"></i>
+            <span class="text-gray-600">My Account</span>
+        </nav>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTENT CONTROL PANEL -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 lg:px-8 py-4 grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
+
+        <!-- 2. LEFT SIDEBAR ACTIONS NAVIGATION -->
+        <aside class="space-y-6">
+            <div>
+                <h1 class="text-xl font-bold text-gray-900 tracking-tight">My Account</h1>
+                <p class="text-xs text-gray-400 font-medium mt-0.5">Manage your profile information, addresses, and track orders.</p>
+            </div>
+
+            <!-- Tab group selector rows -->
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs font-bold bg-[#009640] text-white shadow-xs transition">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100/80 transition">
+                    <i data-lucide="package" class="w-4 h-4"></i>
+                    <span>Orders</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100/80 transition">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    <span>Addresses</span>
+                </a>
+
+                <div class="h-[1px] bg-gray-200 my-4"></div>
+
+                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs font-bold text-red-600 hover:bg-red-50/50 transition">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Sign Out</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- RIGHT DATA WRAPPERS -->
+        <div class="md:col-span-3 space-y-6">
+
+            <!-- 3. PERSONAL INFORMATION MASTER CARD -->
+            <section class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs">
+                <!-- Header block metadata -->
+                <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-white">
+                    <h2 class="text-sm font-bold text-gray-900 tracking-tight">Personal Information</h2>
+                    <span class="text-[10px] font-semibold text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded">Last updated: 2 days ago</span>
+                </div>
+
+                <div class="p-6 space-y-6">
+                    <!-- Photo Uploader Frame -->
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full border-2 border-[#009640]/30 p-0.5 overflow-hidden flex-shrink-0 relative">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+                                 alt="User profile main picture" class="w-full h-full object-cover rounded-full">
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-gray-700">Profile Picture</h4>
+                            <p class="text-[10px] text-gray-400 font-medium mt-0.5">PNG, JPG or GIF. Max 5MB.</p>
+                            <button class="text-[11px] font-bold text-[#009640] hover:underline mt-1 block">Change Photo</button>
+                        </div>
+                    </div>
+
+                    <!-- Input Grid Context Form -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Full Name -->
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-500">Full Name</label>
+                            <input type="text" value="Arjun Malhotra"
+                                   class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-xs font-medium text-gray-800 focus:outline-none focus:border-[#009640] transition">
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-500">Email Address</label>
+                            <input type="email" value="arjun.malhotra@vsetu.com"
+                                   class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-xs font-medium text-gray-800 focus:outline-none focus:border-[#009640] transition">
+                        </div>
+
+                        <!-- Phone Number Composite Input -->
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-500">Phone Number</label>
+                            <div class="flex rounded-lg overflow-hidden border border-gray-200 focus-within:border-[#009640] transition">
+                                <span class="bg-gray-50 border-r border-gray-200 px-3 py-2.5 text-xs font-bold text-gray-500 flex items-center justify-center">+91</span>
+                                <input type="tel" value="9876543210"
+                                       class="w-full px-3 py-2.5 text-xs font-medium text-gray-800 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Gender Select Menu -->
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-500">Gender</label>
+                            <div class="relative">
+                                <select class="w-full border border-gray-200 rounded-lg pl-3 pr-10 py-2.5 text-xs font-medium text-gray-800 bg-white appearance-none focus:outline-none focus:border-[#009640] transition">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submission Flow CTA Row -->
+                    <div class="flex gap-3 pt-2">
+                        <button class="bg-[#009640] hover:bg-[#007a33] text-white text-xs font-bold px-4 py-2.5 rounded-lg shadow-xs transition">Update Profile</button>
+                        <button class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-bold px-4 py-2.5 rounded-lg transition">Discard Changes</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. SAVED ADDRESSES WRAPPER -->
+            <section class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-sm font-bold text-gray-900 tracking-tight">Saved Addresses</h2>
+                    <button class="text-xs font-bold text-[#009640] flex items-center gap-1 hover:underline">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Add New
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Address Card 1 -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-3 shadow-xs relative">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-1.5">
+                                <i data-lucide="home" class="w-4 h-4 text-[#009640]"></i>
+                                <span class="text-xs font-bold text-gray-900">Home</span>
+                                <span class="text-[9px] uppercase font-black text-green-700 bg-green-50 px-1.5 py-0.5 rounded tracking-wide">Default</span>
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-600 transition"><i data-lucide="more-vertical" class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-[11px] text-gray-500 font-medium leading-relaxed">
+                            402, Skyline Residency, Sector 45<br>
+                            Gurugram, Haryana 122003<br>
+                            India
+                        </p>
+                        <div class="flex gap-3 text-[10px] font-bold pt-1">
+                            <button class="text-gray-500 hover:text-gray-900 transition">Edit</button>
+                            <button class="text-red-500 hover:text-red-700 transition">Remove</button>
+                        </div>
+                    </div>
+
+                    <!-- Address Card 2 -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-3 shadow-xs relative">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-1.5">
+                                <i data-lucide="building-2" class="w-4 h-4 text-gray-600"></i>
+                                <span class="text-xs font-bold text-gray-900">Work</span>
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-600 transition"><i data-lucide="more-vertical" class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-[11px] text-gray-400 font-medium leading-relaxed">
+                            Global Tech Park, Tower B, 12th Floor<br>
+                            Marathahalli, Bengaluru 560037<br>
+                            India
+                        </p>
+                        <div class="flex gap-3 text-[10px] font-bold pt-1">
+                            <button class="text-gray-500 hover:text-gray-900 transition">Edit</button>
+                            <button class="text-red-500 hover:text-red-700 transition">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. SECURITY & INTEGRITY DATA PANEL ROWS -->
+            <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                <!-- Box 1: Password -->
+                <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex gap-3 items-center shadow-xs">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-blue-600 shadow-xs flex-shrink-0">
+                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h4 class="text-xs font-bold text-gray-900 truncate">Password</h4>
+                        <button class="text-[10px] font-bold text-blue-600 hover:underline mt-0.5 block">Change Now</button>
+                    </div>
+                </div>
+
+                <!-- Box 2: 2FA Status -->
+                <div class="bg-green-50/50 border border-green-100 rounded-xl p-4 flex gap-3 items-center shadow-xs">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-green-600 shadow-xs flex-shrink-0">
+                        <i data-lucide="check-square" class="w-4 h-4"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h4 class="text-xs font-bold text-gray-900 truncate">2FA Status</h4>
+                        <span class="text-[10px] font-bold text-green-700 block mt-0.5">Enabled</span>
+                    </div>
+                </div>
+
+                <!-- Box 3: Sessions -->
+                <div class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 flex gap-3 items-center shadow-xs">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-indigo-600 shadow-xs flex-shrink-0">
+                        <i data-lucide="smartphone" class="w-4 h-4"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h4 class="text-xs font-bold text-gray-900 truncate">Linked Devices</h4>
+                        <span class="text-[10px] font-semibold text-gray-500 block mt-0.5">2 Active Sessions</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- SYSTEM FOOTER -->
+    <footer class="bg-white border-t border-gray-200 mt-auto py-6 text-[11px] text-gray-400 font-medium">
+        <div class="max-w-6xl mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                © 2026 VyapaarSetu Merchant Hub. All rights reserved.
+            </div>
+            <div class="flex gap-4 font-semibold">
+                <a href="#" class="hover:text-gray-600 transition">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-600 transition">Terms of Service</a>
+                <a href="#" class="hover:text-gray-600 transition">Help Center</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

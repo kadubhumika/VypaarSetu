@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyapaarSetu - Order Management</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#f4f6fa] text-gray-800 antialiased min-h-screen flex">
+
+    <!-- 1. COMPACT LEFT SIDEBAR -->
+    <aside class="w-64 bg-[#f0f4fd] border-r border-gray-200 flex flex-col justify-between fixed h-screen z-20">
+        <div>
+            <!-- Sidebar Header / Logo -->
+            <div class="p-5 flex items-center gap-3">
+                <div class="bg-[#009640] text-white p-2 rounded-xl shadow-sm">
+                    <i data-lucide="store" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-[#00642d] tracking-tight leading-none">CommercePro</h2>
+                    <span class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Merchant Portal</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="px-3 mt-4 space-y-1">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                </a>
+                <a href="check-inventory.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="archive" class="w-4 h-4"></i> Inventory
+                </a>
+                <a href="upload-invoice.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="package" class="w-4 h-4"></i> Products
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-[#009640] text-white text-sm font-semibold rounded-xl transition">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Orders
+                </a>
+            </nav>
+        </div>
+
+        <!-- Merchant Profile Lower Block -->
+        <div class="p-4 border-t border-gray-200 bg-[#f0f4fd] flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
+                 alt="Merchant Avatar" class="w-9 h-9 rounded-full border object-cover">
+            <div>
+                <h4 class="text-xs font-bold text-gray-900 leading-tight">Merchant Profile</h4>
+                <p class="text-[10px] text-gray-400 font-medium">VyapaarSetu Admin</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN WORKING WRAPPER -->
+    <div class="flex-1 ml-64 flex flex-col min-h-screen bg-[#f8f9fc]">
+
+        <!-- TOP NAVBAR -->
+        <header class="bg-white border-b border-gray-100 sticky top-0 z-10 shadow-sm h-20 px-8 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-bold text-[#00642d]">VyapaarSetu</span>
+            </div>
+
+            <!-- Middle Search and Quick Controls -->
+            <div class="flex items-center gap-4">
+                <div class="w-72 relative">
+                    <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2"></i>
+                    <input type="text" placeholder="Search orders..."
+                           class="w-full pl-10 pr-4 py-2 bg-[#f1f3f7] rounded-lg text-xs placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#009640] transition">
+                </div>
+                <button class="p-2 text-gray-500 hover:text-gray-800 transition relative">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                    <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                </button>
+                <button class="p-2 text-gray-500 hover:text-gray-800 transition">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                </button>
+                <div class="w-7 h-7 bg-[#009640] text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
+                    VS
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="p-8 space-y-6 flex-1">
+
+            <!-- Page Title Area -->
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900 tracking-tight">Order Management</h1>
+                    <p class="text-[11px] text-gray-500 font-medium">Track and process your store's customer transactions.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg text-xs hover:bg-gray-50 shadow-sm transition">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
+                    </button>
+                    <button class="flex items-center gap-1.5 bg-[#009640] hover:bg-[#007a33] text-white font-semibold px-4 py-2 rounded-lg text-xs transition shadow-sm">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i> New Product
+                    </button>
+                </div>
+            </div>
+
+            <!-- METRICS ROW -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Total Orders -->
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                    <div class="space-y-0.5">
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Total Orders</span>
+                        <span class="text-xl font-extrabold text-gray-900">1,284</span>
+                    </div>
+                    <div class="p-3 bg-green-50 text-[#009640] rounded-xl">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    </div>
+                </div>
+
+                <!-- Pending Tasks -->
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                    <div class="space-y-0.5">
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Pending Tasks</span>
+                        <span class="text-xl font-extrabold text-gray-900">12</span>
+                    </div>
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    </div>
+                </div>
+
+                <!-- Revenue MoM -->
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                    <div class="space-y-0.5">
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Revenue (MOM)</span>
+                        <span class="text-xl font-extrabold text-gray-900">₹45,200</span>
+                    </div>
+                    <div class="p-3 bg-teal-50 text-teal-600 rounded-xl">
+                        <i data-lucide="credit-card" class="w-5 h-5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLE DATAGRID CONTAINER -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+                <!-- Filters Header Section -->
+                <div class="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-gray-100">
+                    <div class="bg-[#f0f4fd] p-1 rounded-xl flex gap-1 text-xs font-semibold text-gray-500">
+                        <button class="bg-white text-gray-900 px-4 py-1.5 rounded-lg shadow-sm">All Orders</button>
+                        <button class="hover:text-gray-900 px-4 py-1.5 transition">Pending</button>
+                        <button class="hover:text-gray-900 px-4 py-1.5 transition">Completed</button>
+                    </div>
+
+                    <button class="flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 font-semibold px-3 py-2 rounded-lg text-xs hover:bg-gray-50 transition">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-400"></i> Last 30 Days <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-gray-400 ml-1"></i>
+                    </button>
+                </div>
+
+                <!-- Orders Table Workspace -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-gray-400 uppercase font-bold tracking-wider border-b border-gray-100 text-[10px]">
+                                <th class="py-3 px-6">Order ID</th>
+                                <th class="py-3 px-4">Customer</th>
+                                <th class="py-3 px-4">Date</th>
+                                <th class="py-3 px-4">Amount (₹)</th>
+                                <th class="py-3 px-4">Payment</th>
+                                <th class="py-3 px-4">Fulfillment</th>
+                                <th class="py-3 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 font-medium text-gray-700">
+                            <!-- Row #1024 -->
+                            <tr class="hover:bg-slate-50/40 transition">
+                                <td class="py-3.5 px-6 font-bold text-[#009640]">#1024</td>
+                                <td class="py-3.5 px-4 flex items-center gap-2.5">
+                                    <div class="w-7 h-7 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-full flex items-center justify-center">AK</div>
+                                    <span class="font-bold text-gray-900">Amit Kumar</span>
+                                </td>
+                                <td class="py-3.5 px-4 text-gray-500">24 Oct, 2024</td>
+                                <td class="py-3.5 px-4 font-bold text-gray-900">₹1,499.00</td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded">Paid</span>
+                                </td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded">Received</span>
+                                </td>
+                                <td class="py-3.5 px-6 text-right text-[#009640] font-bold hover:underline cursor-pointer">View</td>
+                            </tr>
+
+                            <!-- Row #1025 -->
+                            <tr class="hover:bg-slate-50/40 transition">
+                                <td class="py-3.5 px-6 font-bold text-[#009640]">#1025</td>
+                                <td class="py-3.5 px-4 flex items-center gap-2.5">
+                                    <div class="w-7 h-7 bg-purple-50 text-purple-600 text-[10px] font-bold rounded-full flex items-center justify-center">PS</div>
+                                    <span class="font-bold text-gray-900">Priya Sharma</span>
+                                </td>
+                                <td class="py-3.5 px-4 text-gray-500">24 Oct, 2024</td>
+                                <td class="py-3.5 px-4 font-bold text-gray-900">₹2,840.00</td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded">Pending</span>
+                                </td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded">Packed</span>
+                                </td>
+                                <td class="py-3.5 px-6 text-right text-[#009640] font-bold hover:underline cursor-pointer">View</td>
+                            </tr>
+
+                            <!-- Row #1026 -->
+                            <tr class="hover:bg-slate-50/40 transition">
+                                <td class="py-3.5 px-6 font-bold text-[#009640]">#1026</td>
+                                <td class="py-3.5 px-4 flex items-center gap-2.5">
+                                    <div class="w-7 h-7 bg-teal-50 text-teal-600 text-[10px] font-bold rounded-full flex items-center justify-center">RV</div>
+                                    <span class="font-bold text-gray-900">Rohan Verma</span>
+                                </td>
+                                <td class="py-3.5 px-4 text-gray-500">23 Oct, 2024</td>
+                                <td class="py-3.5 px-4 font-bold text-gray-900">₹750.00</td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded">Paid</span>
+                                </td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-[#009640] text-white text-[10px] font-bold px-2 py-0.5 rounded">Completed</span>
+                                </td>
+                                <td class="py-3.5 px-6 text-right text-[#009640] font-bold hover:underline cursor-pointer">View</td>
+                            </tr>
+
+                            <!-- Row #1027 -->
+                            <tr class="hover:bg-slate-50/40 transition">
+                                <td class="py-3.5 px-6 font-bold text-[#009640]">#1027</td>
+                                <td class="py-3.5 px-4 flex items-center gap-2.5">
+                                    <div class="w-7 h-7 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full flex items-center justify-center">ML</div>
+                                    <span class="font-bold text-gray-900">Meera Lal</span>
+                                </td>
+                                <td class="py-3.5 px-4 text-gray-500">23 Oct, 2024</td>
+                                <td class="py-3.5 px-4 font-bold text-gray-900">₹5,200.00</td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded">Paid</span>
+                                </td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded">Ready</span>
+                                </td>
+                                <td class="py-3.5 px-6 text-right text-[#009640] font-bold hover:underline cursor-pointer">View</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Footer Pagination Controls inside Table Container -->
+                <div class="p-4 bg-slate-50 border-t border-gray-100 flex justify-between items-center text-xs font-semibold text-gray-500">
+                    <span>Showing 1 to 4 of 1,284 entries</span>
+
+                    <div class="flex items-center gap-1.5">
+                        <button class="p-1.5 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-400 disabled:opacity-50">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <button class="w-8 h-8 bg-[#009640] text-white rounded-lg font-bold">1</button>
+                        <button class="w-8 h-8 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg transition">2</button>
+                        <button class="w-8 h-8 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg transition">3</button>
+                        <button class="p-1.5 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-400">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- FOOTER SEGMENT -->
+        <footer class="h-16 border-t border-gray-100 bg-white px-8 flex flex-col sm:flex-row justify-between items-center gap-2 text-[11px] font-medium text-gray-400">
+            <div>
+                <span class="font-bold text-gray-600">CommercePro</span>
+                <span>© 2024 CommercePro Inc. All rights reserved.</span>
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-gray-600 transition">Support</a>
+                <a href="#" class="hover:text-gray-600 transition">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-600 transition">Terms of Service</a>
+                <a href="#" class="hover:text-gray-600 transition">App Store</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

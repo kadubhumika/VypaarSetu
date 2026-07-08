@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout & Payment - VyapaarSetu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#f8f9fa] text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- TOP NAVBAR -->
+    <header class="bg-white border-b border-gray-100 px-4 lg:px-16 h-16 flex items-center justify-between gap-4">
+        <!-- Logo -->
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <span class="text-xl font-black text-[#009640] tracking-tight">VyapaarSetu</span>
+        </div>
+
+        <!-- Navigation Links & Location Context -->
+        <div class="flex items-center gap-6 text-xs font-bold text-gray-600 ml-auto flex-shrink-0">
+            <a href="#" class="hover:text-gray-900 transition font-medium">Categories</a>
+            <a href="#" class="hover:text-gray-900 transition font-medium">Deals</a>
+            <a href="#" class="hover:text-gray-900 transition font-medium">Orders</a>
+
+            <div class="flex items-center gap-1 text-gray-500 font-medium">
+                <i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i>
+                <span>Mumbai, IN</span>
+            </div>
+
+            <!-- Cart Trigger Icon -->
+            <button class="flex items-center gap-1.5 text-gray-700 hover:text-gray-900 transition font-bold">
+                <i data-lucide="shopping-cart" class="w-4 h-4 text-[#009640]"></i>
+                <span>Cart (3)</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN GRID CONTAINER -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 lg:px-8 py-8 space-y-8">
+
+        <!-- STEP CONTROLS INDICATOR -->
+        <nav class="flex items-center gap-4 text-[11px] font-bold text-gray-400">
+            <div class="flex items-center gap-1.5 text-gray-500">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-gray-400"></i>
+                <span>Cart</span>
+            </div>
+            <div class="w-8 h-[1px] bg-gray-200"></div>
+            <div class="flex items-center gap-1.5 text-[#009640]">
+                <div class="w-4 h-4 rounded-full border-2 border-[#009640] flex items-center justify-center text-[9px]"></div>
+                <span>Checkout</span>
+            </div>
+            <div class="w-8 h-[1px] bg-gray-200"></div>
+            <div class="flex items-center gap-1.5">
+                <div class="w-4 h-4 rounded-full border border-gray-300"></div>
+                <span>Confirmation</span>
+            </div>
+        </nav>
+
+        <!-- TWO-COLUMN WORKFLOW SPACE -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+
+            <!-- LEFT AREA: ADDRESSES & GATEWAYS -->
+            <div class="lg:col-span-2 space-y-8">
+
+                <!-- DELIVERY ADDRESS MANAGEMENT BLOCK -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2 text-gray-900">
+                            <i data-lucide="truck" class="w-5 h-5 text-gray-700"></i>
+                            <h2 class="text-sm font-bold tracking-tight">Delivery Address</h2>
+                        </div>
+                        <button class="text-[11px] font-bold text-[#009640] hover:underline">+ Add New</button>
+                    </div>
+
+                    <!-- Address Choice Grid Layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Address Card 1 (Active/Primary) -->
+                        <div class="bg-white border-2 border-[#009640]/40 rounded-xl p-4 space-y-2 cursor-pointer shadow-xs relative">
+                            <h3 class="text-xs font-bold text-gray-900">Home (Primary)</h3>
+                            <p class="text-[11px] text-gray-500 font-medium leading-relaxed">
+                                Flat 402, Green Valley Apartments<br>
+                                Andheri East, Mumbai, Maharashtra<br>
+                                400069
+                            </p>
+                        </div>
+
+                        <!-- Address Card 2 -->
+                        <div class="bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-4 space-y-2 cursor-pointer shadow-xs transition">
+                            <h3 class="text-xs font-bold text-gray-800">Office</h3>
+                            <p class="text-[11px] text-gray-400 font-medium leading-relaxed">
+                                Innovate Tech Park, Floor 12<br>
+                                Bandra Kurla Complex, Mumbai<br>
+                                400051
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAYMENT INSTRUMENT CONTAINER -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2 text-gray-900">
+                        <i data-lucide="credit-card" class="w-5 h-5 text-gray-700"></i>
+                        <h2 class="text-sm font-bold tracking-tight">Payment Method</h2>
+                    </div>
+
+                    <!-- Structured Actionable Row Selection Rows -->
+                    <div class="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100 overflow-hidden shadow-xs">
+                        <!-- Option 1: UPI -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50/80 transition cursor-pointer group">
+                            <div class="flex gap-4 items-center">
+                                <div class="w-8 h-8 bg-emerald-50 text-[#009640] rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="qr-code" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-gray-900">UPI (PhonePe, Google Pay, BHIM)</h4>
+                                    <p class="text-[10px] text-gray-400 font-medium mt-0.5">Instant payment using any UPI app</p>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition"></i>
+                        </div>
+
+                        <!-- Option 2: Cards -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50/80 transition cursor-pointer group">
+                            <div class="flex gap-4 items-center">
+                                <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="credit-card" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-gray-900">Credit / Debit Card</h4>
+                                    <p class="text-[10px] text-gray-400 font-medium mt-0.5">Visa, Mastercard, RuPay, Amex</p>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition"></i>
+                        </div>
+
+                        <!-- Option 3: COD -->
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50/80 transition cursor-pointer group">
+                            <div class="flex gap-4 items-center">
+                                <div class="w-8 h-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="banknote" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-gray-900">Cash on Delivery</h4>
+                                    <p class="text-[10px] text-gray-400 font-medium mt-0.5">Pay when you receive the package</p>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRUST COMPLIANCE FOOTNOTES -->
+                <div class="flex flex-wrap gap-2 pt-2">
+                    <span class="bg-slate-100 text-slate-600 text-[10px] font-bold py-1 px-2.5 rounded-md flex items-center gap-1">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#009640]"></i> SSL Secure Checkout
+                    </span>
+                    <span class="bg-slate-100 text-slate-600 text-[10px] font-bold py-1 px-2.5 rounded-md flex items-center gap-1">
+                        <i data-lucide="check-square" class="w-3.5 h-3.5 text-[#009640]"></i> PCI-DSS Compliant
+                    </span>
+                    <span class="bg-slate-100 text-slate-600 text-[10px] font-bold py-1 px-2.5 rounded-md flex items-center gap-1">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-[#009640]"></i> Encrypted Payments
+                    </span>
+                </div>
+            </div>
+
+            <!-- RIGHT AREA: STICKY INVOICE / BREAKDOWN -->
+            <div class="bg-white border border-gray-200 rounded-2xl p-5 space-y-5 shadow-xs lg:sticky lg:top-24">
+                <h3 class="text-xs font-bold text-gray-900 uppercase tracking-tight">Order Summary</h3>
+
+                <!-- Product Line-Items Stack -->
+                <div class="space-y-3 max-h-48 overflow-y-auto pr-1">
+                    <!-- Item 1 -->
+                    <div class="flex gap-3 items-center">
+                        <img src="https://images.unsplash.com/photo-1574269661728-5a2a890998a2?auto=format&fit=crop&q=80&w=100"
+                             alt="Blender" class="w-12 h-12 object-cover rounded-lg bg-gray-50 flex-shrink-0">
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-xs font-bold text-gray-900 truncate">Smart Kitchen Blender</h4>
+                            <span class="text-[10px] text-gray-400 font-semibold block mt-0.5">Qty: 1 • Steel Grey</span>
+                        </div>
+                        <span class="text-xs font-bold text-gray-800">₹4,499.00</span>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="flex gap-3 items-center">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=100"
+                             alt="Headphones" class="w-12 h-12 object-cover rounded-lg bg-gray-50 flex-shrink-0">
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-xs font-bold text-gray-900 truncate">SonicWave Elite Pro</h4>
+                            <span class="text-[10px] text-gray-400 font-semibold block mt-0.5">Qty: 2 • Matte Black</span>
+                        </div>
+                        <span class="text-xs font-bold text-gray-800">₹12,998.00</span>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-100 pt-4 space-y-2.5 text-xs font-medium text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span class="text-gray-800">₹17,497.00</span>
+                    </div>
+                    <div class="flex justify-between items-baseline">
+                        <span>Shipping</span>
+                        <span class="text-emerald-600 font-bold text-[10px] uppercase">Free</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Tax (GST 18%)</span>
+                        <span class="text-gray-800">₹3,149.46</span>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-100 pt-4 flex justify-between items-center">
+                    <span class="text-sm font-bold text-gray-900">Order Total</span>
+                    <span class="text-xl font-black text-gray-900">₹20,646.46</span>
+                </div>
+
+                <!-- Promo Coupon Input Group Container -->
+                <div class="flex gap-2">
+                    <input type="text" placeholder="Apply Coupon Code"
+                           class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-[#009640] transition">
+                    <button class="bg-[#006b2b] hover:bg-[#005422] text-white text-xs font-bold px-4 py-2 rounded-lg transition">Apply</button>
+                </div>
+
+                <!-- Pay Now Submission Controller Button -->
+                <button class="w-full bg-[#006b2b] hover:bg-[#005422] text-white text-xs font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition shadow-sm">
+                    <i data-lucide="lock" class="w-4 h-4 fill-current"></i>
+                    <span>Pay Now</span>
+                </button>
+
+                <p class="text-[10px] text-center text-gray-400 font-medium leading-relaxed">
+                    By placing your order, you agree to VyapaarSetu's<br>
+                    <a href="#" class="underline hover:text-gray-600">Terms of Use</a> and <a href="#" class="underline hover:text-gray-600">Privacy Policy</a>.
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- SYSTEM SUB-FOOTER -->
+    <footer class="bg-white border-t border-gray-200 mt-auto py-8 text-xs text-gray-400 font-medium">
+        <div class="max-w-6xl mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="space-y-1 text-center sm:text-left">
+                <h4 class="text-sm font-black text-[#006b2b] tracking-tight">VyapaarSetu</h4>
+                <p class="text-[11px]">Empowering local commerce across Bharat.</p>
+            </div>
+
+            <div class="flex gap-6 font-semibold">
+                <a href="#" class="hover:text-gray-600 transition">Support</a>
+                <a href="#" class="hover:text-gray-600 transition">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-600 transition">Terms of Service</a>
+            </div>
+
+            <div class="text-[11px] text-center sm:text-right">
+                © 2026 VyapaarSetu Inc. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyapaarSetu - Upload Invoice</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .dashed-dropzone {
+            border: 2px dashed #cbd5e1;
+            transition: all 0.2s ease-in-out;
+        }
+        .dashed-dropzone:hover {
+            border-color: #009640;
+            background-color: #f8fafc;
+        }
+        /* Animated bars for analyzing line effect */
+        .bar-anim {
+            animation: bounce 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes bounce {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-[#f4f6fa] text-gray-800 antialiased min-h-screen flex">
+
+    <!-- 1. LEFT SIDEBAR (Consistent with Dashboard) -->
+    <aside class="w-64 bg-[#f0f4fd] border-r border-gray-200 flex flex-col justify-between fixed h-screen z-20">
+        <div>
+            <!-- Sidebar Header / Logo -->
+            <div class="p-5 flex items-center gap-3">
+                <div class="bg-[#009640] text-white p-2 rounded-xl shadow-sm">
+                    <i data-lucide="store" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-[#00642d] tracking-tight leading-none">VyapaarSetu</h2>
+                    <span class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Merchant Hub</span>
+                </div>
+            </div>
+
+            <!-- Main Navigation Links -->
+            <nav class="px-3 mt-4 space-y-1">
+                <a href="merchant-dashboard.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="package" class="w-4 h-4"></i> Inventory
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-[#009640] text-white text-sm font-semibold rounded-xl transition">
+                    <i data-lucide="file-up" class="w-4 h-4"></i> Upload Invoice
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="boxes" class="w-4 h-4"></i> Products
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Orders
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="line-chart" class="w-4 h-4"></i> Analytics
+                </a>
+            </nav>
+        </div>
+
+        <!-- Lower Controls / Profile Segment -->
+        <div class="p-3 border-t border-gray-200 bg-[#f0f4fd] space-y-1">
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                <i data-lucide="bell" class="w-4 h-4"></i> Notifications
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                <i data-lucide="user" class="w-4 h-4"></i> Profile
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                <i data-lucide="settings" class="w-4 h-4"></i> Settings
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 text-sm font-semibold rounded-xl transition mt-2">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN WORKING WRAPPER -->
+    <div class="flex-1 ml-64 flex flex-col min-h-screen bg-[#f8f9fc]">
+
+        <!-- TOP HEADER BAR -->
+        <header class="h-20 bg-white border-b border-gray-100 px-8 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+            <div class="w-96 relative">
+                <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2"></i>
+                <input type="text" placeholder="Search orders, invoices, products..."
+                       class="w-full pl-10 pr-4 py-2 bg-[#f1f3f7] rounded-full text-xs placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#009640] transition">
+            </div>
+
+            <div class="flex items-center gap-6">
+                <button class="relative p-1 text-gray-500 hover:text-gray-800">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
+                         alt="Merchant Avatar" class="w-9 h-9 rounded-full border object-cover">
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD MAIN WORKSPACE -->
+        <main class="p-8 flex-1 space-y-6">
+
+            <!-- Page Title Area -->
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Upload Invoice</h1>
+                    <p class="text-xs text-gray-500 mt-0.5 font-medium">Automate your inventory entry by uploading purchase invoices.</p>
+                </div>
+                <button class="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 font-bold px-4 py-2 rounded-xl text-xs hover:bg-gray-50 shadow-sm transition">
+                    <i data-lucide="help-circle" class="w-4 h-4 text-gray-500"></i> Guide
+                </button>
+            </div>
+
+            <!-- UPPER GRID PANELS -->
+            <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+
+                <!-- Main Drag-and-Drop Area (3 Cols) -->
+                <div class="xl:col-span-3 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center items-center">
+                    <div class="dashed-dropzone w-full rounded-xl py-12 px-4 flex flex-col items-center justify-center text-center">
+                        <div class="p-4 bg-green-50 text-[#009640] rounded-full mb-4">
+                            <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-800">Drag and drop your invoice here</h3>
+                        <p class="text-[11px] text-gray-400 font-medium max-w-xs mt-2 mb-6">
+                            Supports PDF, JPG, PNG. Max file size 10MB. Smart AI will extract product data automatically.
+                        </p>
+
+                        <div class="flex gap-3">
+                            <button class="flex items-center gap-1.5 px-4 py-2 bg-[#008037] hover:bg-[#00642d] text-white text-xs font-bold rounded-lg transition shadow-sm">
+                                <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Upload PDF
+                            </button>
+                            <button class="flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 text-xs font-bold rounded-lg transition shadow-sm">
+                                <i data-lucide="image" class="w-3.5 h-3.5"></i> Upload Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Extraction Engine Status Panel (1 Col) -->
+                <div class="space-y-4">
+                    <!-- Scan Component -->
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center h-44">
+                        <div class="p-2.5 bg-blue-50 text-blue-600 rounded-full mb-2">
+                            <i data-lucide="camera" class="w-5 h-5"></i>
+                        </div>
+                        <h4 class="text-xs font-bold text-gray-900">Camera Scan</h4>
+                        <p class="text-[10px] text-gray-400 font-medium mt-1 mb-3 max-w-[180px]">
+                            Use your mobile camera or webcam to capture invoice instantly.
+                        </p>
+                        <button class="w-full py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 text-xs font-bold rounded-lg transition">
+                            Start Scanning
+                        </button>
+                    </div>
+
+                    <!-- Live AI Processing Component -->
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-gray-900">Extraction Engine</h4>
+                            <span class="bg-green-50 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> LIVE AI
+                            </span>
+                        </div>
+
+                        <!-- Active Processing Item Row -->
+                        <div class="flex items-center gap-2.5 p-2 bg-slate-50 border border-gray-100 rounded-xl">
+                            <div class="p-2 bg-white text-gray-400 border border-gray-200 rounded-lg">
+                                <i data-lucide="file" class="w-4 h-4"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-xs font-bold text-gray-800 truncate">inv_9921_retail.pdf</p>
+                                <p class="text-[10px] text-gray-400 font-medium mt-0.5">2.4 MB • Processing..</p>
+                            </div>
+                        </div>
+
+                        <!-- Equalizer Waveform Processing Simulation Frame -->
+                        <div class="bg-[#f0f4fd] rounded-xl p-4 flex flex-col items-center justify-center h-20 relative overflow-hidden">
+                            <div class="flex items-end gap-1 h-8">
+                                <span class="bar-anim w-1 bg-[#009640] rounded-full h-4" style="animation-delay: 0.1s;"></span>
+                                <span class="bar-anim w-1 bg-[#00642d] rounded-full h-7" style="animation-delay: 0.3s;"></span>
+                                <span class="bar-anim w-1 bg-[#009640] rounded-full h-5" style="animation-delay: 0.5s;"></span>
+                                <span class="bar-anim w-1 bg-[#12a64a] rounded-full h-8" style="animation-delay: 0.2s;"></span>
+                                <span class="bar-anim w-1 bg-[#00642d] rounded-full h-3" style="animation-delay: 0.4s;"></span>
+                                <span class="bar-anim w-1 bg-[#009640] rounded-full h-6" style="animation-delay: 0.6s;"></span>
+                            </div>
+                            <p class="text-[9px] font-bold tracking-widest text-[#00642d]/70 uppercase mt-2">Analyzing Lines...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOWER TABLE BLOCK: PREVIEW INTERFACE -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-gray-100">
+                    <h3 class="text-sm font-bold text-gray-900">Extracted Products Preview</h3>
+                    <div class="flex gap-4 text-xs font-medium text-gray-500">
+                        <span>Total Items: <strong class="text-gray-900 font-bold">3</strong></span>
+                        <span>Total Value: <strong class="text-[#009640] font-bold">₹24,500.00</strong></span>
+                    </div>
+                </div>
+
+                <!-- Product Data Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-gray-400 uppercase font-bold tracking-wider border-b border-gray-100 text-[10px]">
+                                <th class="py-3 px-5">Item Name</th>
+                                <th class="py-3 px-4">Category</th>
+                                <th class="py-3 px-4">Quantity</th>
+                                <th class="py-3 px-4">Price (Per Unit)</th>
+                                <th class="py-3 px-4">Total</th>
+                                <th class="py-3 px-5 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 font-medium text-gray-700">
+                            <!-- Item 1 -->
+                            <tr class="hover:bg-slate-50/50 transition">
+                                <td class="py-3.5 px-5 font-bold text-gray-900">Premium Basmati Rice 5kg</td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-slate-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Grocery</span>
+                                </td>
+                                <td class="py-3.5 px-4 text-gray-600">20</td>
+                                <td class="py-3.5 px-4 text-gray-600">₹550.00</td>
+                                <td class="py-3.5 px-4 font-bold text-[#00642d]">₹11,000.00</td>
+                                <td class="py-3.5 px-5 text-right text-gray-400 hover:text-gray-600 cursor-pointer">
+                                    <i data-lucide="edit-3" class="w-3.5 h-3.5 inline"></i>
+                                </td>
+                            </tr>
+                            <!-- Item 2 -->
+                            <tr class="hover:bg-slate-50/50 transition">
+                                <td class="py-3.5 px-5 font-bold text-gray-900">Refined Sunflower Oil 1L</td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-slate-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Oils</span>
+                                </td>
+                                <td class="py-3.5 px-4 text-gray-600">50</td>
+                                <td class="py-3.5 px-4 text-gray-600">₹180.00</td>
+                                <td class="py-3.5 px-4 font-bold text-[#00642d]">₹9,000.00</td>
+                                <td class="py-3.5 px-5 text-right text-gray-400 hover:text-gray-600 cursor-pointer">
+                                    <i data-lucide="edit-3" class="w-3.5 h-3.5 inline"></i>
+                                </td>
+                            </tr>
+                            <!-- Item 3 -->
+                            <tr class="hover:bg-slate-50/50 transition">
+                                <td class="py-3.5 px-5 font-bold text-gray-900">Organica Honey 500g</td>
+                                <td class="py-3.5 px-4">
+                                    <span class="bg-slate-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Staples</span>
+                                </td>
+                                <td class="py-3.5 px-4 text-gray-600">15</td>
+                                <td class="py-3.5 px-4 text-gray-600">₹300.00</td>
+                                <td class="py-3.5 px-4 font-bold text-[#00642d]">₹4,500.00</td>
+                                <td class="py-3.5 px-5 text-right text-gray-400 hover:text-gray-600 cursor-pointer">
+                                    <i data-lucide="edit-3" class="w-3.5 h-3.5 inline"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Footer Operations Bar inside Preview block -->
+                <div class="p-4 bg-slate-50 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                        <i data-lucide="info" class="w-4 h-4 text-blue-500"></i>
+                        <span>Check extraction accuracy before final approval.</span>
+                    </div>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <button class="flex-1 sm:flex-none px-5 py-2 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg text-xs hover:bg-gray-50 transition">
+                            Cancel
+                        </button>
+                        <button class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-5 py-2 bg-[#009640] hover:bg-[#007a33] text-white font-semibold rounded-lg text-xs transition shadow-sm">
+                            Approve & Add to Inventory <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM ENGINE STATS ROW -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3">
+                    <div class="p-2.5 bg-green-50 text-green-600 rounded-lg">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-gray-400 font-medium block">Success Rate</span>
+                        <strong class="text-sm font-bold text-gray-900">98.4% Accuracy</strong>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3">
+                    <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
+                        <i data-lucide="gauge" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-gray-400 font-medium block">Processing Speed</span>
+                        <strong class="text-sm font-bold text-gray-900">~4.2s per page</strong>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3">
+                    <div class="p-2.5 bg-amber-50 text-amber-600 rounded-lg">
+                        <i data-lucide="history" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-gray-400 font-medium block">Today's Volume</span>
+                        <strong class="text-sm font-bold text-gray-900">12 Invoices Scanned</strong>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
