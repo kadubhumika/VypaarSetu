@@ -11,14 +11,13 @@ from app.orders.router import router as orders_router
 from app.payments.router import router as payments_router
 from app.analytics.router import router as analytics_router
 from app.customers.router import router as customers_router
+from app.notifications.router import router as notifications_router
 
 app = FastAPI(title="VyapaarSetu API", version="0.1.0")
 
-# Frontend is served separately (VS Code Live Server, a static file server, or file://)
-# so the browser treats it as a different origin — CORS must explicitly allow it.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tighten to your real frontend domain before going to production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -31,12 +30,12 @@ app.include_router(orders_router)
 app.include_router(payments_router)
 app.include_router(analytics_router)
 app.include_router(customers_router)
+app.include_router(notifications_router)
 
 
 @app.get("/health")
 def health_check():
     db_ok, redis_ok = False, False
-
     try:
         db = SessionLocal()
         db.execute(text("SELECT 1"))
@@ -44,10 +43,8 @@ def health_check():
         db_ok = True
     except Exception:
         db_ok = False
-
     try:
         redis_ok = redis_client.ping()
     except Exception:
         redis_ok = False
-
     return {"status": "ok" if db_ok and redis_ok else "degraded", "database": db_ok, "redis": redis_ok}

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models import Order, Payment, TransactionLedger, Inventory, Notification, Store, Merchant
+from app.notifications.service import send_order_notification_with_buttons
 from app.notifications.whatsapp import send_whatsapp_message
 
 
@@ -91,7 +92,6 @@ def handle_webhook(db: Session, razorpay_order_id: str, razorpay_payment_id: str
     if not payment:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "No matching payment intent for this order")
 
-    # --- Idempotency guard: if we've already processed this exact payment id, do nothing ---
     if payment.razorpay_payment_id == razorpay_payment_id and payment.status == "success":
         return payment
 
@@ -103,12 +103,14 @@ def handle_webhook(db: Session, razorpay_order_id: str, razorpay_payment_id: str
     order = db.query(Order).filter(Order.id == payment.order_id).first()
 
     if payment.status == "success":
+        # NOTE: order.status deliberately stays "created" here — payment succeeding is
+        # not the same as the merchant accepting the order. The merchant still needs to
+        # Accept & Pack (or mark Out of Stock) via the WhatsApp reply or the dashboard;
+        # that action is what moves status to "accepted"/"cancelled".
         order.payment_status = "paid"
-        order.status = "accepted"
 
         store = db.query(Store).filter(Store.id == order.store_id).first()
 
-        # Saga step 1: immutable ledger entry — single source of truth for analytics
         db.add(TransactionLedger(
             payment_id=payment.id,
             merchant_id=store.merchant_id,
@@ -119,14 +121,11 @@ def handle_webhook(db: Session, razorpay_order_id: str, razorpay_payment_id: str
             status="success",
         ))
 
-        # Saga step 2: decrement inventory for each item
         for item in order.items:
             inv = db.query(Inventory).filter(Inventory.store_id == order.store_id, Inventory.product_id == item.product_id).first()
             if inv:
                 inv.quantity = max(0, inv.quantity - item.quantity)
 
-        # Saga step 3: notify merchant via WhatsApp (real Twilio send if configured,
-        # falls back to console logging otherwise — see app/notifications/whatsapp.py)
         db.add(Notification(
             merchant_id=store.merchant_id,
             order_id=order.id,
@@ -135,12 +134,8 @@ def handle_webhook(db: Session, razorpay_order_id: str, razorpay_payment_id: str
             type="whatsapp",
         ))
         merchant = db.query(Merchant).filter(Merchant.id == store.merchant_id).first()
-        if merchant:
-            send_whatsapp_message(
-                merchant.phone,
-                f"🛒 New order #{order.id} — ₹{payment.amount} paid via {method or 'online'}. "
-                f"Reply ACCEPT to pack it or OUT to mark out of stock.",
-            )
+        if merchant and merchant.phone:
+            send_order_notification_with_buttons(merchant.phone, order.id, float(payment.amount))
 
     else:
         order.payment_status = "failed"

@@ -12,11 +12,10 @@ Setup (free):
      TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
      TWILIO_AUTH_TOKEN=your_auth_token
      TWILIO_WHATSAPP_FROM=whatsapp:+14155238886   (the sandbox number, keep the whatsapp: prefix)
-6. pip install twilio  (already in requirements.txt below)
+6. pip install twilio  (already in requirements.txt)
 
 Without these three env vars set, this module silently falls back to printing
-to the console — exactly what you had before, so nothing breaks if you haven't
-set up Twilio yet.
+to the console — nothing breaks if Twilio isn't configured yet.
 """
 
 from app.core.config import settings
