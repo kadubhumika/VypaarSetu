@@ -4,347 +4,264 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VyapaarSetu - Store Inventory</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
 <body class="bg-[#f4f6fa] text-gray-800 antialiased min-h-screen flex">
 
-    <!-- 1. COMPACT LEFT SIDEBAR -->
     <aside class="w-64 bg-[#f0f4fd] border-r border-gray-200 flex flex-col justify-between fixed h-screen z-20">
         <div>
-            <!-- Sidebar Header / Logo -->
             <div class="p-5 flex items-center gap-3">
-                <div class="bg-[#009640] text-white p-2 rounded-xl shadow-sm">
-                    <i data-lucide="store" class="w-5 h-5"></i>
-                </div>
+                <div class="bg-[#009640] text-white p-2 rounded-xl shadow-sm"><i data-lucide="store" class="w-5 h-5"></i></div>
                 <div>
                     <h2 class="text-lg font-bold text-[#00642d] tracking-tight leading-none">VyapaarSetu</h2>
                     <span class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Merchant Hub</span>
                 </div>
             </div>
-
-            <!-- Navigation Links -->
             <nav class="px-3 mt-4 space-y-1">
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                <a href="merchant-dashboard.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-[#009640] text-white text-sm font-semibold rounded-xl transition">
+                <a href="check-inventory.html" class="flex items-center gap-3 px-4 py-3 bg-[#009640] text-white text-sm font-semibold rounded-xl transition">
                     <i data-lucide="archive" class="w-4 h-4"></i> Inventory
                 </a>
                 <a href="upload-invoice.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
-                    <i data-lucide="file-up" class="w-4 h-4"></i> Products
+                    <i data-lucide="file-up" class="w-4 h-4"></i> Upload Invoice
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                <a href="order-status.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i> Orders
                 </a>
             </nav>
         </div>
-
-        <!-- Action / Lower Block -->
-        <div class="p-4 border-t border-gray-200 bg-[#f0f4fd]">
-            <button class="w-full flex items-center justify-center gap-2 bg-[#009640] hover:bg-[#007a33] text-white font-semibold py-3 px-4 rounded-xl text-xs transition shadow-sm">
+        <div class="p-4 border-t border-gray-200 bg-[#f0f4fd] space-y-2">
+            <button id="add-product-btn" class="w-full flex items-center justify-center gap-2 bg-[#009640] hover:bg-[#007a33] text-white font-semibold py-3 px-4 rounded-xl text-xs transition shadow-sm">
                 <i data-lucide="plus" class="w-4 h-4"></i> Add Product
             </button>
+            <a href="#" id="logout-btn" class="flex items-center justify-center gap-2 text-red-600 hover:bg-red-50 text-xs font-semibold py-2 rounded-xl transition">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            </a>
         </div>
     </aside>
 
-    <!-- MAIN WORKING WRAPPER -->
     <div class="flex-1 ml-64 flex flex-col min-h-screen bg-[#f8f9fc]">
-
-        <!-- TOP NAVBAR EXTENSION WITH SEARCH & FILTERS -->
         <header class="bg-white border-b border-gray-100 sticky top-0 z-10 shadow-sm">
             <div class="h-20 px-8 flex items-center justify-between">
                 <div>
                     <h1 class="text-xl font-bold text-gray-900 tracking-tight">Store Inventory</h1>
                     <p class="text-[11px] text-gray-500 font-medium">Manage your products by category</p>
                 </div>
-
-                <!-- Right Action Controls -->
                 <div class="flex items-center gap-4">
                     <div class="w-72 relative">
                         <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2"></i>
-                        <input type="text" placeholder="Search items..."
+                        <input id="search-input" type="text" placeholder="Search items..."
                                class="w-full pl-10 pr-4 py-2 bg-[#f1f3f7] rounded-lg text-xs placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#009640] transition">
                     </div>
-                    <button class="p-2 text-gray-500 hover:text-gray-800 transition">
-                        <i data-lucide="bell" class="w-4 h-4"></i>
-                    </button>
-                    <button class="p-2 text-gray-500 hover:text-gray-800 transition">
-                        <i data-lucide="settings" class="w-4 h-4"></i>
-                    </button>
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100"
-                         alt="User profile" class="w-8 h-8 rounded-full border object-cover ml-2">
                 </div>
             </div>
-
-            <!-- Categories Selection Tabstrip -->
-            <div class="px-8 flex gap-6 text-xs font-semibold text-gray-500 pb-3 border-t border-gray-50 pt-3">
-                <a href="#" class="text-[#009640] border-b-2 border-[#009640] pb-2 px-1">Grocery</a>
-                <a href="#" class="hover:text-gray-900 transition pb-2 px-1">Oils</a>
-                <a href="#" class="hover:text-gray-900 transition pb-2 px-1">Staples</a>
-                <a href="#" class="hover:text-gray-900 transition pb-2 px-1">Electronics</a>
-                <a href="#" class="hover:text-gray-900 transition pb-2 px-1">Personal Care</a>
-                <a href="#" class="hover:text-gray-900 transition pb-2 px-1">Home Decor</a>
-            </div>
+            <div id="category-tabs" class="px-8 flex gap-6 text-xs font-semibold text-gray-500 pb-3 border-t border-gray-50 pt-3 overflow-x-auto"></div>
         </header>
 
-        <!-- DASHBOARD MAIN CONTAINER -->
         <main class="p-8 space-y-6">
-
-            <!-- OVERVIEW COUNTERS BLOCK -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Total Products Card -->
                 <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
-                    <div class="space-y-1">
-                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Total Products</span>
-                        <span class="text-xl font-extrabold text-gray-900">1,284</span>
-                    </div>
-                    <div class="p-3 bg-green-50 text-[#009640] rounded-xl">
-                        <i data-lucide="box" class="w-5 h-5"></i>
-                    </div>
+                    <div><span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Total Products</span><span id="stat-total" class="text-xl font-extrabold text-gray-900">0</span></div>
+                    <div class="p-3 bg-green-50 text-[#009640] rounded-xl"><i data-lucide="box" class="w-5 h-5"></i></div>
                 </div>
-
-                <!-- Low Stock Card -->
                 <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
-                    <div class="space-y-1">
-                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Low Stock</span>
-                        <span class="text-xl font-extrabold text-red-500">12</span>
-                    </div>
-                    <div class="p-3 bg-red-50 text-red-500 rounded-xl">
-                        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-                    </div>
+                    <div><span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Low Stock</span><span id="stat-low-stock" class="text-xl font-extrabold text-red-500">0</span></div>
+                    <div class="p-3 bg-red-50 text-red-500 rounded-xl"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
                 </div>
-
-                <!-- Stock Value Card -->
                 <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
-                    <div class="space-y-1">
-                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Stock Value</span>
-                        <span class="text-xl font-extrabold text-gray-900">₹4.2L</span>
-                    </div>
-                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
-                        <i data-lucide="trending-up" class="w-5 h-5"></i>
-                    </div>
+                    <div><span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Stock Value</span><span id="stat-value" class="text-xl font-extrabold text-gray-900">₹0</span></div>
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i data-lucide="trending-up" class="w-5 h-5"></i></div>
                 </div>
-
-                <!-- Active Categories Card -->
                 <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
-                    <div class="space-y-1">
-                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Active Categories</span>
-                        <span class="text-xl font-extrabold text-gray-900">18</span>
-                    </div>
-                    <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
-                        <i data-lucide="layers" class="w-5 h-5"></i>
-                    </div>
+                    <div><span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Categories</span><span id="stat-categories" class="text-xl font-extrabold text-gray-900">0</span></div>
+                    <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><i data-lucide="layers" class="w-5 h-5"></i></div>
                 </div>
             </div>
 
-            <!-- GRID AREA FOR PRODUCT DISPLAY CARDS -->
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-
-                <!-- Card 1: Basmati Rice -->
-                <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
-                    <div class="p-4 relative">
-                        <span class="absolute top-6 right-6 z-10 bg-green-50 text-[#009640] text-[9px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
-                            <i data-lucide="check" class="w-2.5 h-2.5"></i> In Stock
-                        </span>
-                        <div class="w-full h-44 bg-slate-50 rounded-xl overflow-hidden mb-3 flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=300"
-                                 alt="Premium Basmati Rice" class="object-cover w-full h-full">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-sm font-bold text-gray-900">Premium Basmati Rice</h3>
-                                <p class="text-[10px] text-gray-400 font-semibold mt-0.5">5kg Pack • Grocery</p>
-                            </div>
-                            <span class="text-sm font-extrabold text-gray-900">₹1,200</span>
-                        </div>
-                    </div>
-                    <div class="p-4 pt-0 flex justify-between items-center">
-                        <div>
-                            <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">Stock Level</span>
-                            <span class="text-xs font-bold text-gray-800">45 units</span>
-                        </div>
-                        <button class="p-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-slate-50 transition">
-                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Card 2: Sunflower Oil -->
-                <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
-                    <div class="p-4 relative">
-                        <span class="absolute top-6 right-6 z-10 bg-red-50 text-red-500 text-[9px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
-                            <i data-lucide="alert-circle" class="w-2.5 h-2.5"></i> Low Stock
-                        </span>
-                        <div class="w-full h-44 bg-slate-50 rounded-xl overflow-hidden mb-3 flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80&w=300"
-                                 alt="Sunflower Oil" class="object-cover w-full h-full">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-sm font-bold text-gray-900">Sunflower Oil</h3>
-                                <p class="text-[10px] text-gray-400 font-semibold mt-0.5">1L Bottle • Oils</p>
-                            </div>
-                            <span class="text-sm font-extrabold text-gray-900">₹185</span>
-                        </div>
-                    </div>
-                    <div class="p-4 pt-0 flex justify-between items-center">
-                        <div>
-                            <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">Stock Level</span>
-                            <span class="text-xs font-bold text-red-500">5 units</span>
-                        </div>
-                        <button class="p-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-slate-50 transition">
-                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Card 3: Organic Turmeric -->
-                <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
-                    <div class="p-4 relative">
-                        <span class="absolute top-6 right-6 z-10 bg-green-50 text-[#009640] text-[9px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
-                            <i data-lucide="check" class="w-2.5 h-2.5"></i> In Stock
-                        </span>
-                        <div class="w-full h-44 bg-slate-50 rounded-xl overflow-hidden mb-3 flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=300"
-                                 alt="Organic Turmeric" class="object-cover w-full h-full">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-sm font-bold text-gray-900">Organic Turmeric</h3>
-                                <p class="text-[10px] text-gray-400 font-semibold mt-0.5">200g Pouch • Staples</p>
-                            </div>
-                            <span class="text-sm font-extrabold text-gray-900">₹45</span>
-                        </div>
-                    </div>
-                    <div class="p-4 pt-0 flex justify-between items-center">
-                        <div>
-                            <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">Stock Level</span>
-                            <span class="text-xs font-bold text-gray-800">120 units</span>
-                        </div>
-                        <button class="p-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-slate-50 transition">
-                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Card 4: Wireless Speaker -->
-                <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
-                    <div class="p-4 relative">
-                        <span class="absolute top-6 right-6 z-10 bg-green-50 text-[#009640] text-[9px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
-                            <i data-lucide="check" class="w-2.5 h-2.5"></i> In Stock
-                        </span>
-                        <div class="w-full h-44 bg-slate-50 rounded-xl overflow-hidden mb-3 flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&q=80&w=300"
-                                 alt="Wireless Speaker" class="object-cover w-full h-full">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-sm font-bold text-gray-900">Wireless Speaker</h3>
-                                <p class="text-[10px] text-gray-400 font-semibold mt-0.5">Electronics • Smart Audio</p>
-                            </div>
-                            <span class="text-sm font-extrabold text-gray-900">₹2,499</span>
-                        </div>
-                    </div>
-                    <div class="p-4 pt-0 flex justify-between items-center">
-                        <div>
-                            <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">Stock Level</span>
-                            <span class="text-xs font-bold text-gray-800">12 units</span>
-                        </div>
-                        <button class="p-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-slate-50 transition">
-                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                </div>
-
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                <p class="text-xs text-gray-400 col-span-4">Loading inventory...</p>
             </div>
-
-            <!-- RECENTLY UPDATED ITEMS BLOCK -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                <div class="p-5 flex justify-between items-center border-b border-gray-100">
-                    <h3 class="text-sm font-bold text-gray-900">Recently Updated Items</h3>
-                    <a href="#" class="text-[11px] text-[#009640] hover:underline font-bold flex items-center gap-0.5">
-                        View All <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-                    </a>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 text-gray-400 uppercase font-bold tracking-wider border-b border-gray-100 text-[10px]">
-                                <th class="py-3 px-5">Product</th>
-                                <th class="py-3 px-5">Category</th>
-                                <th class="py-3 px-5">Price</th>
-                                <th class="py-3 px-5">Stock</th>
-                                <th class="py-3 px-5 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 text-gray-700 font-medium">
-                            <!-- Product Row 1 -->
-                            <tr class="hover:bg-slate-50/40 transition">
-                                <td class="py-4 px-5 flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-slate-50 rounded-lg overflow-hidden border border-gray-100">
-                                        <img src="https://images.unsplash.com/photo-1497515114629-f71d768fd07c?auto=format&fit=crop&q=80&w=80" alt="Arabica Coffee Beans" class="w-full h-full object-cover">
-                                    </div>
-                                    <span class="font-bold text-gray-900">Arabica Coffee Beans</span>
-                                </td>
-                                <td class="py-4 px-5 text-gray-500">Grocery</td>
-                                <td class="py-4 px-5 font-bold text-gray-900">₹850</td>
-                                <td class="py-4 px-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-28 bg-gray-100 h-2 rounded-full overflow-hidden">
-                                            <div class="bg-[#009640] h-full" style="width: 85%;"></div>
-                                        </div>
-                                        <span class="text-[11px] font-bold text-gray-500">85/100</span>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-5 text-right text-gray-400 hover:text-gray-600 cursor-pointer">
-                                    <i data-lucide="more-vertical" class="w-4 h-4 inline"></i>
-                                </td>
-                            </tr>
-
-                            <!-- Product Row 2 -->
-                            <tr class="hover:bg-slate-50/40 transition">
-                                <td class="py-4 px-5 flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-slate-50 rounded-lg overflow-hidden border border-gray-100">
-                                        <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&q=80&w=80" alt="Lavender Oil" class="w-full h-full object-cover">
-                                    </div>
-                                    <span class="font-bold text-gray-900">Lavender Oil</span>
-                                </td>
-                                <td class="py-4 px-5 text-gray-500">Personal Care</td>
-                                <td class="py-4 px-5 font-bold text-gray-900">₹420</td>
-                                <td class="py-4 px-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-28 bg-gray-100 h-2 rounded-full overflow-hidden">
-                                            <div class="bg-red-400 h-full" style="width: 15%;"></div>
-                                        </div>
-                                        <span class="text-[11px] font-bold text-gray-500">15/100</span>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-5 text-right text-gray-400 hover:text-gray-600 cursor-pointer">
-                                    <i data-lucide="more-vertical" class="w-4 h-4 inline"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </main>
     </div>
 
-    <!-- Initialize Lucide Icons Icons -->
+    <div id="edit-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4">
+            <h3 class="text-sm font-bold text-gray-900">Edit Stock</h3>
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-bold text-gray-500">Quantity</label>
+                <input id="edit-quantity" type="number" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            </div>
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-bold text-gray-500">Selling Price (₹)</label>
+                <input id="edit-price" type="number" step="0.01" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            </div>
+            <div class="flex gap-2 pt-2">
+                <button id="edit-cancel-btn" class="flex-1 border border-gray-200 rounded-lg py-2 text-xs font-bold text-gray-600">Cancel</button>
+                <button id="edit-save-btn" class="flex-1 bg-[#009640] text-white rounded-lg py-2 text-xs font-bold">Save</button>
+                <button id="edit-delete-btn" class="border border-red-200 text-red-600 rounded-lg px-3 py-2 text-xs font-bold">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-3">
+            <h3 class="text-sm font-bold text-gray-900">Add Product</h3>
+            <input id="add-category" placeholder="Category (e.g. Grocery)" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <input id="add-name" placeholder="Product name" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <input id="add-quantity" type="number" placeholder="Quantity" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <input id="add-purchase-price" type="number" step="0.01" placeholder="Purchase price" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <input id="add-selling-price" type="number" step="0.01" placeholder="Selling price" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <div class="flex gap-2 pt-2">
+                <button id="add-cancel-btn" class="flex-1 border border-gray-200 rounded-lg py-2 text-xs font-bold text-gray-600">Cancel</button>
+                <button id="add-save-btn" class="flex-1 bg-[#009640] text-white rounded-lg py-2 text-xs font-bold">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
     <script>
         lucide.createIcons();
+        requireAuth("merchant", "login.html");
+        document.getElementById("logout-btn").addEventListener("click", (e) => { e.preventDefault(); clearSession(); window.location.href = "login.html"; });
+
+        let allItems = [];
+        let activeCategory = "All";
+        let editingId = null;
+
+        async function loadInventory() {
+            try {
+                allItems = await apiFetch("/inventory");
+                renderStats();
+                renderCategoryTabs();
+                renderGrid();
+            } catch (err) {
+                document.getElementById("product-grid").innerHTML = `<p class="text-xs text-red-500 col-span-4">${err.message}</p>`;
+            }
+        }
+
+        function renderStats() {
+            document.getElementById("stat-total").textContent = allItems.length;
+            document.getElementById("stat-low-stock").textContent = allItems.filter(i => i.is_low_stock).length;
+            const value = allItems.reduce((sum, i) => sum + i.selling_price * i.quantity, 0);
+            document.getElementById("stat-value").textContent = `₹${value.toLocaleString("en-IN")}`;
+            document.getElementById("stat-categories").textContent = new Set(allItems.map(i => i.category_name)).size;
+        }
+
+        function renderCategoryTabs() {
+            const categories = ["All", ...new Set(allItems.map(i => i.category_name))];
+            document.getElementById("category-tabs").innerHTML = categories.map(cat => `
+                <a href="#" data-cat="${cat}" class="cat-tab pb-2 px-1 ${cat === activeCategory ? 'text-[#009640] border-b-2 border-[#009640] font-bold' : 'hover:text-gray-900 transition'}">${cat}</a>
+            `).join("");
+            document.querySelectorAll(".cat-tab").forEach(tab => {
+                tab.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    activeCategory = tab.dataset.cat;
+                    renderCategoryTabs();
+                    renderGrid();
+                });
+            });
+        }
+
+        function renderGrid() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const filtered = allItems.filter(i =>
+                (activeCategory === "All" || i.category_name === activeCategory) &&
+                i.product_name.toLowerCase().includes(query)
+            );
+
+            document.getElementById("product-grid").innerHTML = filtered.length ? filtered.map(item => `
+                <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-4 relative">
+                        <span class="absolute top-6 right-6 z-10 ${item.is_low_stock ? 'bg-red-50 text-red-500' : 'bg-green-50 text-[#009640]'} text-[9px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <i data-lucide="${item.is_low_stock ? 'alert-circle' : 'check'}" class="w-2.5 h-2.5"></i> ${item.is_low_stock ? 'Low Stock' : 'In Stock'}
+                        </span>
+                        <div class="w-full h-32 bg-slate-50 rounded-xl overflow-hidden mb-3 flex items-center justify-center text-gray-300">
+                            <i data-lucide="package" class="w-10 h-10"></i>
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-900">${item.product_name}</h3>
+                                <p class="text-[10px] text-gray-400 font-semibold mt-0.5">${item.brand || ''} • ${item.category_name}</p>
+                            </div>
+                            <span class="text-sm font-extrabold text-gray-900">₹${item.selling_price}</span>
+                        </div>
+                    </div>
+                    <div class="p-4 pt-0 flex justify-between items-center">
+                        <div>
+                            <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">Stock Level</span>
+                            <span class="text-xs font-bold ${item.is_low_stock ? 'text-red-500' : 'text-gray-800'}">${item.quantity} units</span>
+                        </div>
+                        <button class="edit-btn p-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-slate-50 transition" data-id="${item.inventory_id}" data-qty="${item.quantity}" data-price="${item.selling_price}">
+                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join("") : `<p class="text-xs text-gray-400 col-span-4">No items match. Try Upload Invoice or Add Product.</p>`;
+
+            lucide.createIcons();
+            document.querySelectorAll(".edit-btn").forEach(btn => {
+                btn.addEventListener("click", () => openEditModal(btn.dataset.id, btn.dataset.qty, btn.dataset.price));
+            });
+        }
+
+        document.getElementById("search-input").addEventListener("input", renderGrid);
+
+        function openEditModal(id, qty, price) {
+            editingId = id;
+            document.getElementById("edit-quantity").value = qty;
+            document.getElementById("edit-price").value = price;
+            document.getElementById("edit-modal").classList.remove("hidden");
+        }
+        document.getElementById("edit-cancel-btn").addEventListener("click", () => document.getElementById("edit-modal").classList.add("hidden"));
+
+        document.getElementById("edit-save-btn").addEventListener("click", async () => {
+            try {
+                await apiFetch(`/inventory/${editingId}`, {
+                    method: "PATCH",
+                    body: { quantity: Number(document.getElementById("edit-quantity").value), selling_price: Number(document.getElementById("edit-price").value) },
+                });
+                document.getElementById("edit-modal").classList.add("hidden");
+                loadInventory();
+            } catch (err) { alert(err.message); }
+        });
+
+        document.getElementById("edit-delete-btn").addEventListener("click", async () => {
+            if (!confirm("Remove this item from inventory?")) return;
+            try {
+                await apiFetch(`/inventory/${editingId}`, { method: "DELETE" });
+                document.getElementById("edit-modal").classList.add("hidden");
+                loadInventory();
+            } catch (err) { alert(err.message); }
+        });
+
+        document.getElementById("add-product-btn").addEventListener("click", () => document.getElementById("add-modal").classList.remove("hidden"));
+        document.getElementById("add-cancel-btn").addEventListener("click", () => document.getElementById("add-modal").classList.add("hidden"));
+        document.getElementById("add-save-btn").addEventListener("click", async () => {
+            try {
+                await apiFetch("/inventory/products", {
+                    method: "POST",
+                    body: {
+                        category_name: document.getElementById("add-category").value,
+                        name: document.getElementById("add-name").value,
+                        quantity: Number(document.getElementById("add-quantity").value),
+                        purchase_price: Number(document.getElementById("add-purchase-price").value),
+                        selling_price: Number(document.getElementById("add-selling-price").value),
+                    },
+                });
+                document.getElementById("add-modal").classList.add("hidden");
+                loadInventory();
+            } catch (err) { alert(err.message); }
+        });
+
+        loadInventory();
     </script>
 </body>
 </html>

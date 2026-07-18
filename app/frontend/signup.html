@@ -4,60 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VyapaarSetu - Create Your Merchant Account</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); }
     </style>
 </head>
 <body class="bg-white min-h-screen flex text-gray-800 antialiased">
-
-    <!-- Left Side: Hero Image & Glassmorphism Text (Identical to Login for Brand Continuity) -->
     <div class="hidden md:flex md:w-1/2 bg-cover bg-center relative p-12 flex-col justify-center items-center"
          style="background-image: url('https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=1000');">
         <div class="absolute inset-0 bg-amber-900/10 mix-blend-multiply"></div>
-
         <div class="glass-card rounded-2xl p-8 max-w-md relative z-10 text-white shadow-2xl">
             <h1 class="text-3xl font-bold mb-4 leading-tight">Empowering Local Commerce</h1>
-            <p class="text-white/90 text-sm leading-relaxed">
-                Join thousands of merchants managing their inventory, orders, and growth with VyapaarSetu's intelligent retail platform.
-            </p>
+            <p class="text-white/90 text-sm leading-relaxed">Join thousands of merchants managing their inventory, orders, and growth with VyapaarSetu's intelligent retail platform.</p>
         </div>
     </div>
 
-    <!-- Right Side: Signup Form -->
     <div class="w-full md:w-1/2 flex flex-col justify-between p-8 md:p-12 min-h-screen bg-white">
-        <!-- Spacer -->
         <div class="hidden md:block"></div>
-
-        <!-- Main Form Container -->
         <div class="w-full max-w-md mx-auto flex flex-col items-center">
-
-            <!-- Logo Icon Box -->
-            <div class="bg-[#009640] text-white p-3.5 rounded-xl shadow-sm mb-4">
-                <i data-lucide="store" class="w-7 h-7"></i>
-            </div>
-
-            <!-- Brand Header -->
+            <div class="bg-[#009640] text-white p-3.5 rounded-xl shadow-sm mb-4"><i data-lucide="store" class="w-7 h-7"></i></div>
             <h2 class="text-2xl font-bold text-[#00642d] tracking-tight">VyapaarSetu</h2>
             <p class="text-xs text-gray-500 mt-1 mb-6 font-medium">Create Merchant Account</p>
 
-            <!-- Google OAuth Button (Top Action for Onboarding Flow) -->
-            <button type="button"
+            <button type="button" id="google-signup-btn"
                     class="w-full flex items-center justify-center gap-2.5 border border-gray-300 rounded-lg py-2.5 bg-white text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm transition">
                 <svg class="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -68,89 +42,68 @@
                 Sign up with Google
             </button>
 
-            <!-- Divider -->
             <div class="w-full flex items-center my-5">
                 <div class="flex-grow border-t border-gray-200"></div>
                 <span class="flex-shrink mx-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Or Register With Email</span>
                 <div class="flex-grow border-t border-gray-200"></div>
             </div>
 
-            <form class="w-full space-y-4">
-                <!-- Full Name Input -->
+            <form id="signup-form" class="w-full space-y-4">
                 <div>
                     <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1.5">Full Name</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                            <i data-lucide="user" class="w-4 h-4"></i>
-                        </div>
-                        <input type="text" placeholder="John Doe"
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i data-lucide="user" class="w-4 h-4"></i></div>
+                        <input id="name" type="text" placeholder="John Doe" required
                                class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-[#009640] focus:ring-1 focus:ring-[#009640] transition">
                     </div>
                 </div>
-
-                <!-- Email Input -->
                 <div>
                     <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1.5">Email Address</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                            <i data-lucide="mail" class="w-4 h-4"></i>
-                        </div>
-                        <input type="email" placeholder="name@store.com"
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i data-lucide="mail" class="w-4 h-4"></i></div>
+                        <input id="email" type="email" placeholder="name@store.com" required
                                class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-[#009640] focus:ring-1 focus:ring-[#009640] transition">
                     </div>
                 </div>
-
-                <!-- Store Name Input -->
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1.5">Phone Number</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i data-lucide="phone" class="w-4 h-4"></i></div>
+                        <input id="phone" type="tel" placeholder="9876543210" required
+                               class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-[#009640] focus:ring-1 focus:ring-[#009640] transition">
+                    </div>
+                </div>
                 <div>
                     <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1.5">Store / Business Name</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-                        </div>
-                        <input type="text" placeholder="e.g. Kirana Super Mart"
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i data-lucide="shopping-bag" class="w-4 h-4"></i></div>
+                        <input id="store_name" type="text" placeholder="e.g. Kirana Super Mart" required
                                class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-[#009640] focus:ring-1 focus:ring-[#009640] transition">
                     </div>
                 </div>
-
-                <!-- Password Input -->
                 <div>
                     <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1.5">Password</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-                            <i data-lucide="lock" class="w-4 h-4"></i>
-                        </div>
-                        <input type="password" placeholder="Create strong password"
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i data-lucide="lock" class="w-4 h-4"></i></div>
+                        <input id="password" type="password" placeholder="Create strong password" required minlength="8"
                                class="w-full pl-10 pr-10 py-2.5 bg-white border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-[#009640] focus:ring-1 focus:ring-[#009640] transition">
-                        <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 cursor-pointer hover:text-gray-600">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </div>
                     </div>
                 </div>
-
-                <!-- Terms and Conditions Checkbox -->
                 <div class="flex items-start">
-                    <input id="terms" type="checkbox"
-                           class="mt-0.5 h-4 w-4 text-[#009640] focus:ring-[#009640] border-gray-300 rounded">
+                    <input id="terms" type="checkbox" required class="mt-0.5 h-4 w-4 text-[#009640] focus:ring-[#009640] border-gray-300 rounded">
                     <label for="terms" class="ml-2 block text-xs text-gray-600 font-medium select-none leading-normal">
                         I agree to the <a href="#" class="text-[#008037] font-semibold hover:underline">Terms of Service</a> and <a href="#" class="text-[#008037] font-semibold hover:underline">Privacy Policy</a>
                     </label>
                 </div>
-
-                <!-- Submit Button -->
-                <button type="submit"
+                <p id="location-status" class="text-[11px] text-gray-400 font-medium">📍 Detecting your location for store setup…</p>
+                <button type="submit" id="submit-btn"
                         class="w-full bg-[#12a64a] hover:bg-[#0e8f3e] text-white font-semibold py-3 px-4 rounded-lg text-sm shadow-sm flex items-center justify-center gap-1.5 transition duration-150 ease-in-out mt-2">
-                    Get Started Now
+                    <span id="submit-label">Get Started Now</span>
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </form>
-
-            <!-- Back to Login Prompt -->
-            <p class="text-xs text-gray-600 font-medium mt-6">
-                Already have an account? <a href="login.html" class="text-[#008037] font-bold hover:underline">Sign In</a>
-            </p>
+            <p class="text-xs text-gray-600 font-medium mt-6">Already have an account? <a href="login.html" class="text-[#008037] font-bold hover:underline">Sign In</a></p>
         </div>
-
-        <!-- Footer Links -->
         <div class="flex justify-center space-x-6 text-[11px] font-medium text-gray-500 mt-8">
             <a href="#" class="hover:text-gray-800 transition">Privacy Policy</a>
             <a href="#" class="hover:text-gray-800 transition">Terms of Service</a>
@@ -158,9 +111,108 @@
         </div>
     </div>
 
-    <!-- Initialize Lucide Icons -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
     <script>
         lucide.createIcons();
+        let userLat = null, userLng = null;
+        const locationStatus = document.getElementById("location-status");
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    userLat = pos.coords.latitude;
+                    userLng = pos.coords.longitude;
+                    locationStatus.textContent = "📍 Location detected — your store will be discoverable nearby.";
+                },
+                () => {
+                    locationStatus.textContent = "⚠️ Location not available — using default coordinates (Mumbai). You can update this later in Settings.";
+                }
+            );
+        }
+
+        function getErrorBanner() {
+            let banner = document.getElementById("error-banner");
+            if (!banner) {
+                banner = document.createElement("div");
+                banner.id = "error-banner";
+                banner.className = "w-full bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-lg px-4 py-3 mb-4";
+                document.getElementById("signup-form").before(banner);
+            }
+            banner.classList.remove("hidden");
+            return banner;
+        }
+
+        async function createStoreForNewMerchant() {
+            const storeName = document.getElementById("store_name").value.trim() || "My Store";
+            await apiFetch("/stores", {
+                method: "POST",
+                body: {
+                    store_name: storeName,
+                    address: "Address not set yet — update in Settings",
+                    latitude: userLat ?? 19.076,
+                    longitude: userLng ?? 72.877,
+                },
+            });
+        }
+
+        document.getElementById("signup-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const errorBanner = getErrorBanner();
+            errorBanner.classList.add("hidden");
+            const submitBtn = document.getElementById("submit-btn");
+            const submitLabel = document.getElementById("submit-label");
+            submitBtn.disabled = true;
+            submitLabel.textContent = "Creating account...";
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const password = document.getElementById("password").value;
+
+            try {
+                const authData = await apiFetch("/merchant/auth/register", { method: "POST", auth: false, body: { name, email, phone, password } });
+                saveSession(authData.access_token, "merchant");
+                await createStoreForNewMerchant();
+                window.location.href = "merchant-dashboard.html";
+            } catch (err) {
+                errorBanner.textContent = err.message;
+                errorBanner.classList.remove("hidden");
+                submitBtn.disabled = false;
+                submitLabel.textContent = "Get Started Now";
+            }
+        });
+
+        async function initGoogleSignIn() {
+            try {
+                const config = await apiFetch("/merchant/auth/config", { auth: false });
+                const googleBtn = document.getElementById("google-signup-btn");
+                if (!config.google_configured) {
+                    googleBtn.addEventListener("click", () => {
+                        alert("Google Sign-In isn't configured on the backend yet — add GOOGLE_CLIENT_ID to .env.");
+                    });
+                    return;
+                }
+                google.accounts.id.initialize({
+                    client_id: config.google_client_id,
+                    callback: async (response) => {
+                        try {
+                            const data = await apiFetch("/merchant/auth/google", { method: "POST", auth: false, body: { id_token: response.credential } });
+                            saveSession(data.access_token, "merchant");
+                            try { await createStoreForNewMerchant(); } catch (_) { }
+                            window.location.href = "merchant-dashboard.html";
+                        } catch (err) {
+                            getErrorBanner().textContent = err.message;
+                        }
+                    },
+                });
+                googleBtn.addEventListener("click", () => google.accounts.id.prompt());
+            } catch (err) {
+                console.error("Google Sign-In init failed:", err);
+            }
+        }
+        window.addEventListener("load", () => setTimeout(initGoogleSignIn, 300));
     </script>
 </body>
 </html>

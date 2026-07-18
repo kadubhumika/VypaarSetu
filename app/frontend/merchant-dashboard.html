@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VyapaarSetu - Merchant Dashboard</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -23,82 +19,55 @@
 </head>
 <body class="bg-[#f4f6fa] text-gray-800 antialiased min-h-screen flex">
 
-    <!-- 1. LEFT SIDEBAR -->
     <aside class="w-64 bg-[#f0f4fd] border-r border-gray-200 flex flex-col justify-between fixed h-screen z-20">
         <div>
-            <!-- Sidebar Header / Logo -->
             <div class="p-5 flex items-center gap-3">
-                <div class="bg-[#009640] text-white p-2 rounded-xl shadow-sm">
-                    <i data-lucide="store" class="w-5 h-5"></i>
-                </div>
+                <div class="bg-[#009640] text-white p-2 rounded-xl shadow-sm"><i data-lucide="store" class="w-5 h-5"></i></div>
                 <div>
                     <h2 class="text-lg font-bold text-[#00642d] tracking-tight leading-none">VyapaarSetu</h2>
                     <span class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Merchant Hub</span>
                 </div>
             </div>
-
-            <!-- Main Navigation Links -->
             <nav class="px-3 mt-4 space-y-1">
-                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-[#009640] text-white text-sm font-semibold rounded-xl transition">
+                <a href="merchant-dashboard.html" class="flex items-center gap-3 px-4 py-3 bg-[#009640] text-white text-sm font-semibold rounded-xl transition">
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                <a href="check-inventory.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
                     <i data-lucide="package" class="w-4 h-4"></i> Inventory
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                <a href="upload-invoice.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
                     <i data-lucide="file-up" class="w-4 h-4"></i> Upload Invoice
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
-                    <i data-lucide="boxes" class="w-4 h-4"></i> Products
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                <a href="order-status.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
                     <i data-lucide="shopping-cart" class="w-4 h-4"></i> Orders
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
-                    <i data-lucide="line-chart" class="w-4 h-4"></i> Analytics
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
-                    <i data-lucide="bell" class="w-4 h-4"></i> Notifications
                 </a>
             </nav>
         </div>
-
-        <!-- Lower Controls / Profile Segment -->
         <div class="p-3 border-t border-gray-200 bg-[#f0f4fd] space-y-1">
-            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
-                <i data-lucide="user" class="w-4 h-4"></i> Profile
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+            <a href="merchant-profile.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
                 <i data-lucide="settings" class="w-4 h-4"></i> Settings
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 text-sm font-semibold rounded-xl transition mt-2">
+            <a href="#" id="logout-btn" class="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 text-sm font-semibold rounded-xl transition mt-2">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Logout
             </a>
         </div>
     </aside>
 
-    <!-- MAIN WORKING WRAPPER -->
     <div class="flex-1 ml-64 flex flex-col min-h-screen bg-[#f8f9fc]">
-
-        <!-- 2. TOP HEADER HEADER BAR -->
         <header class="h-20 bg-white border-b border-gray-100 px-8 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-            <!-- Global Search -->
             <div class="w-96 relative">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2"></i>
                 <input type="text" placeholder="Search orders, inventory or analytics..."
                        class="w-full pl-10 pr-4 py-2 bg-[#f1f3f7] rounded-full text-xs placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#009640] transition">
             </div>
-
-            <!-- Profile & Notifications Status -->
             <div class="flex items-center gap-6">
                 <button class="relative p-1 text-gray-500 hover:text-gray-800">
                     <i data-lucide="bell" class="w-5 h-5"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
                 <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
                     <div class="text-right">
-                        <p class="text-sm font-bold text-gray-800 leading-none">Rajesh Exports</p>
-                        <span class="text-[10px] text-gray-400 font-medium">Merchant ID: #88219</span>
+                        <p id="merchant-name" class="text-sm font-bold text-gray-800 leading-none">Loading...</p>
+                        <span class="text-[10px] text-gray-400 font-medium">Merchant Dashboard</span>
                     </div>
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
                          alt="Merchant Avatar" class="w-10 h-10 rounded-full border object-cover">
@@ -106,362 +75,186 @@
             </div>
         </header>
 
-        <!-- 3. DASHBOARD MAIN SCROLL GRID -->
+        <div id="no-store-banner" class="hidden bg-amber-50 border-b border-amber-200 text-amber-800 text-xs font-semibold px-8 py-3">
+            You haven't created a store yet. <a href="signup.html" class="underline">Set one up</a> to start seeing real data here.
+        </div>
+
         <main class="p-8 flex-1 grid grid-cols-1 xl:grid-cols-4 gap-8">
-
-            <!-- LEFT 3 COLS CONTENT PANEL -->
             <div class="xl:col-span-3 space-y-6">
-
-                <!-- Action Row Title Area -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Merchant Dashboard</h1>
                         <p class="text-xs text-gray-500 mt-0.5 font-medium">Welcome back. Here's what's happening with your store today.</p>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <button class="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg text-xs hover:bg-gray-50 shadow-sm transition">
-                            <i data-lucide="calendar" class="w-4 h-4 text-gray-500"></i> Last 24 Hours
-                        </button>
-                        <button class="flex items-center gap-2 bg-[#00642d] text-white font-semibold px-4 py-2 rounded-lg text-xs hover:bg-[#004d22] shadow-sm transition">
-                            <i data-lucide="download" class="w-4 h-4"></i> Export Report
-                        </button>
-                    </div>
+                    <button id="refresh-btn" class="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg text-xs hover:bg-gray-50 shadow-sm transition">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 text-gray-500"></i> Refresh
+                    </button>
                 </div>
 
-                <!-- 8-GRID STATS CARDS -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Revenue Today -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start">
-                            <div class="p-2 bg-green-50 text-green-600 rounded-lg"><i data-lucide="wallet" class="w-4 h-4"></i></div>
-                            <span class="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-0.5 rounded-full flex items-center gap-0.5"><i data-lucide="trending-up" class="w-2.5 h-2.5"></i> +12.5%</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Today's Revenue</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">₹42,850</p>
-                        </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="p-2 bg-green-50 text-green-600 rounded-lg w-fit"><i data-lucide="wallet" class="w-4 h-4"></i></div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-4">Today's Revenue</p>
+                        <p id="stat-todays-revenue" class="text-xl font-bold text-gray-900 mt-0.5">₹0</p>
                     </div>
-                    <!-- Orders Today -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start">
-                            <div class="p-2 bg-purple-50 text-purple-600 rounded-lg"><i data-lucide="shopping-bag" class="w-4 h-4"></i></div>
-                            <span class="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-0.5 rounded-full flex items-center gap-0.5"><i data-lucide="trending-up" class="w-2.5 h-2.5"></i> +8%</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Today's Orders</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">156</p>
-                        </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="p-2 bg-purple-50 text-purple-600 rounded-lg w-fit"><i data-lucide="shopping-bag" class="w-4 h-4"></i></div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-4">Today's Orders</p>
+                        <p id="stat-todays-orders" class="text-xl font-bold text-gray-900 mt-0.5">0</p>
                     </div>
-                    <!-- Total Products -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start">
-                            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="package-plus" class="w-4 h-4"></i></div>
-                            <span class="text-[10px] font-medium text-blue-600">Active</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Total Products</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">1,240</p>
-                        </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg w-fit"><i data-lucide="package-plus" class="w-4 h-4"></i></div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-4">Total Products</p>
+                        <p id="stat-total-products" class="text-xl font-bold text-gray-900 mt-0.5">0</p>
                     </div>
-                    <!-- Low Stock Items -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between border-l-4 border-l-red-500">
-                        <div class="flex justify-between items-start">
-                            <div class="p-2 bg-red-50 text-red-600 rounded-lg"><i data-lucide="alert-triangle" class="w-4 h-4"></i></div>
-                            <span class="text-[10px] font-bold bg-red-50 text-red-600 px-2 py-0.5 rounded-full">Action Req</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Low Stock Items</p>
-                            <p class="text-xl font-bold text-red-600 mt-0.5">12</p>
-                        </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm border-l-4 border-l-red-500">
+                        <div class="p-2 bg-red-50 text-red-600 rounded-lg w-fit"><i data-lucide="alert-triangle" class="w-4 h-4"></i></div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-4">Low Stock Items</p>
+                        <p id="stat-low-stock" class="text-xl font-bold text-red-600 mt-0.5">0</p>
                     </div>
-
-                    <!-- Monthly Revenue -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start">
-                            <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i data-lucide="banknote" class="w-4 h-4"></i></div>
-                            <span class="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-0.5 rounded-full flex items-center gap-0.5"><i data-lucide="trending-up" class="w-2.5 h-2.5"></i> +24%</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Monthly Revenue</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">₹8.4M</p>
-                        </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg w-fit"><i data-lucide="banknote" class="w-4 h-4"></i></div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-4">Monthly Revenue</p>
+                        <p id="stat-monthly-revenue" class="text-xl font-bold text-gray-900 mt-0.5">₹0</p>
                     </div>
-                    <!-- Total Customers -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start">
-                            <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="users" class="w-4 h-4"></i></div>
-                            <span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">+ 240 new</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Total Customers</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">18.5K</p>
-                        </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg w-fit"><i data-lucide="users" class="w-4 h-4"></i></div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-4">Total Customers</p>
+                        <p id="stat-total-customers" class="text-xl font-bold text-gray-900 mt-0.5">0</p>
                     </div>
-                    <!-- Total Profit -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start">
-                            <div class="p-2 bg-teal-50 text-teal-600 rounded-lg"><i data-lucide="trending-up" class="w-4 h-4"></i></div>
-                            <span class="text-[10px] font-bold bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full">22% Margin</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Total Profit</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">₹1.8M</p>
-                        </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="p-2 bg-teal-50 text-teal-600 rounded-lg w-fit"><i data-lucide="trending-up" class="w-4 h-4"></i></div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-4">Total Profit</p>
+                        <p id="stat-total-profit" class="text-xl font-bold text-gray-900 mt-0.5">₹0</p>
                     </div>
-                    <!-- Pending Orders -->
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between">
-                        <div class="flex justify-between items-start">
-                            <div class="p-2 bg-amber-50 text-amber-600 rounded-lg"><i data-lucide="clock" class="w-4 h-4"></i></div>
-                            <span class="text-[10px] font-bold bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full">Processing</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Pending Orders</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">42</p>
-                        </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="p-2 bg-amber-50 text-amber-600 rounded-lg w-fit"><i data-lucide="clock" class="w-4 h-4"></i></div>
+                        <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 mt-4">Pending Orders</p>
+                        <p id="stat-pending-orders" class="text-xl font-bold text-gray-900 mt-0.5">0</p>
                     </div>
                 </div>
 
-                <!-- ANALYTICS DIAGRAM GRID AREA -->
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
-                    <!-- Chart: Weekly Sales -->
-                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm md:col-span-3 flex flex-col justify-between">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold text-gray-900">Weekly Sales</h3>
-                            <select class="text-xs bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1 text-gray-600 font-medium focus:outline-none">
-                                <option>This Week</option>
-                                <option>Last Week</option>
-                            </select>
-                        </div>
-                        <div class="h-48 relative">
-                            <canvas id="weeklySalesChart"></canvas>
-                        </div>
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm md:col-span-3">
+                        <h3 class="text-sm font-bold text-gray-900 mb-4">Weekly Sales</h3>
+                        <div class="h-48 relative"><canvas id="weeklySalesChart"></canvas></div>
                     </div>
-
-                    <!-- Chart: Sales By Category -->
-                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm md:col-span-2 flex flex-col justify-between">
-                        <div class="mb-2">
-                            <h3 class="text-sm font-bold text-gray-900">Sales by Category</h3>
-                        </div>
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm md:col-span-2">
+                        <h3 class="text-sm font-bold text-gray-900 mb-2">Sales by Category</h3>
                         <div class="h-44 relative flex items-center justify-center">
                             <canvas id="categoryChart"></canvas>
-                            <!-- Absolute text value wrapper within Donut Hole -->
-                            <div class="absolute text-center">
-                                <p class="text-lg font-bold text-gray-900">₹2.4M</p>
-                                <p class="text-[10px] text-gray-400 font-medium tracking-tight">Top Category</p>
-                            </div>
                         </div>
-                        <!-- Custom Inline Legend elements -->
-                        <div class="flex items-center justify-center gap-6 text-xs font-semibold text-gray-600 mt-2">
-                            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#00642d]"></span> Electronics</div>
-                            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#12a64a]"></span> Home Decor</div>
-                        </div>
+                        <div id="category-legend" class="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-gray-600 mt-2"></div>
                     </div>
                 </div>
 
-                <!-- TABLE SECTION: BEST SELLING PRODUCTS -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                     <div class="p-5 flex justify-between items-center border-b border-gray-100">
                         <h3 class="text-sm font-bold text-gray-900">Best Selling Products</h3>
-                        <a href="#" class="text-xs font-bold text-[#00642d] hover:underline">View All</a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 text-gray-400 uppercase font-bold tracking-wider border-b border-gray-100 text-[10px]">
                                     <th class="py-3 px-5">Product</th>
-                                    <th class="py-3 px-4">Stock</th>
+                                    <th class="py-3 px-4">Units Sold</th>
                                     <th class="py-3 px-4">Revenue</th>
-                                    <th class="py-3 px-4">Orders</th>
-                                    <th class="py-3 px-5 text-right">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100 font-medium text-gray-700">
-                                <!-- Row 1 -->
-                                <tr class="hover:bg-slate-50/50 transition">
-                                    <td class="py-3.5 px-5 flex items-center gap-3">
-                                        <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=80"
-                                             class="w-10 h-10 rounded-lg border object-cover bg-gray-50" alt="iPhone 15">
-                                        <div>
-                                            <p class="font-bold text-gray-900 text-sm">iPhone 15 Pro Max</p>
-                                            <span class="text-[10px] text-gray-400">ID: #990-21</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3.5 px-4 text-gray-600">45 units</td>
-                                    <td class="py-3.5 px-4 font-bold text-gray-900">₹12,45,000</td>
-                                    <td class="py-3.5 px-4 text-gray-500">112</td>
-                                    <td class="py-3.5 px-5 text-right"><span class="bg-green-50 text-green-700 text-[10px] font-bold px-2.5 py-1 rounded-full">Bestseller</span></td>
-
-                                </tr>
-                                <!-- Row 2 -->
-                                <tr class="hover:bg-slate-50/50 transition">
-                                    <td class="py-3.5 px-5 flex items-center gap-3">
-                                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=80"
-                                             class="w-10 h-10 rounded-lg border object-cover bg-gray-50" alt="Sony Headphones">
-                                        <div>
-                                            <p class="font-bold text-gray-900 text-sm">Sony WH-1000XM5</p>
-                                            <span class="text-[10px] text-gray-400">ID: #441-10</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3.5 px-4 text-gray-600">12 units</td>
-                                    <td class="py-3.5 px-4 font-bold text-gray-900">₹4,20,500</td>
-                                    <td class="py-3.5 px-4 text-gray-500">84</td>
-                                    <td class="py-3.5 px-5 text-right"><span class="bg-green-50 text-green-700 text-[10px] font-bold px-2.5 py-1 rounded-full">Bestseller</span></td>
-                                </tr>
-                                <!-- Row 3 -->
-                                <tr class="hover:bg-slate-50/50 transition">
-                                    <td class="py-3.5 px-5 flex items-center gap-3">
-                                        <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&q=80&w=80"
-                                             class="w-10 h-10 rounded-lg border object-cover bg-gray-50" alt="Logitech Keyboard">
-                                        <div>
-                                            <p class="font-bold text-gray-900 text-sm">Logitech G Pro Keyboard</p>
-                                            <span class="text-[10px] text-gray-400">ID: #322-88</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3.5 px-4 text-gray-600">8 units</td>
-                                    <td class="py-3.5 px-4 font-bold text-gray-900">₹1,15,000</td>
-                                    <td class="py-3.5 px-4 text-gray-500">45</td>
-                                    <td class="py-3.5 px-5 text-right"><span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2.5 py-1 rounded-full">Steady</span></td>
-                                </tr>
+                            <tbody id="best-sellers-body" class="divide-y divide-gray-100 font-medium text-gray-700">
+                                <tr><td colspan="3" class="py-6 px-5 text-center text-gray-400">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- RIGHT 1 COL PANEL: NOTIFICATIONS & CRITICAL TOOLS -->
             <div class="space-y-6">
-                <!-- Alerts Container -->
-                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-                    <div class="flex items-center gap-2 text-red-600 font-bold text-sm">
-                        <i data-lucide="alert-octagon" class="w-5 h-5"></i>
-                        <h3>Inventory Alerts</h3>
-                    </div>
-
-                    <!-- Item Alert 1 -->
-                    <div class="p-3 bg-slate-50 rounded-xl border border-gray-100 space-y-3">
-                        <div class="flex justify-between items-start">
-                            <p class="font-bold text-xs text-gray-900 max-w-[70%]">Samsung Galaxy Tab S9</p>
-                            <span class="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">Only 2 Left</span>
-                        </div>
-                        <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-red-500 h-full w-[15%]"></div>
-                        </div>
-                        <button class="w-full py-2 bg-[#009640] hover:bg-[#007a33] text-white text-[11px] font-bold rounded-lg transition shadow-sm">
-                            Reorder Now
-                        </button>
-                    </div>
-
-                    <!-- Item Alert 2 -->
-                    <div class="p-3 bg-slate-50 rounded-xl border border-gray-100 space-y-3">
-                        <div class="flex justify-between items-start">
-                            <p class="font-bold text-xs text-gray-900 max-w-[70%]">Dell XPS 15 9530</p>
-                            <span class="bg-gray-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">Only 5 Left</span>
-                        </div>
-                        <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-gray-500 h-full w-[35%]"></div>
-                        </div>
-                        <button class="w-full py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] font-bold rounded-lg transition shadow-sm">
-                            Reorder Now
-                        </button>
-                    </div>
-
-                    <!-- Item Alert 3 -->
-                    <div class="p-3 bg-slate-50 rounded-xl border border-gray-100 space-y-3">
-                        <div class="flex justify-between items-start">
-                            <p class="font-bold text-xs text-gray-900 max-w-[70%]">Apple Watch Ultra 2</p>
-                            <span class="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">Only 3 Left</span>
-                        </div>
-                        <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-red-500 h-full w-[20%]"></div>
-                        </div>
-                        <button class="w-full py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] font-bold rounded-lg transition shadow-sm">
-                            Reorder Now
-                        </button>
-                    </div>
-
-                    <!-- Footnote Button -->
-                    <button class="w-full py-2.5 text-center text-[11px] font-bold bg-[#f1f4fd] hover:bg-[#e4ebfc] text-[#00642d] rounded-lg transition">
-                        More items reaching threshold soon...
-                    </button>
-                </div>
-
-                <!-- Utilities/Tools Container -->
-                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-3">
-                    <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Inventory Tools</p>
-
-                    <button class="w-full flex items-center justify-between p-3 bg-white border border-gray-200 hover:bg-slate-50 rounded-xl transition text-left">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-slate-100 text-gray-600 rounded-lg"><i data-lucide="scan-barcode" class="w-4 h-4"></i></div>
-                            <div>
-                                <h4 class="text-xs font-bold text-gray-900">Bulk Stock Update</h4>
-                            </div>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-                    </button>
-
-                    <button class="w-full flex items-center justify-between p-3 bg-white border border-gray-200 hover:bg-slate-50 rounded-xl transition text-left">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-slate-100 text-gray-600 rounded-lg"><i data-lucide="truck" class="w-4 h-4"></i></div>
-                            <div>
-                                <h4 class="text-xs font-bold text-gray-900">Returns Tracking</h4>
-                            </div>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
-                    </button>
+                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                    <p class="text-xs text-gray-500 font-medium">
+                        Low-stock alerts appear on the Inventory page — same pattern as this page: call <code class="bg-gray-100 px-1 rounded">GET /inventory</code> and filter <code class="bg-gray-100 px-1 rounded">is_low_stock</code>.
+                    </p>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- 4. CHARTS CONFIGURATION SCRIPT -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
     <script>
-        // Start Lucide Icons instance Engine
         lucide.createIcons();
+        requireAuth("merchant", "login.html");
 
-        // Weekly Sales Bar Chart configurations
-        const barCtx = document.getElementById('weeklySalesChart').getContext('2d');
-        new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{
-                    data: [35, 45, 30, 60, 75, 50, 40],
-                    backgroundColor: '#12a64a',
-                    borderRadius: 6,
-                    borderSkipped: false,
-                    barThickness: 16
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { font: { size: 10, family: 'Inter' }, color: '#9ca3af' } },
-                    y: { display: false }
+        document.getElementById("logout-btn").addEventListener("click", (e) => {
+            e.preventDefault();
+            clearSession();
+            window.location.href = "login.html";
+        });
+
+        let weeklyChart, categoryChart;
+
+        async function loadDashboard() {
+            try {
+                const data = await apiFetch("/analytics/dashboard");
+                document.getElementById("no-store-banner").classList.add("hidden");
+
+                document.getElementById("stat-todays-revenue").textContent = `₹${data.todays_revenue.toLocaleString("en-IN")}`;
+                document.getElementById("stat-todays-orders").textContent = data.todays_orders;
+                document.getElementById("stat-total-products").textContent = data.total_products;
+                document.getElementById("stat-low-stock").textContent = data.low_stock_items;
+                document.getElementById("stat-monthly-revenue").textContent = `₹${data.monthly_revenue.toLocaleString("en-IN")}`;
+                document.getElementById("stat-total-customers").textContent = data.total_customers;
+                document.getElementById("stat-total-profit").textContent = `₹${data.total_profit.toLocaleString("en-IN")}`;
+                document.getElementById("stat-pending-orders").textContent = data.pending_orders;
+
+                const weekLabels = data.weekly_sales.map(d => d.day);
+                const weekValues = data.weekly_sales.map(d => d.revenue);
+                if (weeklyChart) weeklyChart.destroy();
+                weeklyChart = new Chart(document.getElementById("weeklySalesChart").getContext("2d"), {
+                    type: "bar",
+                    data: { labels: weekLabels, datasets: [{ data: weekValues, backgroundColor: "#12a64a", borderRadius: 6, barThickness: 16 }] },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { grid: { display: false } }, y: { display: false } },
+                    },
+                });
+
+                const catLabels = data.sales_by_category.map(c => c.category_name);
+                const catValues = data.sales_by_category.map(c => c.revenue);
+                const colors = ["#00642d", "#12a64a", "#65d68a", "#a3e6b8", "#d4f4dd"];
+                if (categoryChart) categoryChart.destroy();
+                categoryChart = new Chart(document.getElementById("categoryChart").getContext("2d"), {
+                    type: "doughnut",
+                    data: { datasets: [{ data: catValues.length ? catValues : [1], backgroundColor: catValues.length ? colors : ["#e5e7eb"], borderWidth: 0 }] },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: "78%", plugins: { legend: { display: false } } },
+                });
+
+                document.getElementById("category-legend").innerHTML = catLabels.length
+                    ? catLabels.map((name, i) => `<div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full" style="background:${colors[i % colors.length]}"></span> ${name}</div>`).join("")
+                    : `<span class="text-gray-400">No sales yet</span>`;
+
+                const tbody = document.getElementById("best-sellers-body");
+                tbody.innerHTML = data.best_sellers.length
+                    ? data.best_sellers.map(p => `
+                        <tr class="hover:bg-slate-50/50 transition">
+                            <td class="py-3.5 px-5 font-bold text-gray-900">${p.product_name}</td>
+                            <td class="py-3.5 px-4 text-gray-600">${p.units_sold}</td>
+                            <td class="py-3.5 px-4 font-bold text-gray-900">₹${p.revenue.toLocaleString("en-IN")}</td>
+                        </tr>`).join("")
+                    : `<tr><td colspan="3" class="py-6 px-5 text-center text-gray-400">No sales yet — approve an invoice and place a test order to see data here.</td></tr>`;
+
+            } catch (err) {
+                if (err.message.includes("No store")) {
+                    document.getElementById("no-store-banner").classList.remove("hidden");
+                } else {
+                    alert("Failed to load dashboard: " + err.message);
                 }
             }
-        });
+        }
 
-        // Sales Category Donut Chart configurations
-        const donutCtx = document.getElementById('categoryChart').getContext('2d');
-        new Chart(donutCtx, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [65, 35],
-                    backgroundColor: ['#00642d', '#12a64a'],
-                    borderWidth: 0,
-                    weight: 0.5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '78%',
-                plugins: { legend: { display: false } }
-            }
-        });
+        document.getElementById("refresh-btn").addEventListener("click", loadDashboard);
+        loadDashboard();
     </script>
 </body>
 </html>

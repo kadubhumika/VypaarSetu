@@ -34,6 +34,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     restart: unless-stopped
+    command: ${APP_CMD}
     env_file:
       - ../.env
     ports:
@@ -44,7 +45,8 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ../app:/code/app
+      - ../:/code
+
 
 volumes:
   pgdata:

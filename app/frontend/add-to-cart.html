@@ -3,234 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Shopping Cart - ShopLocal</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Your Shopping Cart - VyapaarSetu</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
 <body class="bg-[#f8f9fa] text-gray-800 antialiased min-h-screen flex flex-col">
 
-    <!-- TOP NAVBAR -->
     <header class="bg-white border-b border-gray-200 px-4 lg:px-16 h-16 flex items-center justify-between gap-4">
-        <!-- Logo -->
-        <div class="flex items-center gap-2 flex-shrink-0">
-            <span class="text-2xl font-bold text-[#006b2b] tracking-tight">ShopLocal</span>
-        </div>
-
-        <!-- Search Bar -->
-        <div class="max-w-xl w-full relative hidden md:block">
-            <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2"></i>
-            <input type="text" placeholder="Search for products..."
-                   class="w-full pl-11 pr-4 py-2 bg-[#f1f4f9] rounded-full text-xs font-medium placeholder-gray-400 border border-transparent focus:outline-none focus:border-gray-300 transition">
-        </div>
-
-        <!-- Navigation items -->
-        <div class="flex items-center gap-6 text-xs font-semibold text-gray-600 ml-auto md:ml-0 flex-shrink-0">
-            <a href="#" class="hover:text-gray-900 transition">Categories</a>
-            <a href="#" class="hover:text-gray-900 transition">Deals</a>
-            <a href="#" class="hover:text-gray-900 transition">Orders</a>
-
-            <!-- Cart Trigger Icon -->
-            <button class="flex items-center gap-1.5 text-gray-700 hover:text-gray-900 transition">
-                <i data-lucide="shopping-cart" class="w-4 h-4 text-[#006b2b]"></i>
-                <span>Cart</span>
-                <span class="w-4 h-4 bg-[#006b2b] text-white text-[9px] font-black rounded-full flex items-center justify-center">3</span>
-            </button>
-
-            <!-- User Profile Avatar -->
-            <div class="w-8 h-8 rounded-full border border-gray-200 overflow-hidden cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
-                     alt="User Profile" class="w-full h-full object-cover">
-            </div>
+        <a href="customer-dashboard.html" class="text-2xl font-bold text-[#006b2b] tracking-tight">VyapaarSetu</a>
+        <div class="flex items-center gap-6 text-xs font-semibold text-gray-600 ml-auto flex-shrink-0">
+            <button id="logout-btn" class="hover:text-red-600 transition">Logout</button>
         </div>
     </header>
 
-    <!-- MAIN TWO-COLUMN LAYOUT -->
     <main class="flex-1 max-w-6xl mx-auto w-full px-4 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-        <!-- LEFT COLUMN: CART ITEMS & SAVED LIST -->
         <div class="lg:col-span-2 space-y-6">
             <div>
                 <h1 class="text-xl font-bold text-gray-900 tracking-tight">Your Shopping Cart</h1>
-                <p class="text-xs text-gray-500 font-medium mt-0.5">3 items in your cart from VyapaarSetu merchants.</p>
+                <p id="item-count-label" class="text-xs text-gray-500 font-medium mt-0.5">0 items in your cart.</p>
             </div>
-
-            <!-- Cart Item 1 -->
-            <div class="bg-white border border-gray-200 rounded-xl p-4 flex gap-4 relative shadow-xs">
-                <div class="w-24 h-20 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&q=80&w=200"
-                         alt="Premium Mechanical Keyboard" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 min-w-0 pr-8">
-                    <h3 class="text-sm font-bold text-gray-900 truncate">Premium Mechanical Keyboard v4</h3>
-                    <p class="text-[11px] text-gray-400 font-medium mt-0.5">Space Gray • Tactile Switches</p>
-
-                    <!-- Quantity Adjuster -->
-                    <div class="flex items-center border border-gray-200 rounded-lg w-24 justify-between p-1 mt-4">
-                        <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition text-sm">-</button>
-                        <span class="text-xs font-bold text-gray-700">1</span>
-                        <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition text-sm">+</button>
-                    </div>
-                </div>
-                <div class="text-right flex flex-col justify-between items-end">
-                    <button class="text-gray-400 hover:text-red-500 transition">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                    <div>
-                        <span class="text-[10px] text-gray-400 font-medium line-through block">₹5,499</span>
-                        <span class="text-sm font-extrabold text-gray-900">₹4,299</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cart Item 2 -->
-            <div class="bg-white border border-gray-200 rounded-xl p-4 flex gap-4 relative shadow-xs">
-                <div class="w-24 h-20 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&q=80&w=200"
-                         alt="Precision Wireless Mouse" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 min-w-0 pr-8">
-                    <h3 class="text-sm font-bold text-gray-900 truncate">Precision Wireless Mouse</h3>
-                    <p class="text-[11px] text-gray-400 font-medium mt-0.5">Matte Black • Multi-device Pairing</p>
-
-                    <!-- Quantity Adjuster -->
-                    <div class="flex items-center border border-gray-200 rounded-lg w-24 justify-between p-1 mt-4">
-                        <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition text-sm">-</button>
-                        <span class="text-xs font-bold text-gray-700">2</span>
-                        <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition text-sm">+</button>
-                    </div>
-                </div>
-                <div class="text-right flex flex-col justify-between items-end">
-                    <button class="text-gray-400 hover:text-red-500 transition">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                    <div>
-                        <span class="text-[10px] text-gray-400 font-medium line-through block">₹2,998</span>
-                        <span class="text-sm font-extrabold text-gray-900">₹2,498</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SAVED FOR LATER CONTAINER -->
-            <div class="space-y-3 pt-2">
-                <div class="flex items-center gap-1.5 text-gray-900">
-                    <i data-lucide="bookmark" class="w-4 h-4"></i>
-                    <h2 class="text-sm font-bold tracking-tight">Saved for Later</h2>
-                </div>
-
-                <!-- Saved Item Horizontal Row Frame -->
-                <div class="bg-white border border-gray-100 rounded-xl p-3 flex gap-4 max-w-sm items-center shadow-xs">
-                    <div class="w-14 h-14 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=150"
-                             alt="Noise-Canceling Headphones" class="w-full h-full object-cover">
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <h4 class="text-xs font-bold text-gray-900 truncate">Noise-Canceling Headphones</h4>
-                        <span class="text-[11px] font-extrabold text-gray-500 mt-0.5 block">₹12,999</span>
-                        <button class="text-[10px] font-bold text-[#006b2b] hover:underline mt-1.5 block">Move to Cart</button>
-                    </div>
-                </div>
+            <div id="cart-items" class="space-y-4">
+                <p class="text-xs text-gray-400">Loading cart...</p>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: BILLING & ASSISTANCE SUMMARY -->
         <div class="space-y-4">
-
-            <!-- PRICE DETAILS CARD -->
             <div class="bg-white border border-gray-200 rounded-2xl p-5 space-y-4 shadow-xs">
                 <h2 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Price Details</h2>
-
                 <div class="space-y-2.5 text-xs font-medium text-gray-600">
                     <div class="flex justify-between">
-                        <span>Total MRP (3 items)</span>
-                        <span class="text-gray-900">₹8,497</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Discount on MRP</span>
-                        <span class="text-emerald-600 font-semibold">-₹1,700</span>
-                    </div>
-                    <div class="flex justify-between items-baseline">
-                        <span>Delivery Charges</span>
-                        <div class="space-x-1">
-                            <span class="text-[10px] text-gray-400 line-through">₹99</span>
-                            <span class="text-emerald-600 font-bold uppercase text-[10px]">Free</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>GST (18%)</span>
-                        <span class="text-gray-900">₹1,223</span>
+                        <span>Subtotal</span>
+                        <span id="subtotal" class="text-gray-900">₹0</span>
                     </div>
                 </div>
-
                 <div class="border-t border-dashed border-gray-200 pt-3 flex justify-between items-center">
                     <span class="text-sm font-bold text-gray-900">Total Amount</span>
-                    <span class="text-xl font-black text-gray-900">₹8,020</span>
+                    <span id="total-amount" class="text-xl font-black text-gray-900">₹0</span>
                 </div>
-
-                <!-- Green Savings Callout Bubble -->
-                <div class="bg-emerald-50 text-emerald-800 text-[10px] font-bold py-2.5 px-3 rounded-lg flex items-center gap-1.5">
-                    <i data-lucide="badge-check" class="w-3.5 h-3.5 text-emerald-600 fill-emerald-100"></i>
-                    <span>You're saving ₹1,700 on this order!</span>
-                </div>
-
-                <!-- CTA Proceed Button -->
-                <button class="w-full bg-[#006b2b] hover:bg-[#005422] text-white text-xs font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm group">
+                <button id="checkout-btn" class="w-full bg-[#006b2b] hover:bg-[#005422] text-white text-xs font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-1.5 transition shadow-sm group">
                     <span>PROCEED TO CHECKOUT</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-0.5"></i>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
-
-                <!-- Payment Network Micro Icons Badge Container -->
-                <div class="flex items-center justify-center gap-4 pt-1 text-gray-400 border-t border-gray-100">
-                    <i data-lucide="wallet" class="w-4 h-4"></i>
-                    <i data-lucide="credit-card" class="w-4 h-4"></i>
-                    <i data-lucide="landmark" class="w-4 h-4"></i>
-                </div>
             </div>
-
-            <!-- ESCALATION / ASSISTANCE PANEL -->
-            <div class="bg-[#eef2f9] border border-blue-100 rounded-xl p-4 flex gap-3 items-center">
-                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-xs flex-shrink-0">
-                    <i data-lucide="headset" class="w-4 h-4"></i>
-                </div>
-                <div>
-                    <h4 class="text-xs font-bold text-gray-900">Need help?</h4>
-                    <a href="#" class="text-[11px] font-semibold text-gray-500 hover:text-gray-800 transition block mt-0.5">Contact VyapaarSetu Support</a>
-                </div>
-            </div>
-
         </div>
     </main>
 
-    <!-- MINIMALIST PROFESSIONAL FOOTER -->
-    <footer class="bg-white border-t border-gray-200 mt-auto py-6 text-[11px] text-gray-400 font-medium">
-        <div class="max-w-6xl mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="space-y-0.5 text-center sm:text-left">
-                <h4 class="text-xs font-bold text-gray-800">CommercePro</h4>
-                <p>Empowering small and medium enterprises globally.</p>
-            </div>
-            <div class="flex gap-4">
-                <a href="#" class="hover:text-gray-600 transition">Support</a>
-                <a href="#" class="hover:text-gray-600 transition">Privacy Policy</a>
-                <a href="#" class="hover:text-gray-600 transition">Terms of Service</a>
-                <a href="#" class="hover:text-gray-600 transition">App Store</a>
-            </div>
-            <div>
-                © 2026 CommercePro Inc. All rights reserved.
-            </div>
-        </div>
-    </footer>
-
-    <!-- Initialize Lucide Icons -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/cart.js"></script>
     <script>
         lucide.createIcons();
+        requireAuth("customer", "login.html");
+
+        document.getElementById("logout-btn").addEventListener("click", () => { clearSession(); window.location.href = "login.html"; });
+
+        function render() {
+            const cart = getCart();
+            document.getElementById("item-count-label").textContent = `${cartCount()} item(s) in your cart.`;
+
+            document.getElementById("cart-items").innerHTML = cart.length ? cart.map(item => `
+                <div class="bg-white border border-gray-200 rounded-xl p-4 flex gap-4 relative shadow-xs">
+                    <div class="w-24 h-20 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center text-gray-300">
+                        <i data-lucide="package" class="w-8 h-8"></i>
+                    </div>
+                    <div class="flex-1 min-w-0 pr-8">
+                        <h3 class="text-sm font-bold text-gray-900 truncate">${item.product_name}</h3>
+                        <p class="text-[11px] text-gray-400 font-medium mt-0.5">${item.store_name}</p>
+                        <div class="flex items-center border border-gray-200 rounded-lg w-24 justify-between p-1 mt-4">
+                            <button class="qty-minus-btn w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition text-sm" data-id="${item.product_id}">-</button>
+                            <span class="text-xs font-bold text-gray-700">${item.quantity}</span>
+                            <button class="qty-plus-btn w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition text-sm" data-id="${item.product_id}">+</button>
+                        </div>
+                    </div>
+                    <div class="text-right flex flex-col justify-between items-end">
+                        <button class="remove-btn text-gray-400 hover:text-red-500 transition" data-id="${item.product_id}">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                        <span class="text-sm font-extrabold text-gray-900">₹${(item.selling_price * item.quantity).toLocaleString("en-IN")}</span>
+                    </div>
+                </div>
+            `).join("") : `<p class="text-xs text-gray-400">Your cart is empty. <a href="customer-dashboard.html" class="text-[#009640] underline">Continue shopping</a>.</p>`;
+
+            const total = cartTotal();
+            document.getElementById("subtotal").textContent = `₹${total.toLocaleString("en-IN")}`;
+            document.getElementById("total-amount").textContent = `₹${total.toLocaleString("en-IN")}`;
+            document.getElementById("checkout-btn").disabled = cart.length === 0;
+
+            lucide.createIcons();
+            document.querySelectorAll(".qty-minus-btn").forEach(b => b.addEventListener("click", () => { updateCartQuantity(Number(b.dataset.id), -1); render(); }));
+            document.querySelectorAll(".qty-plus-btn").forEach(b => b.addEventListener("click", () => { updateCartQuantity(Number(b.dataset.id), 1); render(); }));
+            document.querySelectorAll(".remove-btn").forEach(b => b.addEventListener("click", () => { removeFromCart(Number(b.dataset.id)); render(); }));
+        }
+
+        document.getElementById("checkout-btn").addEventListener("click", async () => {
+            const cart = getCart();
+            if (!cart.length) return;
+
+            // All cart items must be from the same store since /orders is store-scoped —
+            // real multi-vendor carts would need one order per store; kept single-store here.
+            const storeId = cart[0].store_id;
+            if (cart.some(i => i.store_id !== storeId)) {
+                alert("Items from multiple stores in one cart aren't supported yet — checkout one store's items at a time.");
+                return;
+            }
+
+            try {
+                const order = await apiFetch("/orders", {
+                    method: "POST",
+                    body: {
+                        store_id: storeId,
+                        items: cart.map(i => ({ product_id: i.product_id, quantity: i.quantity })),
+                    },
+                });
+                clearCart();
+                window.location.href = `checkout-payment.html?order_id=${order.id}`;
+            } catch (err) {
+                alert("Checkout failed: " + err.message);
+            }
+        });
+
+        render();
     </script>
 </body>
 </html>

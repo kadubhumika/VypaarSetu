@@ -4,428 +4,193 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VyapaarSetu - Discover Local Commerce</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
 <body class="bg-white text-gray-800 antialiased min-h-screen flex flex-col">
 
-    <!-- 1. TOP CUSTOMER NAVBAR -->
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50 px-4 lg:px-16 h-20 flex items-center justify-between gap-4">
-        <!-- Logo -->
-        <div class="flex items-center gap-2 flex-shrink-0">
-            <span class="text-xl font-black text-[#009640] tracking-tight">VyapaarSetu</span>
-        </div>
+        <span class="text-xl font-black text-[#009640] tracking-tight">VyapaarSetu</span>
 
-        <!-- Global Search Bar Component -->
         <div class="max-w-xl w-full relative hidden md:block">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2"></i>
-            <input type="text" placeholder="Search products, stores, categories..."
+            <input id="search-input" type="text" placeholder="Search products, e.g. Maggi, Rice, Oil..."
                    class="w-full pl-11 pr-4 py-2.5 bg-[#f1f4f9] rounded-lg text-xs font-medium placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#009640] transition">
         </div>
 
-        <!-- Navigation Utilities & Links -->
         <div class="flex items-center gap-6 text-xs font-bold text-gray-700 ml-auto md:ml-0 flex-shrink-0">
-            <!-- Location Context Selector -->
-            <div class="flex items-center gap-1.5 text-gray-500 cursor-pointer hover:text-gray-900 transition">
+            <div class="flex items-center gap-1.5 text-gray-500">
                 <i data-lucide="map-pin" class="w-4 h-4 text-[#009640]"></i>
                 <div class="text-left leading-tight font-medium">
                     <span class="text-[9px] uppercase tracking-wider text-gray-400 block font-bold">Location</span>
-                    <span class="text-gray-800 font-bold">Mumbai, MH</span>
+                    <span id="location-label" class="text-gray-800 font-bold">Detecting...</span>
                 </div>
             </div>
-
-            <a href="#" class="text-[#009640] border-b-2 border-[#009640] pb-1">Categories</a>
-            <a href="#" class="hover:text-[#009640] transition">Offers</a>
-            <a href="#" class="hover:text-[#009640] transition">Stores</a>
-
-            <!-- Cart Trigger Icon -->
-            <button class="relative p-1.5 text-gray-700 hover:text-gray-900 transition">
+            <a href="add-to-cart.html" class="relative p-1.5 text-gray-700 hover:text-gray-900 transition">
                 <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#009640] text-white text-[9px] font-black rounded-full flex items-center justify-center">3</span>
-            </button>
-
-            <!-- User Avatar Profile Frame -->
-            <div class="w-8 h-8 rounded-full border border-gray-200 overflow-hidden cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
-                     alt="User Profile" class="w-full h-full object-cover">
-            </div>
+                <span id="cart-badge" class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#009640] text-white text-[9px] font-black rounded-full flex items-center justify-center">0</span>
+            </a>
+            <a href="customer-profile.html" class="w-8 h-8 rounded-full border border-gray-200 overflow-hidden cursor-pointer flex items-center justify-center bg-gray-100 text-gray-400">
+                <i data-lucide="user" class="w-4 h-4"></i>
+            </a>
         </div>
     </header>
 
-    <!-- MAIN CENTRAL HERO & GRID CONTENT CONTROLLER -->
     <main class="flex-1 max-w-7xl mx-auto w-full px-4 lg:px-8 py-6 space-y-10">
 
-        <!-- 2. MARKETING IMPACT HERO COMPONENT -->
-        <section class="relative rounded-3xl h-[360px] overflow-hidden bg-slate-900 shadow-sm flex items-center">
-            <!-- Background Image Overlay with Dimming Effect -->
-            <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&q=80&w=1400"
-                     alt="Local market banner" class="w-full h-full object-cover opacity-50 mix-blend-multiply">
-                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
-            </div>
-
-            <!-- Content Body Frame -->
-            <div class="relative z-10 max-w-xl px-8 md:px-12 space-y-4 text-white">
-                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
-                    Empowering Local Commerce with Every Click
-                </h2>
-                <p class="text-xs md:text-sm text-gray-200 font-medium leading-relaxed max-w-md">
-                    Discover the best products from your favorite neighborhood stores. Fresh, authentic, and delivered to your doorstep within hours.
-                </p>
-                <div class="pt-2 flex gap-3">
-                    <button class="bg-[#009640] hover:bg-[#007a33] text-white text-xs font-bold px-5 py-3 rounded-xl shadow transition">
-                        Shop Now
-                    </button>
-                    <button class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm text-xs font-bold px-5 py-3 rounded-xl transition">
-                        Explore Stores
-                    </button>
-                </div>
-            </div>
+        <section id="search-results-section" class="hidden space-y-4">
+            <h3 class="text-base font-bold text-gray-900 tracking-tight">
+                Search results for "<span id="search-query-label"></span>" — nearest stores first
+            </h3>
+            <div id="search-results" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- 3. CIRCULAR CATEGORIES SCROLL LAYOUT -->
-        <section class="space-y-4">
-            <div class="flex justify-between items-baseline">
-                <h3 class="text-base font-bold text-gray-900 tracking-tight">Shop by Category</h3>
-                <a href="#" class="text-xs font-bold text-[#009640] hover:underline">View All</a>
-            </div>
-
-            <!-- Pills Row Wrapper -->
-            <div class="grid grid-cols-4 sm:grid-cols-8 gap-4 justify-items-center">
-                <!-- Template Category Bubble Item -->
-                <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center group-hover:scale-105 transition shadow-sm">
-                        <i data-lucide="milk" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-600 group-hover:text-gray-900">Groceries</span>
-                </div>
-
-                <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div class="w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center group-hover:scale-105 transition shadow-sm">
-                        <i data-lucide="shirt" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-600 group-hover:text-gray-900">Fashion</span>
-                </div>
-
-                <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center group-hover:scale-105 transition shadow-sm">
-                        <i data-lucide="smartphone" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-600 group-hover:text-gray-900">Electronics</span>
-                </div>
-
-                <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center group-hover:scale-105 transition shadow-sm">
-                        <i data-lucide="lamp" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-600 group-hover:text-gray-900">Home Decor</span>
-                </div>
-
-                <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div class="w-12 h-12 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center group-hover:scale-105 transition shadow-sm">
-                        <i data-lucide="heart-pulse" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-600 group-hover:text-gray-900">Wellness</span>
-                </div>
-
-                <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center group-hover:scale-105 transition shadow-sm">
-                        <i data-lucide="dumbbell" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-600 group-hover:text-gray-900">Fitness</span>
-                </div>
-
-                <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center group-hover:scale-105 transition shadow-sm">
-                        <i data-lucide="smile" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-600 group-hover:text-gray-900">Kids</span>
-                </div>
-
-                <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center group-hover:scale-105 transition shadow-sm">
-                        <i data-lucide="utensils" class="w-5 h-5"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-gray-600 group-hover:text-gray-900">Gourmet</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. NEARBY STORES SLOT SEGMENT -->
-        <section class="space-y-4">
+        <section id="nearby-section" class="space-y-4">
             <div class="flex justify-between items-baseline">
                 <h3 class="text-base font-bold text-gray-900 tracking-tight">Nearby Stores Delivering Now</h3>
-                <a href="#" class="text-xs font-bold text-[#009640] hover:underline">Explore Map</a>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Store 1 -->
-                <div class="bg-white border border-gray-100 rounded-xl p-3 flex gap-3 items-center shadow-sm hover:border-gray-200 transition cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=150"
-                         alt="Bakery" class="w-14 h-14 object-cover rounded-lg">
-                    <div class="min-w-0 flex-1">
-                        <h4 class="text-xs font-bold text-gray-900 truncate">Sunshine Delights Bakery</h4>
-                        <div class="flex items-center gap-2 text-[10px] text-gray-400 font-semibold mt-0.5">
-                            <span class="flex items-center gap-0.5 text-amber-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i> 4.8</span>
-                            <span>• 1.2 km away</span>
-                        </div>
-                        <span class="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded mt-2 inline-block">Free Delivery</span>
-                    </div>
-                </div>
-
-                <!-- Store 2 -->
-                <div class="bg-white border border-gray-100 rounded-xl p-3 flex gap-3 items-center shadow-sm hover:border-gray-200 transition cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=150"
-                         alt="Grocery store" class="w-14 h-14 object-cover rounded-lg">
-                    <div class="min-w-0 flex-1">
-                        <h4 class="text-xs font-bold text-gray-900 truncate">Green Earth Organics</h4>
-                        <div class="flex items-center gap-2 text-[10px] text-gray-400 font-semibold mt-0.5">
-                            <span class="flex items-center gap-0.5 text-amber-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i> 4.5</span>
-                            <span>• 0.8 km away</span>
-                        </div>
-                        <span class="text-[9px] font-bold text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded mt-2 inline-block">Fastest: 20 mins</span>
-                    </div>
-                </div>
-
-                <!-- Store 3 -->
-                <div class="bg-white border border-gray-100 rounded-xl p-3 flex gap-3 items-center shadow-sm hover:border-gray-200 transition cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=150"
-                         alt="Electronics store" class="w-14 h-14 object-cover rounded-lg">
-                    <div class="min-w-0 flex-1">
-                        <h4 class="text-xs font-bold text-gray-900 truncate">Pulse Tech Boutique</h4>
-                        <div class="flex items-center gap-2 text-[10px] text-gray-400 font-semibold mt-0.5">
-                            <span class="flex items-center gap-0.5 text-amber-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i> 4.9</span>
-                            <span>• 2.5 km away</span>
-                        </div>
-                        <span class="text-[9px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded mt-2 inline-block">Next delivery: Today 4 PM</span>
-                    </div>
-                </div>
+            <div id="nearby-stores" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <p class="text-xs text-gray-400 col-span-3">Detecting your location to find nearby stores...</p>
             </div>
-        </section>
-
-        <!-- 5. HORIZONTAL DISPLAY: TRENDING PRODUCTS GRID -->
-        <section class="space-y-4">
-            <div class="flex justify-between items-baseline">
-                <h3 class="text-base font-bold text-gray-900 tracking-tight">Trending in Mumbai</h3>
-                <div class="flex gap-1">
-                    <button class="p-1 border border-gray-200 rounded-lg text-gray-400 hover:text-gray-700 transition">
-                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                    </button>
-                    <button class="p-1 border border-gray-200 rounded-lg text-gray-400 hover:text-gray-700 transition">
-                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 5-Column Product Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <!-- Card 1 -->
-                <div class="bg-white rounded-xl overflow-hidden cursor-pointer group space-y-2">
-                    <div class="aspect-square bg-[#f8f9fa] rounded-xl flex items-center justify-center p-4 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=250"
-                             alt="Product" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition duration-300">
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900 group-hover:text-[#009640] transition truncate">SonicWave Pro Headphones</h4>
-                        <div class="flex items-baseline gap-1.5 mt-0.5">
-                            <span class="text-xs font-extrabold text-gray-900">₹4,999</span>
-                            <span class="text-[10px] text-gray-400 line-through font-medium">₹7,499</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="bg-white rounded-xl overflow-hidden cursor-pointer group space-y-2">
-                    <div class="aspect-square bg-[#f8f9fa] rounded-xl flex items-center justify-center p-4 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=250"
-                             alt="Product" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition duration-300">
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900 group-hover:text-[#009640] transition truncate">Organic Cotton Crew Neck</h4>
-                        <div class="flex items-center gap-1.5 mt-0.5">
-                            <span class="text-xs font-extrabold text-gray-900">₹899</span>
-                            <span class="text-[10px] text-gray-400 font-medium flex items-center gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 text-amber-500 fill-current"></i> 4.5 (120)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="bg-white rounded-xl overflow-hidden cursor-pointer group space-y-2">
-                    <div class="aspect-square bg-[#f8f9fa] rounded-xl flex items-center justify-center p-4 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=250"
-                             alt="Product" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition duration-300">
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900 group-hover:text-[#009640] transition truncate">UltraBoost Glide V2</h4>
-                        <div class="flex items-baseline gap-1.5 mt-0.5">
-                            <span class="text-xs font-extrabold text-gray-900">₹3,250</span>
-                            <span class="text-[9px] font-bold text-red-500 bg-red-50 px-1 rounded">30% OFF</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="bg-white rounded-xl overflow-hidden cursor-pointer group space-y-2">
-                    <div class="aspect-square bg-[#f8f9fa] rounded-xl flex items-center justify-center p-4 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&q=80&w=250"
-                             alt="Product" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition duration-300">
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900 group-hover:text-[#009640] transition truncate">Eco-Insulated Flask (1L)</h4>
-                        <div class="flex items-baseline gap-1.5 mt-0.5">
-                            <span class="text-xs font-extrabold text-gray-900">₹1,150</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 5 -->
-                <div class="bg-white rounded-xl overflow-hidden cursor-pointer group space-y-2">
-                    <div class="aspect-square bg-[#f8f9fa] rounded-xl flex items-center justify-center p-4 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=250"
-                             alt="Product" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition duration-300">
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900 group-hover:text-[#009640] transition truncate">Artisan Ceramic Mug Set</h4>
-                        <div class="flex items-baseline gap-1.5 mt-0.5">
-                            <span class="text-xs font-extrabold text-gray-900">₹2,400</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. PERSONALIZED RECS CONTEXT PANEL -->
-        <section class="bg-[#eef2f9] rounded-2xl p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-            <!-- Left Info Block -->
-            <div class="space-y-3 lg:pr-6">
-                <span class="text-[9px] uppercase font-extrabold tracking-widest text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full inline-block">Personalized Pick</span>
-                <h3 class="text-xl font-extrabold text-gray-900 tracking-tight leading-tight">Recommended for You</h3>
-                <p class="text-xs text-gray-500 font-medium leading-relaxed">
-                    Based on your recent interest in 'Healthy Living', we thought you'd love this curated selection from local farmers.
-                </p>
-                <button class="bg-[#111827] hover:bg-black text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm mt-1">
-                    Discover More
-                </button>
-            </div>
-
-            <!-- Right Items Data Grid (Takes 2 Columns) -->
-            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Item 1 -->
-                <div class="bg-white p-2.5 rounded-xl flex gap-3 items-center border border-slate-100 shadow-xs cursor-pointer hover:border-gray-200 transition">
-                    <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=100" alt="Honey" class="w-14 h-14 object-cover rounded-lg">
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900">Raw Himalayan Honey</h4>
-                        <span class="text-[10px] text-gray-400 font-medium block mt-0.5">From Local Bee Farms</span>
-                        <span class="text-xs font-extrabold text-gray-900 mt-1 block">₹450</span>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="bg-white p-2.5 rounded-xl flex gap-3 items-center border border-slate-100 shadow-xs cursor-pointer hover:border-gray-200 transition">
-                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=100" alt="Microgreens" class="w-14 h-14 object-cover rounded-lg">
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900">Organic Microgreens Mix</h4>
-                        <span class="text-[10px] text-gray-400 font-medium block mt-0.5">Harvested Today</span>
-                        <span class="text-xs font-extrabold text-gray-900 mt-1 block">₹180</span>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="bg-white p-2.5 rounded-xl flex gap-3 items-center border border-slate-100 shadow-xs cursor-pointer hover:border-gray-200 transition">
-                    <img src="https://images.unsplash.com/photo-1568651343853-2198d6faae27?auto=format&fit=crop&q=80&w=100" alt="Almond Milk" class="w-14 h-14 object-cover rounded-lg">
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900">Cold-Pressed Almond Milk</h4>
-                        <span class="text-[10px] text-gray-400 font-medium block mt-0.5">Dairy-Free & Fresh</span>
-                        <span class="text-xs font-extrabold text-gray-900 mt-1 block">₹290</span>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="bg-white p-2.5 rounded-xl flex gap-3 items-center border border-slate-100 shadow-xs cursor-pointer hover:border-gray-200 transition">
-                    <img src="https://images.unsplash.com/photo-1541795795328-f073b763494e?auto=format&fit=crop&q=80&w=100" alt="Nut Mix" class="w-14 h-14 object-cover rounded-lg">
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-900">Premium Raw Nut Mix</h4>
-                        <span class="text-[10px] text-gray-400 font-medium block mt-0.5">Local Roastery</span>
-                        <span class="text-xs font-extrabold text-gray-900 mt-1 block">₹599</span>
-                    </div>
-                </div>
-            </div>
+            <div id="map-container" class="hidden w-full h-72 rounded-2xl overflow-hidden border border-gray-200 mt-4"></div>
         </section>
 
     </main>
 
-    <!-- 7. COMPREHENSIVE SITE FOOTER -->
-    <footer class="bg-[#f0f4fd] border-t border-gray-200 pt-10 pb-6 text-xs text-gray-500 font-medium mt-12">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <!-- Col 1: About Statement -->
-            <div class="space-y-3">
-                <h4 class="text-sm font-black text-[#00642d] tracking-tight">VyapaarSetu</h4>
-                <p class="text-gray-400 font-medium leading-relaxed">
-                    Revolutionizing local commerce by connecting neighborhood stores with customers everywhere.
-                </p>
-                <div class="flex gap-3 text-gray-400 pt-1">
-                    <a href="#" class="hover:text-gray-600 transition"><i data-lucide="globe" class="w-4 h-4"></i></a>
-                    <a href="#" class="hover:text-gray-600 transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                    <a href="#" class="hover:text-gray-600 transition"><i data-lucide="share-2" class="w-4 h-4"></i></a>
-                </div>
-            </div>
-
-            <!-- Col 2: Quick Links -->
-            <div class="space-y-2.5">
-                <h5 class="font-bold text-gray-900 tracking-tight">Quick Links</h5>
-                <ul class="space-y-1.5 text-gray-400">
-                    <li><a href="#" class="hover:text-gray-700 transition">About Us</a></li>
-                    <li><a href="#" class="hover:text-gray-700 transition">Join as a Merchant</a></li>
-                    <li><a href="#" class="hover:text-gray-700 transition">Delivery Partners</a></li>
-                    <li><a href="#" class="hover:text-gray-700 transition">Contact Support</a></li>
-                </ul>
-            </div>
-
-            <!-- Col 3: Customer Service -->
-            <div class="space-y-2.5">
-                <h5 class="font-bold text-gray-900 tracking-tight">Customer Care</h5>
-                <ul class="space-y-1.5 text-gray-400">
-                    <li><a href="#" class="hover:text-gray-700 transition">My Account</a></li>
-                    <li><a href="#" class="hover:text-gray-700 transition">Track Order</a></li>
-                    <li><a href="#" class="hover:text-gray-700 transition">Returns & Refunds</a></li>
-                    <li><a href="#" class="hover:text-gray-700 transition">Help Center</a></li>
-                </ul>
-            </div>
-
-            <!-- Col 4: Badges -->
-            <div class="space-y-3">
-                <h5 class="font-bold text-gray-900 tracking-tight">Download App</h5>
-                <div class="space-y-2 max-w-[160px]">
-                    <a href="#" class="flex items-center gap-2 bg-[#111827] text-white p-2 rounded-lg hover:bg-black transition">
-                        <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-                        <div class="text-[9px] font-medium leading-tight">GET IT ON <span class="block text-xs font-bold">Google Play</span></div>
-                    </a>
-                    <a href="#" class="flex items-center gap-2 bg-[#111827] text-white p-2 rounded-lg hover:bg-black transition">
-                        <i data-lucide="apple" class="w-4 h-4 fill-current"></i>
-                        <div class="text-[9px] font-medium leading-tight">DOWNLOAD ON THE <span class="block text-xs font-bold">App Store</span></div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Copyright Line -->
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 border-t border-gray-200/60 pt-4 text-center text-[11px] text-gray-400">
+    <footer class="bg-[#f0f4fd] border-t border-gray-200 pt-6 pb-6 text-xs text-gray-500 font-medium mt-12">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 text-center text-[11px]">
             © 2026 VyapaarSetu Technologies. All rights reserved. Built for India.
         </div>
     </footer>
 
-    <!-- Initialize Lucide Icons -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/maps-config.js"></script>
     <script>
         lucide.createIcons();
+        document.getElementById("cart-badge").textContent = cartCount();
+
+        let userLat = null, userLng = null;
+        let map = null;
+        const locationLabel = document.getElementById("location-label");
+
+        function loadGoogleMapsScript(callback) {
+            if (!GOOGLE_MAPS_API_KEY) return;
+            const script = document.createElement("script");
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=__initMap`;
+            window.__initMap = callback;
+            document.head.appendChild(script);
+        }
+
+        function renderMap(stores) {
+            if (!GOOGLE_MAPS_API_KEY || !userLat) return;
+            const container = document.getElementById("map-container");
+            container.classList.remove("hidden");
+
+            map = new google.maps.Map(container, { center: { lat: userLat, lng: userLng }, zoom: 13 });
+
+            new google.maps.Marker({
+                position: { lat: userLat, lng: userLng },
+                map,
+                label: "You",
+                icon: { url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" },
+            });
+
+            stores.forEach(store => {
+                if (store.latitude && store.longitude) {
+                    new google.maps.Marker({ position: { lat: store.latitude, lng: store.longitude }, map, title: store.store_name });
+                }
+            });
+        }
+
+        async function loadNearbyStores() {
+            try {
+                const stores = await apiFetch(`/customers/nearby-stores?latitude=${userLat}&longitude=${userLng}&radius_km=10`, { auth: false });
+                const container = document.getElementById("nearby-stores");
+                container.innerHTML = stores.length
+                    ? stores.map(s => `
+                        <div class="bg-white border border-gray-100 rounded-xl p-3 flex gap-3 items-center shadow-sm hover:border-gray-200 transition cursor-pointer">
+                            <div class="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 flex-shrink-0">
+                                <i data-lucide="store" class="w-6 h-6"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <h4 class="text-xs font-bold text-gray-900 truncate">${s.store_name}</h4>
+                                <div class="flex items-center gap-2 text-[10px] text-gray-400 font-semibold mt-0.5">
+                                    <span class="flex items-center gap-0.5 text-amber-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i> ${s.rating.toFixed(1)}</span>
+                                    <span>• ${s.distance_km} km away</span>
+                                </div>
+                            </div>
+                        </div>`).join("")
+                    : `<p class="text-xs text-gray-400 col-span-3">No stores found within 10km yet. Merchants need to set up their store with GPS coordinates first.</p>`;
+                lucide.createIcons();
+
+                if (GOOGLE_MAPS_API_KEY) loadGoogleMapsScript(() => renderMap(stores));
+            } catch (err) {
+                document.getElementById("nearby-stores").innerHTML = `<p class="text-xs text-red-500 col-span-3">${err.message}</p>`;
+            }
+        }
+
+        async function runSearch(query) {
+            if (!query.trim()) {
+                document.getElementById("search-results-section").classList.add("hidden");
+                return;
+            }
+            document.getElementById("search-query-label").textContent = query;
+            document.getElementById("search-results-section").classList.remove("hidden");
+
+            try {
+                let url = `/customers/search-products?q=${encodeURIComponent(query)}`;
+                if (userLat) url += `&latitude=${userLat}&longitude=${userLng}`;
+                const results = await apiFetch(url, { auth: false });
+
+                const container = document.getElementById("search-results");
+                container.innerHTML = results.length
+                    ? results.map(p => `
+                        <a href="products-detail.html?product_id=${p.product_id}&name=${encodeURIComponent(p.product_name)}&price=${p.selling_price}&store_id=${p.store_id}&store_name=${encodeURIComponent(p.store_name)}&qty_available=${p.quantity_available}"
+                           class="bg-white border border-gray-100 rounded-xl p-4 space-y-2 shadow-sm block hover:border-gray-300 transition">
+                            <h4 class="text-sm font-bold text-gray-900">${p.product_name}</h4>
+                            <p class="text-[11px] text-gray-400 font-medium">${p.brand || ""}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-extrabold text-gray-900">₹${p.selling_price}</span>
+                                <span class="text-[10px] text-gray-500 font-semibold">at ${p.store_name}</span>
+                            </div>
+                            <span class="text-[10px] text-gray-400">${p.quantity_available} in stock</span>
+                        </a>`).join("")
+                    : `<p class="text-xs text-gray-400 col-span-3">No stores near you currently have "${query}" in stock.</p>`;
+            } catch (err) {
+                document.getElementById("search-results").innerHTML = `<p class="text-xs text-red-500 col-span-3">${err.message}</p>`;
+            }
+        }
+
+        let searchDebounce;
+        document.getElementById("search-input").addEventListener("input", (e) => {
+            clearTimeout(searchDebounce);
+            searchDebounce = setTimeout(() => runSearch(e.target.value), 400);
+        });
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    userLat = pos.coords.latitude;
+                    userLng = pos.coords.longitude;
+                    locationLabel.textContent = "Current location";
+                    loadNearbyStores();
+                },
+                () => {
+                    locationLabel.textContent = "Location unavailable";
+                    userLat = 19.076; userLng = 72.877;
+                    loadNearbyStores();
+                }
+            );
+        } else {
+            userLat = 19.076; userLng = 72.877;
+            loadNearbyStores();
+        }
     </script>
 </body>
 </html>
