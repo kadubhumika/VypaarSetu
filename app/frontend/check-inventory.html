@@ -92,23 +92,41 @@
     </div>
 
     <div id="edit-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4">
-            <h3 class="text-sm font-bold text-gray-900">Edit Stock</h3>
-            <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-gray-500">Quantity</label>
-                <input id="edit-quantity" type="number" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4">
+        <h3 class="text-sm font-bold text-gray-900">Edit Stock</h3>
+        <div class="space-y-1.5">
+            <label class="text-[11px] font-bold text-gray-500">Quantity</label>
+            <input id="edit-quantity" type="number" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+        </div>
+        <div class="space-y-1.5">
+            <label class="text-[11px] font-bold text-gray-500">Selling Price (₹)</label>
+            <input id="edit-price" type="number" step="0.01" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+        </div>
+
+        <div class="space-y-1.5 border-t border-gray-100 pt-3">
+            <label class="text-[11px] font-bold text-gray-500">Product Image</label>
+            <div class="flex gap-2 mb-2">
+                <label class="flex-1 text-center border border-gray-200 rounded-lg py-2 text-[10px] font-bold text-gray-600 cursor-pointer hover:bg-gray-50">
+                    📁 Upload Image
+                    <input id="edit-image-upload" type="file" accept="image/*" class="hidden">
+                </label>
+                <label class="flex-1 text-center border border-gray-200 rounded-lg py-2 text-[10px] font-bold text-gray-600 cursor-pointer hover:bg-gray-50">
+                    📷 Camera
+                    <input id="edit-image-camera" type="file" accept="image/*" capture="environment" class="hidden">
+                </label>
             </div>
-            <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-gray-500">Selling Price (₹)</label>
-                <input id="edit-price" type="number" step="0.01" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
-            </div>
-            <div class="flex gap-2 pt-2">
-                <button id="edit-cancel-btn" class="flex-1 border border-gray-200 rounded-lg py-2 text-xs font-bold text-gray-600">Cancel</button>
-                <button id="edit-save-btn" class="flex-1 bg-[#009640] text-white rounded-lg py-2 text-xs font-bold">Save</button>
-                <button id="edit-delete-btn" class="border border-red-200 text-red-600 rounded-lg px-3 py-2 text-xs font-bold">Delete</button>
-            </div>
+            <input id="edit-image-url" type="text" placeholder="Or paste an image URL"
+                   class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <p id="edit-image-status" class="text-[10px] text-gray-400"></p>
+        </div>
+
+        <div class="flex gap-2 pt-2">
+            <button id="edit-cancel-btn" class="flex-1 border border-gray-200 rounded-lg py-2 text-xs font-bold text-gray-600">Cancel</button>
+            <button id="edit-save-btn" class="flex-1 bg-[#009640] text-white rounded-lg py-2 text-xs font-bold">Save</button>
+            <button id="edit-delete-btn" class="border border-red-200 text-red-600 rounded-lg px-3 py-2 text-xs font-bold">Delete</button>
         </div>
     </div>
+</div>
 
     <div id="add-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-3">
@@ -215,23 +233,54 @@
         document.getElementById("search-input").addEventListener("input", renderGrid);
 
         function openEditModal(id, qty, price) {
-            editingId = id;
-            document.getElementById("edit-quantity").value = qty;
-            document.getElementById("edit-price").value = price;
-            document.getElementById("edit-modal").classList.remove("hidden");
-        }
+    editingId = id;
+    document.getElementById("edit-quantity").value = qty;
+    document.getElementById("edit-price").value = price;
+    document.getElementById("edit-image-url").value = "";
+    document.getElementById("edit-image-status").textContent = "";
+    document.getElementById("edit-modal").classList.remove("hidden");
+}
         document.getElementById("edit-cancel-btn").addEventListener("click", () => document.getElementById("edit-modal").classList.add("hidden"));
 
-        document.getElementById("edit-save-btn").addEventListener("click", async () => {
-            try {
-                await apiFetch(`/inventory/${editingId}`, {
-                    method: "PATCH",
-                    body: { quantity: Number(document.getElementById("edit-quantity").value), selling_price: Number(document.getElementById("edit-price").value) },
-                });
-                document.getElementById("edit-modal").classList.add("hidden");
-                loadInventory();
-            } catch (err) { alert(err.message); }
-        });
+        let pendingImageUrl = null;
+
+async function handleImageUpload(file) {
+    const statusEl = document.getElementById("edit-image-status");
+    statusEl.textContent = "Uploading...";
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+        const result = await apiFetch("/inventory/upload-image", { method: "POST", isFormData: true, body: formData });
+        pendingImageUrl = result.image_url;
+        document.getElementById("edit-image-url").value = result.image_url;
+        statusEl.textContent = "✅ Image uploaded — click Save to apply.";
+    } catch (err) {
+        statusEl.textContent = "❌ " + err.message;
+    }
+}
+
+document.getElementById("edit-image-upload").addEventListener("change", (e) => {
+    if (e.target.files.length) handleImageUpload(e.target.files[0]);
+});
+document.getElementById("edit-image-camera").addEventListener("change", (e) => {
+    if (e.target.files.length) handleImageUpload(e.target.files[0]);
+});
+
+document.getElementById("edit-save-btn").addEventListener("click", async () => {
+    try {
+        const imageUrl = document.getElementById("edit-image-url").value.trim();
+        const body = {
+            quantity: Number(document.getElementById("edit-quantity").value),
+            selling_price: Number(document.getElementById("edit-price").value),
+        };
+        if (imageUrl) body.image_url = imageUrl;
+
+        await apiFetch(`/inventory/${editingId}`, { method: "PATCH", body });
+        document.getElementById("edit-modal").classList.add("hidden");
+        pendingImageUrl = null;
+        loadInventory();
+    } catch (err) { alert(err.message); }
+});
 
         document.getElementById("edit-delete-btn").addEventListener("click", async () => {
             if (!confirm("Remove this item from inventory?")) return;

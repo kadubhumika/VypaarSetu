@@ -64,7 +64,7 @@ class ProductUpdate(BaseModel):
     purchase_price: float | None = Field(default=None, ge=0)
     expiry_date: date | None = None
     batch_number: str | None = None
-
+    image_url: str | None = None
 
 # --- Inventory card view — the shape the "Store Inventory" screen renders ---
 class InventoryCardOut(BaseModel):

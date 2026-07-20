@@ -1,6 +1,9 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
+from starlette.staticfiles import StaticFiles
 
 from app.core.database import SessionLocal
 from app.core.redis_client import redis_client
@@ -13,11 +16,18 @@ from app.analytics.router import router as analytics_router
 from app.customers.router import router as customers_router
 from app.notifications.router import router as notifications_router
 
+
 app = FastAPI(title="VyapaarSetu API", version="0.1.0")
+
+os.makedirs("static/uploads/products", exist_ok=True)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -18,8 +18,6 @@ def _get_store_or_404(db: Session, merchant_id: int) -> Store:
     return store
 
 
-# ---------- Store ----------
-
 @router.post("/stores", response_model=schemas.StoreOut)
 def create_store(payload: schemas.StoreCreate, db: Session = Depends(get_db), merchant=Depends(get_current_merchant)):
     if service.get_merchant_store(db, merchant.id):
@@ -37,8 +35,6 @@ def update_my_store(payload: schemas.StoreUpdate, db: Session = Depends(get_db),
     store = _get_store_or_404(db, merchant.id)
     return service.update_store(db, store, payload)
 
-
-# ---------- Invoice upload ----------
 
 @router.post("/inventory/upload-invoice", response_model=schemas.InvoiceUploadResponse)
 async def upload_invoice(
@@ -62,7 +58,7 @@ async def upload_invoice(
 
     file_path = service.save_invoice_file(contents, file.filename)
     invoice = service.create_invoice_record(db, store.id, file_path)
-    extracted = service.mock_extract_invoice(file_path)
+    extracted = service.extract_invoice_items(file_path)  # <-- real extraction now, not mock
 
     return schemas.InvoiceUploadResponse(
         invoice_id=invoice.id,
@@ -100,8 +96,6 @@ def cancel_invoice(invoice_id: int, db: Session = Depends(get_db), merchant=Depe
     return {"message": "Invoice discarded"}
 
 
-# ---------- Products / Inventory cards ----------
-
 @router.post("/inventory/products", response_model=schemas.InventoryCardOut)
 def add_product(payload: schemas.ProductCreate, db: Session = Depends(get_db), merchant=Depends(get_current_merchant)):
     store = _get_store_or_404(db, merchant.id)
@@ -135,3 +129,31 @@ def delete_inventory(inventory_id: int, db: Session = Depends(get_db), merchant=
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Inventory item not found")
     service.delete_inventory_item(db, inventory)
     return {"message": "Item removed from inventory"}
+
+
+# ---------- Product image upload (new) ----------
+
+ALLOWED_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+MAX_IMAGE_SIZE_MB = 5
+
+
+@router.post("/inventory/upload-image")
+async def upload_product_image(
+    file: UploadFile = File(...),
+    merchant=Depends(get_current_merchant),
+):
+    """Generic image upload — returns a URL you then PATCH onto an inventory item's
+    image_url field. Works for the 'Upload Image' button; for 'Camera', the frontend
+    file input uses capture="environment" which opens the device camera directly
+    on mobile browsers and calls this same endpoint."""
+    ext = os.path.splitext(file.filename)[1].lower()
+    if ext not in ALLOWED_IMAGE_EXTENSIONS:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"Unsupported image type '{ext}'. Allowed: {', '.join(sorted(ALLOWED_IMAGE_EXTENSIONS))}")
+
+    contents = await file.read()
+    size_mb = len(contents) / (1024 * 1024)
+    if size_mb > MAX_IMAGE_SIZE_MB:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"Image too large ({size_mb:.1f}MB). Max {MAX_IMAGE_SIZE_MB}MB")
+
+    image_url = service.save_product_image(contents, file.filename)
+    return {"image_url": image_url}

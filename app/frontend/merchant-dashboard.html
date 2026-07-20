@@ -252,6 +252,15 @@
                 }
             }
         }
+        async function loadStoreName() {
+    try {
+        const store = await apiFetch("/stores/me");
+        document.getElementById("merchant-name").textContent = store.store_name;
+    } catch (err) {
+        document.getElementById("merchant-name").textContent = "Merchant";
+    }
+}
+loadStoreName();
 
         document.getElementById("refresh-btn").addEventListener("click", loadDashboard);
         loadDashboard();

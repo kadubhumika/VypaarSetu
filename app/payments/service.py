@@ -7,56 +7,42 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.models import Order, Payment, TransactionLedger, Inventory, Notification, Store, Merchant
 from app.notifications.service import send_order_notification_with_buttons
-from app.notifications.whatsapp import send_whatsapp_message
 
 
 def create_razorpay_order_stub(amount: float) -> str:
-    """Fallback when Razorpay credentials aren't configured yet."""
+    """Fallback when Razorpay credentials aren't configured or fail."""
     return f"order_stub_{uuid.uuid4().hex[:14]}"
 
 
 def create_razorpay_order(amount: float) -> str:
     """
-    Real Razorpay order creation.
-
-    Setup (free, test mode):
-    1. Sign up at https://dashboard.razorpay.com/signup
-    2. Go to Settings > API Keys > Generate Test Key
-    3. Add to your .env:
-         RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxxx
-         RAZORPAY_KEY_SECRET=your_test_secret
-    4. pip install razorpay (already in requirements.txt)
-
-    Without these two env vars set, falls back to a stub order id — the rest of the
-    flow (webhook, ledger, inventory decrement) works identically either way, since
-    they only depend on getting an order id string back.
+    Real Razorpay order creation — now with a safety net. If the keys are missing,
+    malformed, or Razorpay rejects them (wrong test/live key, typo, etc.), this falls
+    back to the stub instead of crashing the whole checkout with a 500. Check your
+    Docker logs for the [ERROR] line if this fires — it tells you exactly why.
     """
     if not (settings.razorpay_key_id and settings.razorpay_key_secret):
         return create_razorpay_order_stub(amount)
 
-    import razorpay
-
-    client = razorpay.Client(auth=(settings.razorpay_key_id, settings.razorpay_key_secret))
-    order = client.order.create({
-        "amount": int(amount * 100),  # Razorpay expects paise, not rupees
-        "currency": "INR",
-        "payment_capture": 1,
-    })
-    return order["id"]
+    try:
+        import razorpay
+        client = razorpay.Client(auth=(settings.razorpay_key_id, settings.razorpay_key_secret))
+        order = client.order.create({
+            "amount": int(amount * 100),
+            "currency": "INR",
+            "payment_capture": 1,
+        })
+        return order["id"]
+    except Exception as e:
+        print(f"[ERROR] Razorpay order creation failed ({e}). Falling back to stub — "
+              f"double check RAZORPAY_KEY_ID/RAZORPAY_KEY_SECRET in .env are correct TEST mode keys.")
+        return create_razorpay_order_stub(amount)
 
 
 def verify_razorpay_signature(order_id: str, payment_id: str, signature: str) -> bool:
-    """
-    Verifies the checkout signature Razorpay's frontend script returns after a real
-    payment. This is what actually confirms the payment wasn't tampered with —
-    NEVER trust a frontend payment success callback without this check.
-    Needs RAZORPAY_KEY_SECRET in .env.
-    """
     if not settings.razorpay_key_secret:
-        return False  # can't verify without the secret — reject rather than silently trust
-
+        return False
     import razorpay
-
     client = razorpay.Client(auth=(settings.razorpay_key_id, settings.razorpay_key_secret))
     try:
         client.utility.verify_payment_signature({
@@ -72,7 +58,7 @@ def verify_razorpay_signature(order_id: str, payment_id: str, signature: str) ->
 def create_payment_for_order(db: Session, order: Order) -> Payment:
     existing = db.query(Payment).filter(Payment.order_id == order.id).first()
     if existing:
-        return existing  # idempotent — don't create a duplicate payment intent
+        return existing
 
     razorpay_order_id = create_razorpay_order(float(order.total_amount))
     payment = Payment(
@@ -103,10 +89,6 @@ def handle_webhook(db: Session, razorpay_order_id: str, razorpay_payment_id: str
     order = db.query(Order).filter(Order.id == payment.order_id).first()
 
     if payment.status == "success":
-        # NOTE: order.status deliberately stays "created" here — payment succeeding is
-        # not the same as the merchant accepting the order. The merchant still needs to
-        # Accept & Pack (or mark Out of Stock) via the WhatsApp reply or the dashboard;
-        # that action is what moves status to "accepted"/"cancelled".
         order.payment_status = "paid"
 
         store = db.query(Store).filter(Store.id == order.store_id).first()

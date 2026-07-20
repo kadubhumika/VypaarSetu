@@ -1,5 +1,7 @@
 import os
+import re
 import uuid
+import pdfplumber
 from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
@@ -7,8 +9,9 @@ from sqlalchemy.orm import Session
 from app.models import Store, Category, Product, Inventory, SupplierInvoice, InvoiceItem
 from app.inventory.schemas import ExtractedInvoiceItem
 
-LOW_STOCK_THRESHOLD = 10  # units — matches the "Low Stock" badge logic in the UI
+LOW_STOCK_THRESHOLD = 10
 UPLOAD_DIR = "uploads/invoices"
+IMAGE_UPLOAD_DIR = "static/uploads/products"
 
 
 # ---------- Store ----------
@@ -94,8 +97,18 @@ def add_product_to_inventory(db: Session, store_id: int, data) -> Inventory:
 
 
 def update_inventory_item(db: Session, inventory: Inventory, data) -> Inventory:
-    for field, value in data.dict(exclude_unset=True).items():
+    payload = data.dict(exclude_unset=True)
+    image_url = payload.pop("image_url", None)
+
+    for field, value in payload.items():
         setattr(inventory, field, value)
+
+    # image_url lives on Product, not Inventory — cascade it to the linked product
+    if image_url:
+        product = db.query(Product).filter(Product.id == inventory.product_id).first()
+        if product:
+            product.image_url = image_url
+
     db.commit()
     db.refresh(inventory)
     return inventory
@@ -131,7 +144,21 @@ def list_inventory_cards(db: Session, store_id: int) -> list[dict]:
     ]
 
 
-# ---------- Invoice upload (OCR pipeline) ----------
+# ---------- Image upload (real file storage) ----------
+
+def save_product_image(file_bytes: bytes, original_filename: str) -> str:
+    """Saves an uploaded product image to disk and returns a public URL for it.
+    Requires app.mount("/static", StaticFiles(directory="static")) in main.py."""
+    os.makedirs(IMAGE_UPLOAD_DIR, exist_ok=True)
+    ext = os.path.splitext(original_filename)[1].lower() or ".jpg"
+    stored_name = f"{uuid.uuid4().hex}{ext}"
+    path = os.path.join(IMAGE_UPLOAD_DIR, stored_name)
+    with open(path, "wb") as f:
+        f.write(file_bytes)
+    return f"/static/uploads/products/{stored_name}"
+
+
+# ---------- Invoice upload (real PDF text extraction + OCR fallback) ----------
 
 def save_invoice_file(file_bytes: bytes, original_filename: str) -> str:
     os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -143,15 +170,83 @@ def save_invoice_file(file_bytes: bytes, original_filename: str) -> str:
     return path
 
 
+# Matches lines like: "1. Maggie Noodles (Qty: 5) - $2.50 each"
+# Also tolerates ₹ instead of $, and "x" or "qty" variants loosely.
+_LINE_PATTERN = re.compile(
+    r'^\s*\d+[\.\)]\s*(?P<name>.+?)\s*\(\s*(?:qty|quantity)\s*:?\s*(?P<qty>\d+)\s*\)\s*[-–]\s*[₹$]\s*(?P<price>[\d.]+)',
+    re.IGNORECASE,
+)
+
+_CATEGORY_KEYWORDS = {
+    "Dairy": ["milk", "cheese", "butter", "yogurt", "curd", "paneer"],
+    "Grocery": ["rice", "oil", "sugar", "flour", "atta", "dal", "salt", "ketchup"],
+    "Personal Care": ["soap", "detergent", "toothpaste", "shampoo"],
+    "Snacks & Beverages": ["chips", "biscuit", "soda", "coffee", "tea", "noodles", "cookie"],
+    "Household": ["towel", "trash", "bag", "cleaning", "tissue"],
+    "Bakery": ["bread"],
+}
+
+
+def _guess_category(product_name: str) -> str:
+    name_lower = product_name.lower()
+    for category, keywords in _CATEGORY_KEYWORDS.items():
+        if any(k in name_lower for k in keywords):
+            return category
+    return "General"
+
+
+def _extract_from_pdf_text(file_path: str) -> list[ExtractedInvoiceItem]:
+
+
+    with pdfplumber.open(file_path) as pdf:
+        text = "\n".join(page.extract_text() or "" for page in pdf.pages)
+
+    items = []
+    for line in text.splitlines():
+        match = _LINE_PATTERN.match(line.strip())
+        if match:
+            name = match.group("name").strip()
+            items.append(ExtractedInvoiceItem(
+                item_name=name,
+                category_name=_guess_category(name),
+                quantity=int(match.group("qty")),
+                price_per_unit=float(match.group("price")),
+            ))
+
+    if not items:
+        raise ValueError("No recognizable 'N. Product (Qty: X) - $Y each' lines found in this PDF's text")
+
+    return items
+
+
 def mock_extract_invoice(file_path: str) -> list[ExtractedInvoiceItem]:
-    """Placeholder for the real OCR + LLM-normalization pipeline (Tesseract/EasyOCR + LLM
-    cleanup, per the architecture doc). Returns realistic dummy rows so the approve flow
-    can be built and tested end-to-end before OCR is wired in."""
+    """Fallback used for images (JPG/PNG) — real image OCR needs Tesseract installed
+    in the Docker image, which isn't wired in yet. Returns realistic dummy rows so
+    the approve flow still works end-to-end for image uploads until that's added."""
     return [
         ExtractedInvoiceItem(item_name="Premium Basmati Rice 5kg", category_name="Grocery", quantity=20, price_per_unit=550.0),
         ExtractedInvoiceItem(item_name="Refined Sunflower Oil 1L", category_name="Oils", quantity=50, price_per_unit=180.0),
         ExtractedInvoiceItem(item_name="Organic Honey 500g", category_name="Staples", quantity=15, price_per_unit=300.0),
     ]
+
+
+def extract_invoice_items(file_path: str) -> list[ExtractedInvoiceItem]:
+    """Real extraction for PDFs with selectable text (like your test file).
+    Falls back to mock data for images, or if the PDF's text doesn't match the
+    expected line format — check Docker logs for the [ERROR] line if that happens."""
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext == ".pdf":
+        try:
+            return _extract_from_pdf_text(file_path)
+        except Exception as e:
+            print(f"[ERROR] PDF text extraction failed ({e}). Falling back to mock data. "
+                  f"Check that your PDF has selectable text (not a scanned image) matching "
+                  f"the pattern 'N. Product Name (Qty: X) - $Y each'.")
+            return mock_extract_invoice(file_path)
+    else:
+        print(f"[DEV] Image OCR not wired in yet for {file_path} — using mock data. "
+              f"Real image OCR needs Tesseract installed in the Docker image.")
+        return mock_extract_invoice(file_path)
 
 
 def create_invoice_record(db: Session, store_id: int, file_path: str) -> SupplierInvoice:
@@ -189,7 +284,7 @@ def approve_invoice(db: Session, invoice: SupplierInvoice, items: list[Extracted
                 product_id=product.id,
                 quantity=item.quantity,
                 purchase_price=item.price_per_unit,
-                selling_price=item.price_per_unit * 1.2,  # simple default markup — merchant edits later
+                selling_price=item.price_per_unit * 1.2,
             ))
         added += 1
 
