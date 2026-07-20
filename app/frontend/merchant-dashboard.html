@@ -61,9 +61,19 @@
                        class="w-full pl-10 pr-4 py-2 bg-[#f1f3f7] rounded-full text-xs placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#009640] transition">
             </div>
             <div class="flex items-center gap-6">
-                <button class="relative p-1 text-gray-500 hover:text-gray-800">
-                    <i data-lucide="bell" class="w-5 h-5"></i>
-                </button>
+                <div class="relative">
+    <button id="notif-bell-btn" class="relative p-1 text-gray-500 hover:text-gray-800">
+        <i data-lucide="bell" class="w-5 h-5"></i>
+        <span id="notif-badge" class="hidden absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+    </button>
+    <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-96 overflow-y-auto">
+        <div class="p-3 border-b border-gray-100 flex justify-between items-center">
+            <span class="text-xs font-bold text-gray-900">Notifications</span>
+            <button id="mark-all-read-btn" class="text-[10px] font-bold text-[#009640] hover:underline">Mark all read</button>
+        </div>
+        <div id="notif-list" class="divide-y divide-gray-100"></div>
+    </div>
+</div>
                 <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
                     <div class="text-right">
                         <p id="merchant-name" class="text-sm font-bold text-gray-800 leading-none">Loading...</p>
@@ -192,6 +202,45 @@
         });
 
         let weeklyChart, categoryChart;
+        async function loadNotifications() {
+    try {
+        const data = await apiFetch("/notifications");
+        const badge = document.getElementById("notif-badge");
+        badge.classList.toggle("hidden", data.unread_count === 0);
+
+        document.getElementById("notif-list").innerHTML = data.notifications.length
+            ? data.notifications.map(n => `
+                <div class="notif-item p-3 hover:bg-slate-50 cursor-pointer ${n.is_read ? '' : 'bg-blue-50/40'}" data-id="${n.id}">
+                    <p class="text-xs font-bold text-gray-900">${n.title}</p>
+                    <p class="text-[11px] text-gray-500 mt-0.5">${n.body}</p>
+                    <span class="text-[10px] text-gray-400 mt-1 block">${new Date(n.created_at).toLocaleString()}</span>
+                </div>`).join("")
+            : `<p class="text-xs text-gray-400 p-4 text-center">No notifications yet.</p>`;
+
+        document.querySelectorAll(".notif-item").forEach(item => {
+            item.addEventListener("click", async () => {
+                try { await apiFetch(`/notifications/${item.dataset.id}/read`, { method: "PATCH" }); loadNotifications(); }
+                catch (err) { console.error(err); }
+            });
+        });
+    } catch (err) {
+        console.error("Failed to load notifications:", err);
+    }
+}
+
+document.getElementById("notif-bell-btn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    document.getElementById("notif-dropdown").classList.toggle("hidden");
+});
+document.addEventListener("click", () => document.getElementById("notif-dropdown").classList.add("hidden"));
+document.getElementById("mark-all-read-btn").addEventListener("click", async (e) => {
+    e.stopPropagation();
+    try { await apiFetch("/notifications/read-all", { method: "PATCH" }); loadNotifications(); }
+    catch (err) { alert(err.message); }
+});
+
+loadNotifications();
+setInterval(loadNotifications, 15000); // poll every 15s for new orders
 
         async function loadDashboard() {
             try {

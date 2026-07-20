@@ -202,8 +202,8 @@
                             <i data-lucide="${item.is_low_stock ? 'alert-circle' : 'check'}" class="w-2.5 h-2.5"></i> ${item.is_low_stock ? 'Low Stock' : 'In Stock'}
                         </span>
                         <div class="w-full h-32 bg-slate-50 rounded-xl overflow-hidden mb-3 flex items-center justify-center text-gray-300">
-                            <i data-lucide="package" class="w-10 h-10"></i>
-                        </div>
+    ${item.image_url ? `<img src="${API_BASE_URL}${item.image_url}" class="w-full h-full object-cover">` : `<i data-lucide="package" class="w-10 h-10"></i>`}
+</div>
                         <div class="flex justify-between items-start">
                             <div>
                                 <h3 class="text-sm font-bold text-gray-900">${item.product_name}</h3>

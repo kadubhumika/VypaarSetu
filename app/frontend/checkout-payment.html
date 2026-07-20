@@ -139,64 +139,69 @@
         }
 
         payBtn.addEventListener("click", async () => {
-            payBtn.disabled = true;
-            payLabel.textContent = "Processing...";
+    payBtn.disabled = true;
+    payLabel.textContent = "Processing...";
 
-            try {
-                const payment = await apiFetch("/payments/create-order", { method: "POST", body: { order_id: currentOrder.id } });
+    try {
+        const payment = await apiFetch("/payments/create-order", { method: "POST", body: { order_id: currentOrder.id } });
 
-                if (!razorpayKeyId) {
-                    await apiFetch("/payments/webhook", {
+        // The backend falls back to a stub order id if Razorpay auth fails server-side —
+        // opening the real Razorpay widget with a fake order id always 400s, so check for
+        // that explicitly instead of trusting /payments/config alone.
+        const isRealRazorpayOrder = razorpayKeyId && !payment.razorpay_order_id.startsWith("order_stub_");
+
+        if (!isRealRazorpayOrder) {
+            await apiFetch("/payments/webhook", {
+                method: "POST",
+                auth: false,
+                body: {
+                    razorpay_order_id: payment.razorpay_order_id,
+                    razorpay_payment_id: "pay_dev_" + Date.now(),
+                    status: "captured",
+                    method: "dev_simulated",
+                },
+            });
+            alert("Payment simulated (Razorpay credentials aren't valid yet — see backend logs). Order marked as paid.");
+            window.location.href = "order-status.html";
+            return;
+        }
+
+        const options = {
+            key: razorpayKeyId,
+            amount: Math.round(payment.amount * 100),
+            currency: "INR",
+            name: "VyapaarSetu",
+            description: `Order #${currentOrder.id}`,
+            order_id: payment.razorpay_order_id,
+            handler: async function (response) {
+                try {
+                    await apiFetch("/payments/verify", {
                         method: "POST",
                         auth: false,
                         body: {
-                            razorpay_order_id: payment.razorpay_order_id,
-                            razorpay_payment_id: "pay_dev_" + Date.now(),
-                            status: "captured",
-                            method: "dev_simulated",
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
                         },
                     });
-                    alert("Payment simulated (Razorpay not configured). Order marked as paid.");
+                    alert("Payment successful!");
                     window.location.href = "order-status.html";
-                    return;
+                } catch (err) {
+                    showError("Payment verification failed: " + err.message);
                 }
+            },
+            theme: { color: "#009640" },
+        };
 
-                const options = {
-                    key: razorpayKeyId,
-                    amount: Math.round(payment.amount * 100),
-                    currency: "INR",
-                    name: "VyapaarSetu",
-                    description: `Order #${currentOrder.id}`,
-                    order_id: payment.razorpay_order_id,
-                    handler: async function (response) {
-                        try {
-                            await apiFetch("/payments/verify", {
-                                method: "POST",
-                                auth: false,
-                                body: {
-                                    razorpay_order_id: response.razorpay_order_id,
-                                    razorpay_payment_id: response.razorpay_payment_id,
-                                    razorpay_signature: response.razorpay_signature,
-                                },
-                            });
-                            alert("Payment successful!");
-                            window.location.href = "order-status.html";
-                        } catch (err) {
-                            showError("Payment verification failed: " + err.message);
-                        }
-                    },
-                    theme: { color: "#009640" },
-                };
-
-                const rzp = new Razorpay(options);
-                rzp.open();
-            } catch (err) {
-                showError(err.message);
-            } finally {
-                payBtn.disabled = false;
-                payLabel.textContent = currentOrder ? `Pay ₹${currentOrder.total_amount.toLocaleString("en-IN")}` : "Pay Now";
-            }
-        });
+        const rzp = new Razorpay(options);
+        rzp.open();
+    } catch (err) {
+        showError(err.message);
+    } finally {
+        payBtn.disabled = false;
+        payLabel.textContent = currentOrder ? `Pay ₹${currentOrder.total_amount.toLocaleString("en-IN")}` : "Pay Now";
+    }
+});
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
