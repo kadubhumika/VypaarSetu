@@ -150,18 +150,22 @@
 
                 const container = document.getElementById("search-results");
                 container.innerHTML = results.length
-                    ? results.map(p => `
-                        <a href="products-detail.html?product_id=${p.product_id}&name=${encodeURIComponent(p.product_name)}&price=${p.selling_price}&store_id=${p.store_id}&store_name=${encodeURIComponent(p.store_name)}&qty_available=${p.quantity_available}"
-                           class="bg-white border border-gray-100 rounded-xl p-4 space-y-2 shadow-sm block hover:border-gray-300 transition">
-                            <h4 class="text-sm font-bold text-gray-900">${p.product_name}</h4>
-                            <p class="text-[11px] text-gray-400 font-medium">${p.brand || ""}</p>
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm font-extrabold text-gray-900">₹${p.selling_price}</span>
-                                <span class="text-[10px] text-gray-500 font-semibold">at ${p.store_name}</span>
-                            </div>
-                            <span class="text-[10px] text-gray-400">${p.quantity_available} in stock</span>
-                        </a>`).join("")
-                    : `<p class="text-xs text-gray-400 col-span-3">No stores near you currently have "${query}" in stock.</p>`;
+    ? results.map(p => `
+        <a href="products-detail.html?product_id=${p.product_id}&name=${encodeURIComponent(p.product_name)}&price=${p.selling_price}&store_id=${p.store_id}&store_name=${encodeURIComponent(p.store_name)}&qty_available=${p.quantity_available}&image_url=${encodeURIComponent(p.image_url || '')}"
+           class="bg-white border border-gray-100 rounded-xl p-4 space-y-2 shadow-sm block hover:border-gray-300 transition">
+            <div class="w-full h-24 bg-slate-50 rounded-lg overflow-hidden mb-2 flex items-center justify-center text-gray-300">
+                ${p.image_url ? `<img src="${API_BASE_URL}${p.image_url}" class="w-full h-full object-cover">` : `<i data-lucide="package" class="w-8 h-8"></i>`}
+            </div>
+            <h4 class="text-sm font-bold text-gray-900">${p.product_name}</h4>
+            <p class="text-[11px] text-gray-400 font-medium">${p.brand || ""}</p>
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-extrabold text-gray-900">₹${p.selling_price}</span>
+                <span class="text-[10px] text-gray-500 font-semibold">at ${p.store_name}</span>
+            </div>
+            <span class="text-[10px] text-gray-400">${p.quantity_available} in stock</span>
+        </a>`).join("")
+    : `<p class="text-xs text-gray-400 col-span-3">No stores near you currently have "${query}" in stock.</p>`;
+lucide.createIcons();
             } catch (err) {
                 document.getElementById("search-results").innerHTML = `<p class="text-xs text-red-500 col-span-3">${err.message}</p>`;
             }

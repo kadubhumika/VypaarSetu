@@ -92,6 +92,18 @@
     </div>
 
     <div id="edit-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div id="camera-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+    <div class="bg-white rounded-2xl p-4 w-full max-w-md space-y-3">
+        <h3 class="text-sm font-bold text-gray-900">Take a Photo</h3>
+        <video id="camera-preview" autoplay playsinline class="w-full rounded-xl bg-black"></video>
+        <canvas id="camera-canvas" class="hidden"></canvas>
+        <p id="camera-error" class="hidden text-xs text-red-500"></p>
+        <div class="flex gap-2">
+            <button id="camera-cancel-btn" class="flex-1 border border-gray-200 rounded-lg py-2 text-xs font-bold text-gray-600">Cancel</button>
+            <button id="camera-capture-btn" class="flex-1 bg-[#009640] text-white rounded-lg py-2 text-xs font-bold">📸 Capture</button>
+        </div>
+    </div>
+</div>
     <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4">
         <h3 class="text-sm font-bold text-gray-900">Edit Stock</h3>
         <div class="space-y-1.5">
@@ -110,10 +122,9 @@
                     📁 Upload Image
                     <input id="edit-image-upload" type="file" accept="image/*" class="hidden">
                 </label>
-                <label class="flex-1 text-center border border-gray-200 rounded-lg py-2 text-[10px] font-bold text-gray-600 cursor-pointer hover:bg-gray-50">
-                    📷 Camera
-                    <input id="edit-image-camera" type="file" accept="image/*" capture="environment" class="hidden">
-                </label>
+                <button id="open-camera-btn" type="button" class="flex-1 text-center border border-gray-200 rounded-lg py-2 text-[10px] font-bold text-gray-600 hover:bg-gray-50">
+    📷 Camera
+</button>
             </div>
             <input id="edit-image-url" type="text" placeholder="Or paste an image URL"
                    class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
@@ -262,8 +273,46 @@ async function handleImageUpload(file) {
 document.getElementById("edit-image-upload").addEventListener("change", (e) => {
     if (e.target.files.length) handleImageUpload(e.target.files[0]);
 });
-document.getElementById("edit-image-camera").addEventListener("change", (e) => {
-    if (e.target.files.length) handleImageUpload(e.target.files[0]);
+let cameraStream = null;
+
+document.getElementById("open-camera-btn").addEventListener("click", async () => {
+    const modal = document.getElementById("camera-modal");
+    const video = document.getElementById("camera-preview");
+    const errorEl = document.getElementById("camera-error");
+    errorEl.classList.add("hidden");
+    modal.classList.remove("hidden");
+
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = cameraStream;
+    } catch (err) {
+        errorEl.textContent = "Couldn't access camera — check browser permissions, or your device may not have one. " + err.message;
+        errorEl.classList.remove("hidden");
+    }
+});
+
+function closeCameraModal() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+    document.getElementById("camera-modal").classList.add("hidden");
+}
+
+document.getElementById("camera-cancel-btn").addEventListener("click", closeCameraModal);
+
+document.getElementById("camera-capture-btn").addEventListener("click", () => {
+    const video = document.getElementById("camera-preview");
+    const canvas = document.getElementById("camera-canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext("2d").drawImage(video, 0, 0);
+
+    canvas.toBlob(async (blob) => {
+        const file = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
+        closeCameraModal();
+        await handleImageUpload(file);
+    }, "image/jpeg", 0.9);
 });
 
 document.getElementById("edit-save-btn").addEventListener("click", async () => {

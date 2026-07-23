@@ -78,6 +78,7 @@ def search_products(db: Session, query: str, latitude: float | None = None, long
             "store_name": store.store_name,
             "selling_price": float(inv.selling_price),
             "quantity_available": inv.quantity,
+            "image_url": prod.image_url,
         }
         for prod, inv, store in rows
     ]

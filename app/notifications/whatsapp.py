@@ -1,47 +1,32 @@
-"""
-Real WhatsApp notifications via Twilio.
+"""Real WhatsApp notifications via Twilio — see earlier setup notes for signup steps."""
 
-Setup (free):
-1. Sign up at https://www.twilio.com/try-twilio (free trial gives test credit)
-2. Go to Console > Messaging > Try it out > Send a WhatsApp message
-   -> this activates the Twilio Sandbox for WhatsApp on a shared number
-3. From your phone, WhatsApp the join code Twilio shows you to their sandbox number
-   -> this opts your phone in to receive sandbox messages
-4. Copy your Account SID and Auth Token from the Console dashboard
-5. Add to your .env:
-     TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-     TWILIO_AUTH_TOKEN=your_auth_token
-     TWILIO_WHATSAPP_FROM=whatsapp:+14155238886   (the sandbox number, keep the whatsapp: prefix)
-6. pip install twilio  (already in requirements.txt)
-
-Without these three env vars set, this module silently falls back to printing
-to the console — nothing breaks if Twilio isn't configured yet.
-"""
-
+import time
 from app.core.config import settings
 
 
 def send_whatsapp_message(to_phone: str, body: str) -> bool:
-    """
-    to_phone must be in E.164 format, e.g. '+919999999999' (no 'whatsapp:' prefix —
-    this function adds it). Returns True if a real send was attempted, False if it
-    fell back to console logging (e.g. credentials not configured yet).
-    """
     if not (settings.twilio_account_sid and settings.twilio_auth_token and settings.twilio_whatsapp_from):
         print(f"[DEV] WhatsApp (Twilio not configured) to {to_phone}: {body}")
         return False
 
-    try:
-        from twilio.rest import Client
+    # Twilio requires strict E.164 — auto-fix common formatting mistakes rather than
+    # silently failing on a number that's missing its country code.
+    if not to_phone.startswith("+"):
+        to_phone = "+91" + to_phone.lstrip("0")
+        print(f"[WARN] Phone number wasn't in E.164 format — auto-corrected to {to_phone}")
 
-        client = Client(settings.twilio_account_sid, settings.twilio_auth_token)
-        client.messages.create(
-            from_=settings.twilio_whatsapp_from,
-            to=f"whatsapp:{to_phone}",
-            body=body,
-        )
-        return True
-    except Exception as e:
-        # Never let a notification failure break the payment/order flow — log and move on.
-        print(f"[ERROR] Twilio send failed for {to_phone}: {e}")
-        return False
+    from twilio.rest import Client
+    client = Client(settings.twilio_account_sid, settings.twilio_auth_token)
+
+    last_error = None
+    for attempt in range(1, 3):  # retry once — the SSL hiccup we saw is usually transient
+        try:
+            client.messages.create(from_=settings.twilio_whatsapp_from, to=f"whatsapp:{to_phone}", body=body)
+            return True
+        except Exception as e:
+            last_error = e
+            print(f"[WARN] Twilio send attempt {attempt} failed for {to_phone}: {e}")
+            time.sleep(1)
+
+    print(f"[ERROR] Twilio send failed after 2 attempts for {to_phone}: {last_error}")
+    return False

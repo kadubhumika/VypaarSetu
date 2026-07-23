@@ -34,9 +34,9 @@
 
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <div class="space-y-4">
-                <div class="aspect-4/3 bg-[#f8f9fa] rounded-2xl overflow-hidden flex items-center justify-center p-8 border border-gray-100 text-gray-300">
-                    <i data-lucide="package" class="w-24 h-24"></i>
-                </div>
+                <div id="product-image-container" class="aspect-4/3 bg-[#f8f9fa] rounded-2xl overflow-hidden flex items-center justify-center p-8 border border-gray-100 text-gray-300">
+    <i data-lucide="package" class="w-24 h-24"></i>
+</div>
             </div>
 
             <div class="space-y-6 lg:pl-4">
@@ -90,13 +90,14 @@
         // products-detail.html?product_id=1&name=Rice&price=550&store_id=1&store_name=Ramesh+Kirana&qty_available=18
         const params = new URLSearchParams(window.location.search);
         const product = {
-            product_id: Number(params.get("product_id")),
-            product_name: params.get("name") || "Unknown product",
-            selling_price: Number(params.get("price")) || 0,
-            store_id: Number(params.get("store_id")),
-            store_name: params.get("store_name") || "Unknown store",
-            quantity_available: Number(params.get("qty_available")) || 0,
-        };
+    product_id: Number(params.get("product_id")),
+    product_name: params.get("name") || "Unknown product",
+    selling_price: Number(params.get("price")) || 0,
+    store_id: Number(params.get("store_id")),
+    store_name: params.get("store_name") || "Unknown store",
+    quantity_available: Number(params.get("qty_available")) || 0,
+    image_url: params.get("image_url") || null,
+};
 
         let selectedQty = 1;
 
@@ -143,6 +144,10 @@
             addToCart(product);
             window.location.href = "add-to-cart.html";
         });
+        if (product.image_url) {
+    document.getElementById("product-image-container").innerHTML =
+        `<img src="${API_BASE_URL}${product.image_url}" class="w-full h-full object-cover">`;
+}
 
         render();
     </script>

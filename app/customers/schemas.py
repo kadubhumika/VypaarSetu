@@ -56,3 +56,4 @@ class ProductSearchResultOut(BaseModel):
     store_name: str
     selling_price: float
     quantity_available: int
+    image_url: str | None = None

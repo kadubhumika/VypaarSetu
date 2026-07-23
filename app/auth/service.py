@@ -19,6 +19,11 @@ from app.core.config import settings
 # ---------- Merchant (password-based) ----------
 
 def register_merchant(db: Session, name: str, email: str, phone: str, password: str) -> Merchant:
+    # Normalize to E.164 — Twilio WhatsApp requires this exact format
+    phone = phone.strip()
+    if not phone.startswith("+"):
+        phone = "+91" + phone.lstrip("0")  # assumes Indian numbers; adjust if needed
+
     merchant = Merchant(
         name=name,
         email=email,
