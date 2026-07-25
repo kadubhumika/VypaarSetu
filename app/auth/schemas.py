@@ -1,7 +1,21 @@
 from pydantic import BaseModel, EmailStr
 
 
-# --- Merchant ---
+class MerchantProfileUpdate(BaseModel):
+    name: str | None = None
+    phone: str | None = None
+
+
+class MerchantProfileOut(BaseModel):
+    id: int
+    name: str
+    email: str
+    phone: str
+    google_id: str | None
+
+    class Config:
+        from_attributes = True
+
 class MerchantRegister(BaseModel):
     name: str
     email: EmailStr

@@ -161,3 +161,13 @@ def verify_customer_otp(db: Session, email: str, otp: str) -> Customer | None:
 
 def issue_customer_token(customer: Customer) -> str:
     return create_access_token(subject=str(customer.id), role="customer")
+
+def update_merchant_profile(db: Session, merchant: Merchant, data) -> Merchant:
+    payload = data.dict(exclude_unset=True)
+    if "phone" in payload and payload["phone"] and not payload["phone"].startswith("+"):
+        payload["phone"] = "+91" + payload["phone"].lstrip("0")
+    for field, value in payload.items():
+        setattr(merchant, field, value)
+    db.commit()
+    db.refresh(merchant)
+    return merchant

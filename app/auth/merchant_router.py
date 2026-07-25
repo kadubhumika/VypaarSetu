@@ -27,6 +27,15 @@ def register(payload: schemas.MerchantRegister, db: Session = Depends(get_db)):
     token = service.issue_merchant_token(merchant)
     return schemas.TokenResponse(access_token=token)
 
+@router.get("/me", response_model=schemas.MerchantProfileOut)
+def get_my_profile(merchant=Depends(get_current_merchant)):
+    return merchant
+
+
+@router.patch("/me", response_model=schemas.MerchantProfileOut)
+def update_my_profile(payload: schemas.MerchantProfileUpdate, db: Session = Depends(get_db), merchant=Depends(get_current_merchant)):
+    return service.update_merchant_profile(db, merchant, payload)
+
 
 @router.post("/login", response_model=schemas.TokenResponse)
 def login(payload: schemas.MerchantLogin, db: Session = Depends(get_db)):

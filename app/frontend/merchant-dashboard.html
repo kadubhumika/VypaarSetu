@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    body.dark-mode { background: #0f1115 !important; color: #e5e7eb; }
+    body.dark-mode .bg-white { background: #1a1d24 !important; }
+    body.dark-mode .bg-\[#f8f9fc\], body.dark-mode .bg-\[#f4f6fa\] { background: #0f1115 !important; }
+    body.dark-mode .bg-\[#f0f4fd\] { background: #161922 !important; }
+    body.dark-mode .text-gray-900 { color: #f3f4f6 !important; }
+    body.dark-mode .text-gray-800, body.dark-mode .text-gray-700 { color: #d1d5db !important; }
+    body.dark-mode .text-gray-600, body.dark-mode .text-gray-500 { color: #9ca3af !important; }
+    body.dark-mode .text-gray-400 { color: #6b7280 !important; }
+    body.dark-mode .border-gray-100, body.dark-mode .border-gray-200 { border-color: #2a2e37 !important; }
+    body.dark-mode input, body.dark-mode textarea { background: #1a1d24 !important; color: #e5e7eb !important; }
+</style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,6 +78,10 @@
         <i data-lucide="bell" class="w-5 h-5"></i>
         <span id="notif-badge" class="hidden absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
     </button>
+                    <button id="theme-toggle-btn" class="p-2 text-gray-500 hover:text-gray-800 transition">
+    <i id="theme-icon" data-lucide="moon" class="w-4 h-4"></i>
+</button>
+
     <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-96 overflow-y-auto">
         <div class="p-3 border-b border-gray-100 flex justify-between items-center">
             <span class="text-xs font-bold text-gray-900">Notifications</span>
@@ -301,6 +317,20 @@ setInterval(loadNotifications, 15000); // poll every 15s for new orders
                 }
             }
         }
+        function applyTheme() {
+    const isDark = localStorage.getItem("vs_theme") === "dark";
+    document.body.classList.toggle("dark-mode", isDark);
+    const icon = document.getElementById("theme-icon");
+    if (icon) icon.setAttribute("data-lucide", isDark ? "sun" : "moon");
+    lucide.createIcons();
+}
+applyTheme();
+
+document.getElementById("theme-toggle-btn")?.addEventListener("click", () => {
+    const isDark = localStorage.getItem("vs_theme") === "dark";
+    localStorage.setItem("vs_theme", isDark ? "light" : "dark");
+    applyTheme();
+});
         async function loadStoreName() {
     try {
         const store = await apiFetch("/stores/me");

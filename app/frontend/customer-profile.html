@@ -71,6 +71,12 @@
                     <p class="text-xs text-gray-400 col-span-2">Loading addresses...</p>
                 </div>
             </section>
+            <section class="space-y-3">
+    <h2 class="text-sm font-bold text-gray-900 tracking-tight">Order History</h2>
+    <div id="orders-list" class="space-y-3">
+        <p class="text-xs text-gray-400">Loading your orders...</p>
+    </div>
+</section>
         </div>
     </main>
 
@@ -145,6 +151,39 @@
                 document.getElementById("addresses-grid").innerHTML = `<p class="text-xs text-red-500 col-span-2">${err.message}</p>`;
             }
         }
+        async function loadOrderHistory() {
+    try {
+        const orders = await apiFetch("/orders/mine");
+        const statusColors = {
+            created: 'bg-amber-50 text-amber-700',
+            accepted: 'bg-indigo-50 text-indigo-700',
+            packed: 'bg-blue-50 text-blue-700',
+            completed: 'bg-green-50 text-green-700',
+            cancelled: 'bg-red-50 text-red-600',
+        };
+        document.getElementById("orders-list").innerHTML = orders.length ? orders.map(o => `
+            <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-gray-900">Order #${o.id}</span>
+                        <span class="text-[10px] text-gray-400 block">${new Date(o.created_at).toLocaleString()}</span>
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${statusColors[o.status] || 'bg-gray-50 text-gray-600'}">${o.status}</span>
+                </div>
+                <div class="text-[11px] text-gray-500">
+                    ${o.items.map(i => `${i.product_name} × ${i.quantity}`).join(", ")}
+                </div>
+                <div class="flex justify-between items-center pt-1 border-t border-gray-100">
+                    <span class="text-[10px] text-gray-400">${o.payment_status === 'paid' ? '✅ Paid' : '⏳ Payment pending'}</span>
+                    <span class="text-sm font-bold text-gray-900">₹${o.total_amount.toLocaleString("en-IN")}</span>
+                </div>
+            </div>
+        `).join("") : `<p class="text-xs text-gray-400">You haven't placed any orders yet.</p>`;
+    } catch (err) {
+        document.getElementById("orders-list").innerHTML = `<p class="text-xs text-red-500">${err.message}</p>`;
+    }
+}
+
 
         document.getElementById("add-address-btn").addEventListener("click", () => document.getElementById("address-modal").classList.remove("hidden"));
         document.getElementById("addr-cancel-btn").addEventListener("click", () => document.getElementById("address-modal").classList.add("hidden"));
@@ -165,6 +204,7 @@
 
         loadProfile();
         loadAddresses();
+        loadOrderHistory();
     </script>
 </body>
 </html>
