@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from starlette.staticfiles import StaticFiles
-
+from app.credit.router import router as credit_router
 from app.core.database import SessionLocal
 from app.core.redis_client import redis_client
 from app.auth.merchant_router import router as merchant_auth_router
@@ -41,6 +41,7 @@ app.include_router(payments_router)
 app.include_router(analytics_router)
 app.include_router(customers_router)
 app.include_router(notifications_router)
+app.include_router(credit_router)
 
 
 @app.get("/health")

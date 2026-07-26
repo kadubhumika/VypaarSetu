@@ -11,6 +11,7 @@ from app.models.payment import Payment
 from app.models.transaction_ledger import TransactionLedger
 from app.models.review import Review
 from app.models.notification import Notification
+from app.models.credit import CreditAccount, CreditTransaction
 
 __all__ = [
     "Merchant",
@@ -28,4 +29,6 @@ __all__ = [
     "TransactionLedger",
     "Review",
     "Notification",
+    "CreditAccount",
+    "CreditTransaction"
 ]
