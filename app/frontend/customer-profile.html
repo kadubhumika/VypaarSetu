@@ -205,6 +205,30 @@
         loadProfile();
         loadAddresses();
         loadOrderHistory();
+        async function loadCreditAccounts() {
+    try {
+        const accounts = await apiFetch("/credit/my-accounts");
+        document.getElementById("credit-list").innerHTML = accounts.length ? accounts.map(a => `
+            <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
+                <h4 class="text-xs font-bold text-gray-900">${a.store_name}</h4>
+                <div class="flex justify-between text-[11px] text-gray-500">
+                    <span>Outstanding</span>
+                    <span class="font-bold text-red-600">₹${a.current_balance.toLocaleString("en-IN")}</span>
+                </div>
+                <div class="flex justify-between text-[11px] text-gray-500">
+                    <span>Credit Limit</span>
+                    <span class="font-bold text-gray-900">₹${a.credit_limit.toLocaleString("en-IN")}</span>
+                </div>
+                <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-red-400 h-full" style="width: ${a.credit_limit > 0 ? (a.current_balance / a.credit_limit * 100) : 0}%"></div>
+                </div>
+            </div>
+        `).join("") : `<p class="text-xs text-gray-400 col-span-2">You don't have a credit account with any store yet — ask a merchant to set one up for you.</p>`;
+    } catch (err) {
+        document.getElementById("credit-list").innerHTML = `<p class="text-xs text-red-500 col-span-2">${err.message}</p>`;
+    }
+}
+loadCreditAccounts();
     </script>
 </body>
 </html>

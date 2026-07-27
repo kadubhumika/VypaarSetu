@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyapaarSetu - Udhaar Book</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-[#f4f6fa] text-gray-800 antialiased min-h-screen flex">
+
+    <aside class="w-64 bg-[#f0f4fd] border-r border-gray-200 flex flex-col justify-between fixed h-screen z-20">
+        <div>
+            <div class="p-5 flex items-center gap-3">
+                <div class="bg-[#009640] text-white p-2 rounded-xl shadow-sm"><i data-lucide="store" class="w-5 h-5"></i></div>
+                <div>
+                    <h2 class="text-lg font-bold text-[#00642d] tracking-tight leading-none">VyapaarSetu</h2>
+                    <span class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Merchant Hub</span>
+                </div>
+            </div>
+            <nav class="px-3 mt-4 space-y-1">
+                <a href="merchant-dashboard.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                </a>
+                <a href="check-inventory.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="archive" class="w-4 h-4"></i> Inventory
+                </a>
+                <a href="order-status.html" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium rounded-xl transition">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Orders
+                </a>
+                <a href="merchant-credit-book.html" class="flex items-center gap-3 px-4 py-3 bg-[#009640] text-white text-sm font-semibold rounded-xl transition">
+                    <i data-lucide="book-open" class="w-4 h-4"></i> Udhaar Book
+                </a>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-gray-200 bg-[#f0f4fd]">
+            <a href="#" id="logout-btn" class="flex items-center justify-center gap-2 text-red-600 hover:bg-red-50 text-xs font-semibold py-2 rounded-xl transition">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 ml-64 flex flex-col min-h-screen bg-[#f8f9fc]">
+        <header class="bg-white border-b border-gray-100 sticky top-0 z-10 shadow-sm h-20 px-8 flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-bold text-gray-900 tracking-tight">Udhaar Book</h1>
+                <p class="text-[11px] text-gray-500 font-medium">Customers with an outstanding credit balance.</p>
+            </div>
+            <button id="set-limit-btn" class="bg-[#009640] hover:bg-[#007a33] text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xs transition flex items-center gap-1.5">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Set Credit Limit
+            </button>
+        </header>
+
+        <main class="p-8 space-y-6 flex-1">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Total Outstanding</span>
+                        <span id="stat-total-outstanding" class="text-xl font-extrabold text-gray-900">₹0</span>
+                    </div>
+                    <div class="p-3 bg-red-50 text-red-500 rounded-xl"><i data-lucide="wallet" class="w-5 h-5"></i></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block">Customers on Credit</span>
+                        <span id="stat-count" class="text-xl font-extrabold text-gray-900">0</span>
+                    </div>
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i data-lucide="users" class="w-5 h-5"></i></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-gray-400 uppercase font-bold tracking-wider border-b border-gray-100 text-[10px]">
+                                <th class="py-3 px-6">Customer</th>
+                                <th class="py-3 px-4">Outstanding</th>
+                                <th class="py-3 px-4">Credit Limit</th>
+                                <th class="py-3 px-4">Available</th>
+                                <th class="py-3 px-4">Oldest Since</th>
+                                <th class="py-3 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="credit-body" class="divide-y divide-gray-100 font-medium text-gray-700">
+                            <tr><td colspan="6" class="py-6 px-5 text-center text-gray-400">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Set credit limit modal -->
+    <div id="limit-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-3">
+            <h3 class="text-sm font-bold text-gray-900">Set Credit Limit</h3>
+            <p class="text-[10px] text-gray-400">Enter the customer's numeric ID (visible in their order history / account) and the credit limit to grant them.</p>
+            <input id="limit-customer-id" type="number" placeholder="Customer ID" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <input id="limit-amount" type="number" step="0.01" placeholder="Credit limit (₹)" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <div class="flex gap-2 pt-2">
+                <button id="limit-cancel-btn" class="flex-1 border border-gray-200 rounded-lg py-2 text-xs font-bold text-gray-600">Cancel</button>
+                <button id="limit-save-btn" class="flex-1 bg-[#009640] text-white rounded-lg py-2 text-xs font-bold">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Record repayment modal -->
+    <div id="repay-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-3">
+            <h3 class="text-sm font-bold text-gray-900">Record Repayment</h3>
+            <p id="repay-context" class="text-[11px] text-gray-500"></p>
+            <input id="repay-amount" type="number" step="0.01" placeholder="Amount received (₹)" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <div class="flex gap-2 pt-2">
+                <button id="repay-cancel-btn" class="flex-1 border border-gray-200 rounded-lg py-2 text-xs font-bold text-gray-600">Cancel</button>
+                <button id="repay-save-btn" class="flex-1 bg-[#009640] text-white rounded-lg py-2 text-xs font-bold">Mark Paid</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        lucide.createIcons();
+        requireAuth("merchant", "login.html");
+        document.getElementById("logout-btn").addEventListener("click", (e) => { e.preventDefault(); clearSession(); window.location.href = "login.html"; });
+
+        let repayingAccountId = null;
+
+        async function loadCreditBook() {
+            try {
+                const accounts = await apiFetch("/credit/book");
+                document.getElementById("stat-count").textContent = accounts.length;
+                const total = accounts.reduce((s, a) => s + a.current_balance, 0);
+                document.getElementById("stat-total-outstanding").textContent = `₹${total.toLocaleString("en-IN")}`;
+
+                document.getElementById("credit-body").innerHTML = accounts.length ? accounts.map(a => `
+                    <tr class="hover:bg-slate-50/40 transition">
+                        <td class="py-3.5 px-6 font-bold text-gray-900">${a.customer_name || a.customer_email}</td>
+                        <td class="py-3.5 px-4 font-bold text-red-600">₹${a.current_balance.toLocaleString("en-IN")}</td>
+                        <td class="py-3.5 px-4 text-gray-600">₹${a.credit_limit.toLocaleString("en-IN")}</td>
+                        <td class="py-3.5 px-4 text-gray-600">₹${a.available_credit.toLocaleString("en-IN")}</td>
+                        <td class="py-3.5 px-4 text-gray-500">${a.oldest_outstanding_date ? new Date(a.oldest_outstanding_date).toLocaleDateString() : '—'}</td>
+                        <td class="py-3.5 px-6 text-right">
+                            <button class="repay-btn text-[#009640] font-bold hover:underline" data-id="${a.id}" data-name="${a.customer_name || a.customer_email}" data-balance="${a.current_balance}">
+                                Mark Paid
+                            </button>
+                        </td>
+                    </tr>`).join("") : `<tr><td colspan="6" class="py-6 px-5 text-center text-gray-400">No outstanding credit right now.</td></tr>`;
+
+                document.querySelectorAll(".repay-btn").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        repayingAccountId = btn.dataset.id;
+                        document.getElementById("repay-context").textContent = `${btn.dataset.name} owes ₹${Number(btn.dataset.balance).toLocaleString("en-IN")}`;
+                        document.getElementById("repay-amount").value = btn.dataset.balance;
+                        document.getElementById("repay-modal").classList.remove("hidden");
+                    });
+                });
+            } catch (err) {
+                document.getElementById("credit-body").innerHTML = `<tr><td colspan="6" class="py-6 px-5 text-center text-red-500">${err.message}</td></tr>`;
+            }
+        }
+
+        document.getElementById("set-limit-btn").addEventListener("click", () => document.getElementById("limit-modal").classList.remove("hidden"));
+        document.getElementById("limit-cancel-btn").addEventListener("click", () => document.getElementById("limit-modal").classList.add("hidden"));
+        document.getElementById("limit-save-btn").addEventListener("click", async () => {
+            try {
+                await apiFetch("/credit/limit", {
+                    method: "POST",
+                    body: {
+                        customer_id: Number(document.getElementById("limit-customer-id").value),
+                        credit_limit: Number(document.getElementById("limit-amount").value),
+                    },
+                });
+                document.getElementById("limit-modal").classList.add("hidden");
+                loadCreditBook();
+            } catch (err) { alert(err.message); }
+        });
+
+        document.getElementById("repay-cancel-btn").addEventListener("click", () => document.getElementById("repay-modal").classList.add("hidden"));
+        document.getElementById("repay-save-btn").addEventListener("click", async () => {
+            try {
+                await apiFetch(`/credit/accounts/${repayingAccountId}/repay`, {
+                    method: "POST",
+                    body: { amount: Number(document.getElementById("repay-amount").value) },
+                });
+                document.getElementById("repay-modal").classList.add("hidden");
+                loadCreditBook();
+            } catch (err) { alert(err.message); }
+        });
+
+        loadCreditBook();
+    </script>
+</body>
+</html>

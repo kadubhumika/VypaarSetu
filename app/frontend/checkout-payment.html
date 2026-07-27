@@ -59,6 +59,11 @@
                     <i data-lucide="lock" class="w-4 h-4"></i>
                     <span id="pay-now-label">Loading...</span>
                 </button>
+                <button id="pay-credit-btn" disabled
+        class="w-full bg-white border-2 border-[#009640] disabled:opacity-50 disabled:cursor-not-allowed text-[#009640] text-xs font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition">
+    <i data-lucide="book-open" class="w-4 h-4"></i>
+    <span>Pay on Credit (Udhaar)</span>
+</button>
 
                 <p class="text-[10px] text-center text-gray-400 font-medium leading-relaxed">
                     By placing your order, you agree to VyapaarSetu's
@@ -108,6 +113,7 @@
                 document.getElementById("order-total").textContent = `₹${currentOrder.total_amount.toLocaleString("en-IN")}`;
                 payLabel.textContent = `Pay ₹${currentOrder.total_amount.toLocaleString("en-IN")}`;
                 payBtn.disabled = false;
+                document.getElementById("pay-credit-btn").disabled = false;
             } catch (err) {
                 showError(err.message);
             }
@@ -141,6 +147,8 @@
         payBtn.addEventListener("click", async () => {
     payBtn.disabled = true;
     payLabel.textContent = "Processing...";
+
+
 
     try {
         const payment = await apiFetch("/payments/create-order", { method: "POST", body: { order_id: currentOrder.id } });
@@ -213,6 +221,16 @@
         loadOrder();
         loadAddresses();
         loadPaymentConfig();
+        document.getElementById("pay-credit-btn").addEventListener("click", async () => {
+    if (!confirm(`Add ₹${currentOrder.total_amount.toLocaleString("en-IN")} to your credit balance with this store?`)) return;
+    try {
+        await apiFetch("/credit/pay-with-credit", { method: "POST", body: { order_id: currentOrder.id } });
+        alert("Order placed on credit successfully!");
+        window.location.href = "order-status.html";
+    } catch (err) {
+        showError(err.message);
+    }
+});
     </script>
 </body>
 </html>
