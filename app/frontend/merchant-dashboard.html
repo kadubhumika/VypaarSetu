@@ -78,6 +78,7 @@
             <div class="flex items-center gap-6">
                 <div class="relative">
     <button id="notif-bell-btn" class="relative p-1 text-gray-500 hover:text-gray-800">
+        <span id="live-indicator" class="text-[10px] font-bold text-gray-400 mr-2">🔴 Connecting...</span>
         <i data-lucide="bell" class="w-5 h-5"></i>
         <span id="notif-badge" class="hidden absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
     </button>
@@ -346,6 +347,36 @@ loadStoreName();
 
         document.getElementById("refresh-btn").addEventListener("click", loadDashboard);
         loadDashboard();
+        let ws = null;
+
+function connectWebSocket() {
+    const token = getToken();
+    if (!token) return;
+
+    const wsUrl = API_BASE_URL.replace(/^http/, "ws") + `/notifications/ws/merchant?token=${encodeURIComponent(token)}`;
+    ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+        document.getElementById("live-indicator").textContent = "🟢 Live";
+    };
+
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "new_order") {
+            loadDashboard();
+            loadNotifications();
+        }
+    };
+
+    ws.onclose = () => {
+        document.getElementById("live-indicator").textContent = "🔴 Reconnecting...";
+        setTimeout(connectWebSocket, 3000); // auto-reconnect if the connection drops
+    };
+
+    ws.onerror = () => ws.close();
+}
+
+connectWebSocket();
     </script>
 </body>
 </html>

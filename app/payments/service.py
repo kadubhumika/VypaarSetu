@@ -3,6 +3,8 @@ from datetime import datetime, timezone
 
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+import anyio
+from app.core.ws_manager import manager
 
 from app.core.config import settings
 from app.models import Order, Payment, TransactionLedger, Inventory, Notification, Store, Merchant
@@ -89,6 +91,7 @@ def handle_webhook(db: Session, razorpay_order_id: str, razorpay_payment_id: str
     order = db.query(Order).filter(Order.id == payment.order_id).first()
 
     if payment.status == "success":
+
         order.payment_status = "paid"
 
         store = db.query(Store).filter(Store.id == order.store_id).first()
@@ -121,6 +124,14 @@ def handle_webhook(db: Session, razorpay_order_id: str, razorpay_payment_id: str
 
     else:
         order.payment_status = "failed"
+    try:
+        anyio.from_thread.run(manager.send_to_merchant, store.merchant_id, {
+            "type": "new_order",
+            "order_id": order.id,
+            "amount": float(payment.amount),
+        })
+    except Exception:
+        pass  # merchant just won't get the instant push — polling still catches it
 
     db.commit()
     db.refresh(payment)

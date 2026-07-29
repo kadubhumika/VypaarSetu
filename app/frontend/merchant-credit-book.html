@@ -100,6 +100,7 @@
         <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-3">
             <h3 class="text-sm font-bold text-gray-900">Set Credit Limit</h3>
             <p class="text-[10px] text-gray-400">Enter the customer's numeric ID (visible in their order history / account) and the credit limit to grant them.</p>
+            <p id="limit-context" class="hidden text-[11px] text-gray-500 font-semibold"></p>
             <input id="limit-customer-id" type="number" placeholder="Customer ID" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
             <input id="limit-amount" type="number" step="0.01" placeholder="Credit limit (₹)" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
             <div class="flex gap-2 pt-2">
@@ -194,6 +195,16 @@
         });
 
         loadCreditBook();
+        const urlParams = new URLSearchParams(window.location.search);
+const prefillCustomerId = urlParams.get("customer_id");
+const prefillCustomerName = urlParams.get("customer_name");
+if (prefillCustomerId) {
+    document.getElementById("limit-customer-id").value = prefillCustomerId;
+    const ctx = document.getElementById("limit-context");
+    ctx.textContent = `Setting limit for: ${prefillCustomerName || 'Customer #' + prefillCustomerId}`;
+    ctx.classList.remove("hidden");
+    document.getElementById("limit-modal").classList.remove("hidden");
+}
     </script>
 </body>
 </html>

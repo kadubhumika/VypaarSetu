@@ -8,6 +8,8 @@ from app.models import (
     TransactionLedger, Inventory, Notification, Merchant,
 )
 from app.notifications.service import send_order_notification_with_buttons
+import anyio
+from app.core.ws_manager import manager
 
 CREDIT_DUE_DAYS = 30
 
@@ -136,6 +138,15 @@ def pay_order_with_credit(db: Session, customer_id: int, order_id: int) -> Credi
     merchant = db.query(Merchant).filter(Merchant.id == store.merchant_id).first()
     if merchant and merchant.phone:
         send_order_notification_with_buttons(merchant.phone, order.id, amount)
+
+    try:
+        anyio.from_thread.run(manager.send_to_merchant, store.merchant_id, {
+            "type": "new_order",
+            "order_id": order.id,
+            "amount": amount,
+        })
+    except Exception:
+        pass
 
     db.commit()
     db.refresh(credit_txn)

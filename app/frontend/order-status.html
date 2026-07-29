@@ -135,6 +135,7 @@
             } else {
                 buttons.push(`<span class="text-gray-300">—</span>`);
             }
+            buttons.push(`<a href="merchant-credit-book.html?customer_id=${order.customer_id}&customer_name=${encodeURIComponent(order.customer_name || '')}" class="text-blue-600 font-bold hover:underline ml-2">Set Credit</a>`);
             return buttons.join("");
         }
 
@@ -159,7 +160,10 @@
             document.getElementById("orders-body").innerHTML = filtered.length ? filtered.map(o => `
                 <tr class="hover:bg-slate-50/40 transition">
                     <td class="py-3.5 px-6 font-bold text-[#009640]">#${o.id}</td>
-                    <td class="py-3.5 px-4 font-bold text-gray-900">${o.customer_name || 'Customer #' + o.customer_id}</td>
+                    <td class="py-3.5 px-4">
+    <span class="font-bold text-gray-900 block">${o.customer_name || 'Customer #' + o.customer_id}</span>
+    <span class="text-[10px] text-gray-400">ID: ${o.customer_id}</span>
+</td>
                     <td class="py-3.5 px-4 text-gray-500">${new Date(o.created_at).toLocaleDateString()}</td>
                     <td class="py-3.5 px-4 font-bold text-gray-900">₹${o.total_amount.toLocaleString("en-IN")}</td>
                     <td class="py-3.5 px-4">${paymentBadge(o.payment_status)}</td>
