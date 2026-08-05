@@ -36,6 +36,12 @@ def repay_credit(account_id: int, payload: schemas.RepaymentRequest, db: Session
 
 
 # ---------- Customer ----------
+@router.get("/customers", response_model=list[schemas.CustomerOptionOut])
+def get_store_customers(db: Session = Depends(get_db), merchant=Depends(get_current_merchant)):
+    store = get_merchant_store(db, merchant.id)
+    if not store:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No store found for this merchant")
+    return service.list_store_customers(db, store.id)
 
 @router.post("/pay-with-credit", response_model=schemas.CreditTransactionOut)
 def pay_with_credit(payload: schemas.PayWithCreditRequest, db: Session = Depends(get_db), customer=Depends(get_current_customer)):

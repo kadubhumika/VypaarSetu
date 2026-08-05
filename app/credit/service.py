@@ -173,6 +173,19 @@ def record_repayment(db: Session, store_id: int, account_id: int, amount: float)
     db.refresh(account)
     return _account_to_dict(db, account)
 
+def list_store_customers(db: Session, store_id: int) -> list[dict]:
+
+    from app.models import Order
+
+    rows = (
+        db.query(Customer)
+        .join(Order, Order.customer_id == Customer.id)
+        .filter(Order.store_id == store_id)
+        .distinct()
+        .all()
+    )
+    return [{"id": c.id, "name": c.name, "email": c.email} for c in rows]
+
 
 def get_customer_credit_accounts(db: Session, customer_id: int) -> list[dict]:
     rows = (

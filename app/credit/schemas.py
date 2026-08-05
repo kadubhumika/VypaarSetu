@@ -38,6 +38,11 @@ class PayWithCreditRequest(BaseModel):
 class RepaymentRequest(BaseModel):
     amount: float = Field(gt=0)
 
+class CustomerOptionOut(BaseModel):
+    id: int
+    name: str | None
+    email: str
+
 
 class MyCreditBalanceOut(BaseModel):
     store_id: int

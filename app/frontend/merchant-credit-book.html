@@ -101,7 +101,9 @@
             <h3 class="text-sm font-bold text-gray-900">Set Credit Limit</h3>
             <p class="text-[10px] text-gray-400">Enter the customer's numeric ID (visible in their order history / account) and the credit limit to grant them.</p>
             <p id="limit-context" class="hidden text-[11px] text-gray-500 font-semibold"></p>
-            <input id="limit-customer-id" type="number" placeholder="Customer ID" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+            <select id="limit-customer-id" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
+    <option value="">Loading customers...</option>
+</select>
             <input id="limit-amount" type="number" step="0.01" placeholder="Credit limit (₹)" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs">
             <div class="flex gap-2 pt-2">
                 <button id="limit-cancel-btn" class="flex-1 border border-gray-200 rounded-lg py-2 text-xs font-bold text-gray-600">Cancel</button>
@@ -165,8 +167,24 @@
                 document.getElementById("credit-body").innerHTML = `<tr><td colspan="6" class="py-6 px-5 text-center text-red-500">${err.message}</td></tr>`;
             }
         }
+        async function loadCustomerOptions(preselectId) {
+    try {
+        const customers = await apiFetch("/credit/customers");
+        const select = document.getElementById("limit-customer-id");
+        select.innerHTML = customers.length
+            ? customers.map(c => `<option value="${c.id}">${c.name || c.email} (#${c.id})</option>`).join("")
+            : `<option value="">No customers have ordered from your store yet</option>`;
+        if (preselectId) select.value = preselectId;
+    } catch (err) {
+        document.getElementById("limit-customer-id").innerHTML = `<option value="">Failed to load: ${err.message}</option>`;
+    }
+}
+loadCustomerOptions();
 
-        document.getElementById("set-limit-btn").addEventListener("click", () => document.getElementById("limit-modal").classList.remove("hidden"));
+        document.getElementById("set-limit-btn").addEventListener("click", () => {
+    loadCustomerOptions();
+    document.getElementById("limit-modal").classList.remove("hidden");
+});
         document.getElementById("limit-cancel-btn").addEventListener("click", () => document.getElementById("limit-modal").classList.add("hidden"));
         document.getElementById("limit-save-btn").addEventListener("click", async () => {
             try {
@@ -195,15 +213,17 @@
         });
 
         loadCreditBook();
+
         const urlParams = new URLSearchParams(window.location.search);
 const prefillCustomerId = urlParams.get("customer_id");
 const prefillCustomerName = urlParams.get("customer_name");
 if (prefillCustomerId) {
-    document.getElementById("limit-customer-id").value = prefillCustomerId;
+    loadCustomerOptions(prefillCustomerId);
     const ctx = document.getElementById("limit-context");
     ctx.textContent = `Setting limit for: ${prefillCustomerName || 'Customer #' + prefillCustomerId}`;
     ctx.classList.remove("hidden");
     document.getElementById("limit-modal").classList.remove("hidden");
+
 }
     </script>
 </body>
