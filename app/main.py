@@ -27,12 +27,14 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5500",
         "http://127.0.0.1:5500",
-        "https://vypaarsetu-1.onrender.com",
+        "https://vypaarsetu-1.onrender.com",     # Your Frontend URL
+        "https://vypaarsetu-p1xs.onrender.com",  # Your Backend URL
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(merchant_auth_router)
 app.include_router(customer_auth_router)
@@ -43,6 +45,14 @@ app.include_router(analytics_router)
 app.include_router(customers_router)
 app.include_router(notifications_router)
 app.include_router(credit_router)
+
+@app.get("/")
+def read_root():
+    return {
+        "status": "online",
+        "message": "Welcome to VyapaarSetu API. Visit /docs for the interactive API layout."
+    }
+
 
 
 @app.get("/health")
