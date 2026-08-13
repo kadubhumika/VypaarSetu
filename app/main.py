@@ -20,8 +20,8 @@ from app.notifications.router import router as notifications_router
 
 
 app = FastAPI(title="VyapaarSetu API", version="0.1.0")
-
 os.makedirs("static/uploads/products", exist_ok=True)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.mount("/frontend", StaticFiles(directory="app/frontend"), name="frontend")
 
