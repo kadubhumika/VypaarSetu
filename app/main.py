@@ -1,6 +1,8 @@
 import os
 
 from fastapi import FastAPI
+
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from starlette.staticfiles import StaticFiles
@@ -20,7 +22,9 @@ from app.notifications.router import router as notifications_router
 app = FastAPI(title="VyapaarSetu API", version="0.1.0")
 
 os.makedirs("static/uploads/products", exist_ok=True)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+
+app.mount("/frontend", StaticFiles(directory="app/frontend"), name="frontend")
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -46,12 +50,12 @@ app.include_router(customers_router)
 app.include_router(notifications_router)
 app.include_router(credit_router)
 
+
 @app.get("/")
 def read_root():
-    return {
-        "status": "online",
-        "message": "Welcome to VyapaarSetu API. Visit /docs for the interactive API layout."
-    }
+
+    return FileResponse("app/frontend/login.html")
+
 
 
 
