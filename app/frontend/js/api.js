@@ -30,6 +30,21 @@ function clearSession() {
  * Throws an Error with the backend's message on non-2xx responses so callers
  * can just try/catch and show err.message to the user.
  */
+ async function handleGoogleLogin(response) {
+  try {
+    const payload = { token: response.credential };
+    const data = await apiFetch("/merchant/auth/google", {
+      method: "POST",
+      body: payload
+    });
+    saveSession(data.access_token, data.role);
+    window.location.href = data.role === "merchant" ? "/frontend/merchant-dashboard.html" : "/frontend/customer-dashboard.html";
+
+  } catch (err) {
+    alert("Google Sign-In failed: " + err.message);
+  }
+}
+
 async function apiFetch(path, { method = "GET", body = null, isFormData = false, auth = true } = {}) {
   const headers = {};
   if (!isFormData) headers["Content-Type"] = "application/json";
