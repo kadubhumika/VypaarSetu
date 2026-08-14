@@ -1,24 +1,21 @@
-"""
-Real email sending via SMTP (works with Gmail using an App Password, or any SMTP provider).
-
-Setup for Gmail specifically:
-1. Your Google Account must have 2-Step Verification turned on
-2. Go to https://myaccount.google.com/apppasswords
-3. Create an app password (choose "Mail" as the app) — this is the 16-character
-   value that goes in SMTP_PASSWORD, NOT your normal Gmail password
-4. .env values:
-     SMTP_HOST=smtp.gmail.com
-     SMTP_PORT=587
-     SMTP_USER=youraddress@gmail.com
-     SMTP_PASSWORD=your16charapppassword
-
-Without these configured (or if sending fails), this falls back to console logging.
-"""
 
 import smtplib
+import socket
 from email.mime.text import MIMEText
 
 from app.core.config import settings
+
+
+def _connect_smtp_ipv4(host: str, port: int, timeout: int = 10) -> smtplib.SMTP:
+
+    addr_info = socket.getaddrinfo(host, port, socket.AF_INET, socket.SOCK_STREAM)
+    ipv4_address = addr_info[0][4][0]  # first IPv4 result
+
+    smtp = smtplib.SMTP(timeout=timeout)
+    smtp.connect(ipv4_address, port)
+
+    smtp.ehlo(host)
+    return smtp
 
 
 def send_email(to_email: str, subject: str, body: str) -> bool:
@@ -32,10 +29,12 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
     msg["To"] = to_email
 
     try:
-        with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=10) as server:
-            server.starttls()
-            server.login(settings.smtp_user, settings.smtp_password)
-            server.sendmail(settings.smtp_user, [to_email], msg.as_string())
+        server = _connect_smtp_ipv4(settings.smtp_host, settings.smtp_port)
+        server.starttls()
+        server.ehlo(settings.smtp_host)
+        server.login(settings.smtp_user, settings.smtp_password)
+        server.sendmail(settings.smtp_user, [to_email], msg.as_string())
+        server.quit()
         return True
     except smtplib.SMTPAuthenticationError:
         print(f"[ERROR] SMTP auth failed — check SMTP_USER/SMTP_PASSWORD (Gmail needs an App Password). Falling back to console for {to_email}: {body}")
