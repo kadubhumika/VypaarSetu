@@ -1,48 +1,39 @@
-import smtplib
-import socket
-from email.mime.text import MIMEText
-
+import requests
 from app.core.config import settings
 
 
-def _connect_smtp_ipv4_ssl(host: str, port: int, timeout: int = 10) -> smtplib.SMTP_SSL:
-    # Keeps your custom IPv4 resolving logic but upgrades it to secure SSL for Port 465
-    addr_info = socket.getaddrinfo(host, port, socket.AF_INET, socket.SOCK_STREAM)
-    ipv4_address = addr_info[0][4][0]
-
-    # Use SMTP_SSL instead of SMTP for port 465
-    smtp = smtplib.SMTP_SSL(timeout=timeout)
-    smtp.connect(ipv4_address, port)
-
-    smtp.ehlo(host)
-    return smtp
-
-
 def send_email(to_email: str, subject: str, body: str) -> bool:
-    if not (settings.smtp_host and settings.smtp_user and settings.smtp_password):
-        print(f"[DEV] Email (SMTP not configured) to {to_email} — {subject}: {body}")
-        return False
 
-    msg = MIMEText(body)
-    msg["Subject"] = subject
-    msg["From"] = settings.smtp_user
-    msg["To"] = to_email
+    if not settings.smtp_password:
+        print(f"[DEV] Resend API Key is missing! Check SMTP_PASSWORD variable. Recipient: {to_email}")
+        return False
 
     try:
-        # Connect using the new SSL helper function
-        server = _connect_smtp_ipv4_ssl(settings.smtp_host, int(settings.smtp_port))
+        # Sends a clean secure web request that Render will never block
+        response = requests.post(
+            "https://resend.com",
+            headers={
+                "Authorization": f"Bearer {settings.smtp_password}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "from": "onboarding@resend.dev",
+                "to": to_email,
+                "subject": subject,
+                "text": body,
+            },
+            timeout=10
+        )
 
-        # REMOVED server.starttls() because Port 465 is already encrypted!
+        # Checks if Resend accepted the email safely (Status 200 to 299)
+        if response.status_code >= 200 and response.status_code < 300:
+            return True
 
-        server.login(settings.smtp_user, settings.smtp_password)
-        server.sendmail(settings.smtp_user, [to_email], msg.as_string())
-        server.quit()
-        return True
-    except smtplib.SMTPAuthenticationError:
-        print(
-            f"[ERROR] SMTP auth failed — check SMTP_USER/SMTP_PASSWORD (Gmail needs an App Password). Falling back to console for {to_email}: {body}")
+        print(f"[ERROR] Resend API rejected email. Status code: {response.status_code}. Response: {response.text}")
         return False
-    except (smtplib.SMTPException, OSError, TimeoutError) as e:
+
+    except Exception as e:
+        # Catches network drops or server timeouts cleanly
         print(f"[ERROR] Email send failed ({e}). Falling back to console for {to_email}: {body}")
         return False
 
