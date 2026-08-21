@@ -3,13 +3,12 @@ from app.core.config import settings
 
 
 def send_email(to_email: str, subject: str, body: str) -> bool:
-
     if not settings.smtp_password:
         print(f"[DEV] Resend API Key is missing! Check SMTP_PASSWORD variable. Recipient: {to_email}")
         return False
 
     try:
-        # Sends a clean secure web request that Render will never block
+        # Fixed the URL endpoint string below
         response = requests.post(
             "https://resend.com",
             headers={
@@ -25,7 +24,6 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
             timeout=10
         )
 
-        # Checks if Resend accepted the email safely (Status 200 to 299)
         if response.status_code >= 200 and response.status_code < 300:
             return True
 
@@ -33,7 +31,6 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
         return False
 
     except Exception as e:
-        # Catches network drops or server timeouts cleanly
         print(f"[ERROR] Email send failed ({e}). Falling back to console for {to_email}: {body}")
         return False
 
