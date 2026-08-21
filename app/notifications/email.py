@@ -8,30 +8,37 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
         return False
 
     try:
-        # Fixed the URL endpoint string below
+        # We add clear headers to bypass Cloudflare security rules
+        headers = {
+            "Authorization": f"Bearer {settings.smtp_password}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "VyapaarSetuBackend/1.0.0 (Python-Requests)"
+        }
+
+        payload = {
+            "from": "onboarding@resend.dev",
+            "to": to_email,
+            "subject": subject,
+            "text": body,
+        }
+
         response = requests.post(
-            "https://resend.com",
-            headers={
-                "Authorization": f"Bearer {settings.smtp_password}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "from": "onboarding@resend.dev",
-                "to": to_email,
-                "subject": subject,
-                "text": body,
-            },
+            "https://api.resend.com/emails",
+            headers=headers,
+            json=payload,
             timeout=10
         )
 
         if response.status_code >= 200 and response.status_code < 300:
+            print(f"[SUCCESS] Email sent successfully via Resend API to {to_email}!")
             return True
 
         print(f"[ERROR] Resend API rejected email. Status code: {response.status_code}. Response: {response.text}")
         return False
 
     except Exception as e:
-        print(f"[ERROR] Email send failed ({e}). Falling back to console for {to_email}: {body}")
+        print(f"[ERROR] Email network fail ({e}). Falling back to console for {to_email}: {body}")
         return False
 
 
