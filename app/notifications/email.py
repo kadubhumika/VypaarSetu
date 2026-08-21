@@ -1,5 +1,3 @@
-
-
 import smtplib
 import socket
 from email.mime.text import MIMEText
@@ -7,12 +5,13 @@ from email.mime.text import MIMEText
 from app.core.config import settings
 
 
-def _connect_smtp_ipv4(host: str, port: int, timeout: int = 10) -> smtplib.SMTP:
-
+def _connect_smtp_ipv4_ssl(host: str, port: int, timeout: int = 10) -> smtplib.SMTP_SSL:
+    # Keeps your custom IPv4 resolving logic but upgrades it to secure SSL for Port 465
     addr_info = socket.getaddrinfo(host, port, socket.AF_INET, socket.SOCK_STREAM)
-    ipv4_address = addr_info[0][4][0]  # first IPv4 result
+    ipv4_address = addr_info[0][4][0]
 
-    smtp = smtplib.SMTP(timeout=timeout)
+    # Use SMTP_SSL instead of SMTP for port 465
+    smtp = smtplib.SMTP_SSL(timeout=timeout)
     smtp.connect(ipv4_address, port)
 
     smtp.ehlo(host)
@@ -30,15 +29,18 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
     msg["To"] = to_email
 
     try:
-        server = _connect_smtp_ipv4(settings.smtp_host, settings.smtp_port)
-        server.starttls()
-        server.ehlo(settings.smtp_host)
+        # Connect using the new SSL helper function
+        server = _connect_smtp_ipv4_ssl(settings.smtp_host, int(settings.smtp_port))
+
+        # REMOVED server.starttls() because Port 465 is already encrypted!
+
         server.login(settings.smtp_user, settings.smtp_password)
         server.sendmail(settings.smtp_user, [to_email], msg.as_string())
         server.quit()
         return True
     except smtplib.SMTPAuthenticationError:
-        print(f"[ERROR] SMTP auth failed — check SMTP_USER/SMTP_PASSWORD (Gmail needs an App Password). Falling back to console for {to_email}: {body}")
+        print(
+            f"[ERROR] SMTP auth failed — check SMTP_USER/SMTP_PASSWORD (Gmail needs an App Password). Falling back to console for {to_email}: {body}")
         return False
     except (smtplib.SMTPException, OSError, TimeoutError) as e:
         print(f"[ERROR] Email send failed ({e}). Falling back to console for {to_email}: {body}")
