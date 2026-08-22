@@ -44,3 +44,30 @@ stores actually extend trust-based credit to regular customers.
   or invalid, with clear logging for debugging
 
 ## Architecture
+Customer/Merchant (Browser)
+│
+FastAPI Backend ──── Razorpay (payments)
+│ ├── Twilio (WhatsApp)
+│ ├── Resend (email)
+│ └── Google OAuth (Sign-In)
+│
+┌────┴────┐
+PostgreSQL Redis
+(Neon) (Upstash)
+
+
+## Running Locally
+
+```bash
+git clone https://github.com/kadubhumika/VypaarSetu.git
+cd VypaarSetu
+cp .env.example .env   # fill in your own keys
+docker compose --env-file .env -f docker/docker-compose.yml up -d --build
+alembic upgrade head
+```
+Backend: `http://localhost:8000/docs`
+Frontend: `cd app/frontend && python -m http.server 5500`
+
+## API Documentation
+
+Interactive Swagger docs available at `/docs` on the running backend.
