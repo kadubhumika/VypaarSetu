@@ -44,16 +44,19 @@ stores actually extend trust-based credit to regular customers.
   or invalid, with clear logging for debugging
 
 ## Architecture
-Customer/Merchant (Browser)
-│
-FastAPI Backend ──── Razorpay (payments)
-│ ├── Twilio (WhatsApp)
-│ ├── Resend (email)
-│ └── Google OAuth (Sign-In)
-│
-┌────┴────┐
-PostgreSQL Redis
-(Neon) (Upstash)
+Stage 1 — Authentication (two separate identity flows converge)
+
+Merchants and customers never share credentials — they're two entirely separate identity paths that both end in the same kind of thing: a signed JWT the rest of the API trusts.
+
+Stage 2 — Merchant side: turning a paper invoice into live inventory
+
+That extraction step is where pdfplumber + regex do the actual work — no manual data entry needed to get a supplier's paper bill into live, sellable stock.
+
+Stage 3 — Customer side: from search to a placed order
+
+The order created here starts life as status: "created", payment_status: "pending" — nothing gets deducted from stock yet. That only happens once payment actually clears, which is the final stage.
+
+Stage 4 — Payment Saga: two ways to pay, one consistent outcome
 
 
 ## Running Locally
