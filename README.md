@@ -44,6 +44,8 @@ stores actually extend trust-based credit to regular customers.
   or invalid, with clear logging for debugging
 
 ## Architecture
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/85914949-7cef-4aed-976c-604b23602046" />
+
 Stage 1 — Authentication (two separate identity flows converge)
 
 Merchants and customers never share credentials — they're two entirely separate identity paths that both end in the same kind of thing: a signed JWT the rest of the API trusts.
