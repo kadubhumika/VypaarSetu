@@ -23,9 +23,6 @@ app = FastAPI(title="VyapaarSetu API", version="0.1.0")
 os.makedirs("static/uploads/products", exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-app.mount("/frontend", StaticFiles(directory="app/frontend", html=True), name="frontend")
-app.mount("/js", StaticFiles(directory="app/frontend/js"), name="frontend-js")
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -50,12 +47,10 @@ app.include_router(analytics_router)
 app.include_router(customers_router)
 app.include_router(notifications_router)
 app.include_router(credit_router)
+app.mount("/", StaticFiles(directory="app/frontend", html=True), name="frontend")
 
 
-@app.get("/")
-def read_root():
 
-    return FileResponse("app/frontend/login.html")
 
 
 
