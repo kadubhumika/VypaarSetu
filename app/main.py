@@ -47,12 +47,10 @@ app.include_router(analytics_router)
 app.include_router(customers_router)
 app.include_router(notifications_router)
 app.include_router(credit_router)
-app.mount("/", StaticFiles(directory="app/frontend", html=True), name="frontend")
 
-
-
-
-
+@app.get("/")
+def serve_login():
+    return FileResponse("app/frontend/login.html")
 
 
 @app.get("/health")
@@ -70,3 +68,4 @@ def health_check():
     except Exception:
         redis_ok = False
     return {"status": "ok" if db_ok and redis_ok else "degraded", "database": db_ok, "redis": redis_ok}
+app.mount("/", StaticFiles(directory="app/frontend", html=True), name="frontend")
